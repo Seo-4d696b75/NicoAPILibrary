@@ -14,42 +14,84 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Seo on 2017/01/01.
- *
+ * コメントの取得・管理をする<br>
  * this class keeps information of each comment
- * also provides methods to parse response in Json to this class
+ * also provides methods to parse response in Json to this class.<br>
  *
- * reference
- * algorithm of merge sort : 東京大学出版会　情報科学入門 ISBN978-4-13-062452-7
- * how to get comment : https://blog.hayu.io/web/nicovideo-comment-api
+ * reference<br>
+ * algorithm of merge sort : 東京大学出版会　情報科学入門 ISBN978-4-13-062452-7<br>
+ * how to get comment : https://blog.hayu.io/web/nicovideo-comment-api<br><br>
  *
  *
- * note
- * Json passed to parse() is supposed to gotten from message server like this;
- * http://msg.nicovideo.jp/10/api.json/thread?version=20090904&thread={0}&res_from=-{1}
- * url of message server can be gotten from getflv API
- * query should be like that (details is known)
- *      params of query;
- *      {0} : thread ID of target video, also can be gotten from getflv API
+ * note<br>
+ * Json passed to {@link #parse(JSONArray)}  } is supposed to gotten from message server like this;<br>
+ * http://msg.nicovideo.jp/10/api.json/thread?version=20090904&thread={0}&res_from=-{1}<br>
+ * url of message server can be gotten from getflv API<br>
+ * query should be like that (details is known)<br>
+ *      params of query;<br>
+ *      {0} : thread ID of target video, also can be gotten from getflv API<br>
  *      {1} : max number of comment, must not be over 1000
+ *
+ * @author Seo-4d696b75
+ * @version 0.0 on 2017/01/01.
  */
 
 public class CommentInfo {
 
+    /**
+     * コメントが右から流れ始める時間　単位はミリ秒<br>
+     * time when the comment begins to flow from one side to the other. unit is milli sec.
+     */
     public long start;
-    public String[] mail;   //list of comment commands, not mail address
+    private String[] mail;   //list of comment commands, not mail address
+    /**
+     * コメントの内容<br>
+     *     content of the comment
+     */
     public String content;  //comment
+    /**
+     * コメントの投稿日時<br>
+     * date when the comment is contributed
+     */
     public String date;
+    /**
+     * コメントの匿名性<br>
+     * whether or not the comment is anonymous<br>
+     * yes:0, no:1(default)
+     */
     public int anonymity = 1;   //1:normal
 
     private boolean initialized = false;
 
-    public float x;
-    public float y;
+    /**
+     * 画面上のコメントの座標（ピクセル単位）<br>
+     * x,y-coordinate on screen (pix)
+     */
+    public float x,y;
+    /**
+     * コメントの画面上での長さ(ピクセル)<br>
+     * length on screen (pix)
+     */
     public float length = -1f;
+    /**
+     * コメントの流れる速さ（ピクセル）<br>
+     *     speed with which the comment flows (pix)
+     */
     public float speed;
+    /**
+     * コメントの色<br>
+     *     color of the comment
+     */
     public int color = -1;
+    /**
+     * 表示行の高さに対するコメントサイズの比率<br>
+     *     ratio of comment size to max height, can be between 0.0 to 1.0
+     */
     public float size = -1f;
+    /**
+     * コメントの位置 POSITION定数<br>
+     *     position of the comment, can be the following constants
+     */
     public int position = -1;
 
     public static final int POSITION_UP = 0;
@@ -89,8 +131,13 @@ public class CommentInfo {
         }
     };
 
-    //in constructor pass Json relevant to each comment,
-    //then Json is parsed and fields are initialized
+    /**
+     * 初期化コンストラクタ <br>
+     *     constructor for initialization.<br><br>
+     * 適当なJSONを渡してパースする<br>
+     * pass Json relevant to each comment, then Json is parsed and fields are initialized
+     * @param item 一つのコメントに該当するＪＳＯＮ, Json relevant to each comment
+     */
     public CommentInfo (JSONObject item){
         initialize(item);
     }
@@ -137,8 +184,14 @@ public class CommentInfo {
         return VideoInfoManager.dateFormatBase.format(new Date(time * 1000));
     }
 
-    //initialize fields needed for being shown on Canvas
-    //when you get Paint from Canvas, call this with the Paint
+    /**
+     * 実際にCanvasに描写する際、必要なフィールドを初期化する<br>
+     *     initialize fields needed for being shown on Canvas.
+     * @param width width of Canvas in pix
+     * @param paint cannot be {@code null}
+     * @param span  time in which the comment from one side to the other in seconds
+     * @param offset offset in the direction of y in pixels
+     */
     public void initialize(float width, Paint paint, float span, float offset){
         if ( ! initialized ){
             length = paint.measureText(content);
@@ -156,7 +209,13 @@ public class CommentInfo {
         }
     }
 
-    //parse Json and return list of CommentInfo
+    /**
+     * APIからのレスポンスをパースして、時系列に整列したリストを返す<br>
+     * parse Json form message server and return items sorted along the time series
+     * @param root response from message server, cannot be {@code null}
+     * @return Returns {@code null} if {@code root} is invalid, see {@link CommentInfo description;"note"}<br>
+     *     Returns empty list if response contains no items
+     */
     public static List<CommentInfo> parse(JSONArray root){
         List<CommentInfo>commentList = new ArrayList<CommentInfo>();
         try{
@@ -176,6 +235,11 @@ public class CommentInfo {
         }
         return null;
     }
+
+    /**
+     * @see #parse(JSONArray) works as the same as this method
+     * @param res response from message server in String, cannot be {@code null}
+     */
     public static List<CommentInfo> parse(String res){
         try{
             JSONArray root = new JSONArray(res);

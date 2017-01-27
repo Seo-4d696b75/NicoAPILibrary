@@ -90,7 +90,7 @@ public class RankingVideoInfo extends VideoInfoManager {
                         pubDate = convertPubDate(value);
                         break;
                     case VideoInfo.THUMBNAIL_URL:
-                        thumbnailUrl = new String[]{value};
+                        setThumbnailUrl(value);
                         break;
                     case VideoInfo.LENGTH:
                         length = parseLength(value);

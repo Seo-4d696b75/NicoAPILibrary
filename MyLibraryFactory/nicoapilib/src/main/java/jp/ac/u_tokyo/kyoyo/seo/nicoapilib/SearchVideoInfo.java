@@ -37,7 +37,7 @@ public class SearchVideoInfo extends VideoInfoManager {
             viewCounter = item.getInt("viewCounter");
             commentCounter = item.getInt("commentCounter");
             myListCounter = item.getInt("mylistCounter");
-            tags = item.getString("tags").split("\\s") ;
+            setTags( item.getString("tags").split("\\s") );
         }catch(JSONException e){
             e.printStackTrace();
         }

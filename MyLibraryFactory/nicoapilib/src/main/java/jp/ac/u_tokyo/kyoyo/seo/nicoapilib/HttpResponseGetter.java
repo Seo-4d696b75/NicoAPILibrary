@@ -16,22 +16,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Seo on 2016/12/17.
  *
- * this class defines the logic of http communication
+ *  HTTP通信の実装クラス<br>
+ * this class defines the logic of http communication.<br><br>
  *
- * reference;
- * important point of URL encoder : http://weblabo.oscasierra.net/java-urlencode/
- * usage of regular expression : http://nobuo-create.net/seikihyougen/#i-13
+ * reference;<br>
+ * important point of URL encoder : http://weblabo.oscasierra.net/java-urlencode/<br>
+ * usage of regular expression : http://nobuo-create.net/seikihyougen/#i-13<br>
  *
+ * @author Seo-4d696b75
+ * @version 0.0 on 2016/12/17.
  */
 
 public class HttpResponseGetter {
 
+    /**
+     * {@link #tryPost(String, Map)} で取得したクッキー、失敗すると{@code null}<br>
+     *     cookies gotten in {@link #tryPost(String, Map)}, can be {@code null} if fails
+     */
     protected CookieStore cookieStore;
-
+    /**
+     * 通信のレスポンス,失敗すると{@code null}<br>
+     *     response from HTTP communication, can be {@code null} if fails.
+     */
     protected String response;
 
+    /**
+     * apacheでpostしてクッキーとレスポンスを取得<br>
+     *     post in apache and get Cookie and response.
+     * @param path target url, cannot be {@code null}
+     * @param params map of name and param, corresponding to List of NameValuePair passed to HttpPost#setEntity
+     * @return Returns {@code true} if success. Be sure to check this value before getting {@link #response} or {@link #cookieStore}.
+     */
     public boolean tryPost(String path,Map<String,String>params){
         response = null;
         cookieStore = null;
@@ -62,12 +78,24 @@ public class HttpResponseGetter {
         return false;
     }
 
-    //TODO return boolean; make sure target object is not null, then return
 
+    /**
+     * 引数簡略したもの <br>
+     *     {@link #tryGet(String, CookieStore) the method} with omitted argument.
+     * @param path target url, cannot be {@code null}
+     * @return the same
+     */
     public boolean tryGet(String path){
         return tryGet(path,null);
     }
 
+    /**
+     * apacheでgetしてクッキーとレスポンスを取得<br>
+     *     get in apache and catch response.
+     * @param path target url, cannot be {@code null}
+     * @param cookieStore cookies needed for access, can be {@code null}
+     * @return Returns {@code true} if success. Be sure to check this value before getting {@link #response}
+     */
     public boolean tryGet(String path, CookieStore cookieStore){
         try{
             //some characters cause IllegalArgumentException

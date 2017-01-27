@@ -11,7 +11,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Seo-4d696b75 on 2017/01/21.
+ * ニコ動のユーザー情報を管理する。Intentで渡せるようにSerializableにした<br>
+ *     this class manages information of user, and is Serializable so that it can be passed with Intent.
+ *
+ * @author Seo-4d696b75
+ * @version 0.0 on 2017/01/21.
  */
 
 public class LoginInfo implements Serializable{
@@ -30,22 +34,46 @@ public class LoginInfo implements Serializable{
     public LoginInfo (){
         login = false;
     }
+
+    /**
+     * ログイン状態を返す<br>
+     *     check login status in boolean.
+     * @return Returns {@code true} if login, otherwise {@code false}
+     */
     public boolean isLogin (){
         return login;
     }
+    /**
+     * ニックネームとか言われるあのユーザ名を取得、必ずログインしてからにしよう。<br>
+     *     get user name in String.
+     * @return can be {@code null} if not login
+     */
     public String getUserName(){
         return userName;
     }
+    /**
+     * ユーザＩＤを取得する、必ずログインしてから取得すること。<br>
+     *     get userID, be sure to get after login.
+     * @return can be {@code null} if not login
+     */
     public int getUserID(){
         return userID;
     }
+    /**
+     * @deprecated supposed to be called by NicoLogin only.
+     */
     public void setUserName (String userName){
         this.userName = userName;
     }
+    /**
+     * @deprecated supposed to be called by NicoLogin only.
+     */
     public void setUserID (int userID){
         this.userID = userID;
     }
-
+    /**
+     * @deprecated supposed to be called within NicoAPI only.
+     */
     public CookieStore getCookieStore(){
         CookieStore cookieStore = new DefaultHttpClient().getCookieStore();
         for (int i = 0; i < cookieNum; i++) {
@@ -57,6 +85,9 @@ public class LoginInfo implements Serializable{
         }
         return cookieStore;
     }
+    /**
+     * @deprecated supposed to be called within NicoAPI only.
+     */
     public void setCookieStore(CookieStore cookieStore){
         if ( cookieStore == null ){
             login = false;

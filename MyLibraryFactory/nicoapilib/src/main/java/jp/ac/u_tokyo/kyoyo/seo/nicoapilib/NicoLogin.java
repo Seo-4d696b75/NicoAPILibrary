@@ -60,7 +60,7 @@ public class NicoLogin extends HttpResponseGetter {
 
     public boolean login( final String mail, final String pass){
         if ( mail == null || pass == null ){
-            //TODO exception
+            return false;
         }
         String path = loginUrl + myPageUrl;
         Map<String,String> params = new HashMap<String,String>(){
@@ -126,6 +126,7 @@ public class NicoLogin extends HttpResponseGetter {
     public Drawable getUserIcon(){
         if ( !loginInfo.isLogin() ){
             //TODO exception
+            return null;
         }
         userID = loginInfo.getUserID();
         String path = String.format(userIconUrl,userID/10000,userID);
