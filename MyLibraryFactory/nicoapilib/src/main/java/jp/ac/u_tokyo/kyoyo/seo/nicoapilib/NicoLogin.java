@@ -28,16 +28,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Seo on 2016/12/10.
+ * ニコ動へのログインおよびユーザＩＤ・ニックネームを取得する<br>
+ * this class try to login NicoNico and get userID, userName and userIconImage in background.<br><br>
  *
- * this class try to login NicoNico and get userID, userName and userIconImage in background
+ * references :<br>
+ * how to login with Apache : https://teratail.com/questions/31972<br>
+ *                              http://c-loft.com/blog/?p=1196<br>
+ * regular expression : java.keicode.com/lang/regexp-split.php<br>
+ * get image via http : http://logicalerror.seesaa.net/article/419965567.html<br>
+ * how to get user name : http://7cc.hatenadiary.jp/entry/nico-user-id-to-name<br>
  *
- * references :
- * how to login with Apache : https://teratail.com/questions/31972
- *                              http://c-loft.com/blog/?p=1196
- * regular expression : java.keicode.com/lang/regexp-split.php
- * get image via http : http://logicalerror.seesaa.net/article/419965567.html
- * how to get user name : http://7cc.hatenadiary.jp/entry/nico-user-id-to-name
+ * @author Seo-4d696b75
+ * @version 0.0 2016/12/10.
  */
 
 public class NicoLogin extends HttpResponseGetter {
@@ -50,15 +52,34 @@ public class NicoLogin extends HttpResponseGetter {
     private int userID;
     private String userName;
 
-    public NicoLogin(LoginInfo loginInfo){
+    /**
+     * ログインを行うにはこのコンストラクタでインスタンスを取得する<br>
+     *     get instance in order to login.<br>
+     *         ログイン情報を格納するための{@link LoginInfo}を引数に渡す必要があります。<br>
+     *         you need to pass {@link LoginInfo} to keep login session.
+     * @param loginInfo can not be {@code null}
+     */
+    protected NicoLogin(LoginInfo loginInfo){
         if ( loginInfo != null ) {
-            loginInfo = loginInfo;
+            this.loginInfo = loginInfo;
         }else{
             //TODO throw exception
         }
     }
 
-    public boolean login( final String mail, final String pass){
+    /**
+     * 指定したメールアドレスとパスワードでログインします<br>
+     *     try to login with mail address and password passed.<br>
+     * ログインに成功すると、{@link NicoLogin コンストラクタ}で渡した{@link LoginInfo}に
+     * ログインセッションの情報を含むCookiesとユーザＩＤ、ユーザ名を登録します。
+     * これらすべての取得に成功すると{@code true}を返します。<br>
+     * when succeed in login, try to get userID and name
+     * then resister them in {@link LoginInfo} passed at {@link NicoLogin constructor}.
+     * @param mail can not be {@code null}
+     * @param pass can not be {@code null}
+     * @return Returns {@code true} if succeed in login and in getting userID and name
+     */
+    protected boolean login( final String mail, final String pass){
         if ( mail == null || pass == null ){
             return false;
         }
@@ -123,7 +144,11 @@ public class NicoLogin extends HttpResponseGetter {
         }
     }
 
-    public Drawable getUserIcon(){
+    /**
+     * supposed to be called from {@link NicoClient} only.
+     * @return Returns {@code null} if not login
+     */
+    protected Drawable getUserIcon(){
         if ( !loginInfo.isLogin() ){
             //TODO exception
             return null;

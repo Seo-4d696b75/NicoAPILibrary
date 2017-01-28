@@ -138,7 +138,7 @@ public class CommentInfo {
      * pass Json relevant to each comment, then Json is parsed and fields are initialized
      * @param item 一つのコメントに該当するＪＳＯＮ, Json relevant to each comment
      */
-    public CommentInfo (JSONObject item){
+    protected CommentInfo (JSONObject item){
         initialize(item);
     }
 
@@ -216,7 +216,7 @@ public class CommentInfo {
      * @return Returns {@code null} if {@code root} is invalid, see {@link CommentInfo description;"note"}<br>
      *     Returns empty list if response contains no items
      */
-    public static List<CommentInfo> parse(JSONArray root){
+    protected static List<CommentInfo> parse(JSONArray root){
         List<CommentInfo>commentList = new ArrayList<CommentInfo>();
         try{
             for ( int i=0 ; i<root.length() ; i++){
@@ -240,7 +240,7 @@ public class CommentInfo {
      * @see #parse(JSONArray) works as the same as this method
      * @param res response from message server in String, cannot be {@code null}
      */
-    public static List<CommentInfo> parse(String res){
+    protected static List<CommentInfo> parse(String res){
         try{
             JSONArray root = new JSONArray(res);
             return parse(root);

@@ -72,7 +72,7 @@ public class NicoSearch extends HttpResponseGetter {
     private final String filterTo = "lte";
     private final String filterExact = "0";
 
-    public NicoSearch (){
+    protected NicoSearch (){
         this(null);
     }
 
@@ -81,7 +81,7 @@ public class NicoSearch extends HttpResponseGetter {
      *     constructor setting search keyword at the same time.
      * @param query can be {@code null}
      */
-    public NicoSearch (String query){
+    protected NicoSearch (String query){
         if ( query == null){
             this.query = "";
         }else {

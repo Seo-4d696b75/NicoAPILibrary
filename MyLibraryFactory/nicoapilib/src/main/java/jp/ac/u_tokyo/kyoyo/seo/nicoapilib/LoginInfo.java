@@ -11,8 +11,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * ニコ動のユーザー情報を管理する。Intentで渡せるようにSerializableにした<br>
- *     this class manages information of user, and is Serializable so that it can be passed with Intent.
+ * ニコ動のユーザー情報を管理する<br>
+ *     this class manages information of user.<br><br>
+ *
+ *     Intentで渡す場合を想定してSerializableにしてある<br>
+ *     this is Serializable so that it can be passed with Intent.
  *
  * @author Seo-4d696b75
  * @version 0.0 on 2017/01/21.
@@ -31,7 +34,7 @@ public class LoginInfo implements Serializable{
     private String[] cookiePath;
     private String[] cookieDomain;
 
-    public LoginInfo (){
+    protected LoginInfo (){
         login = false;
     }
 
@@ -60,15 +63,15 @@ public class LoginInfo implements Serializable{
         return userID;
     }
     /**
-     * @deprecated supposed to be called by NicoLogin only.
+     * supposed to be called by NicoLogin only.
      */
-    public void setUserName (String userName){
+    protected void setUserName (String userName){
         this.userName = userName;
     }
     /**
-     * @deprecated supposed to be called by NicoLogin only.
+     * supposed to be called by NicoLogin only.
      */
-    public void setUserID (int userID){
+    protected void setUserID (int userID){
         this.userID = userID;
     }
     /**
@@ -86,9 +89,9 @@ public class LoginInfo implements Serializable{
         return cookieStore;
     }
     /**
-     * @deprecated supposed to be called within NicoAPI only.
+     * supposed to be called within NicoAPI only.
      */
-    public void setCookieStore(CookieStore cookieStore){
+    protected void setCookieStore(CookieStore cookieStore){
         if ( cookieStore == null ){
             login = false;
             cookieNum = 0;

@@ -1,10 +1,16 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import org.apache.http.client.CookieStore;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -119,6 +125,44 @@ public class NicoClient {
     }
 
     /**
+     * マイリスグループを取得します,ログインが必須です<br>
+     *     get myList group , be sure to login beforehand.<br>
+     * @return Returns {@code Map<String,String>} of myList name and its ID
+     */
+    public Map<String,String> getMyListGroup(){
+        if ( !loginInfo.isLogin() ){
+            return null;
+            //TODO
+        }
+        MyListGetter getter = new MyListGetter();
+        return getter.getMyListGroup();
+    }
+
+    /**
+     * 指定したIDのマイリスを取得します<br>
+     *     get myList identified with ID.<br>
+     * このメソッドでは自身のマイリスのみ取得できます。
+     * ただし、マイリスの公開設定によっては取得できません。
+     * マイリスIDは{@link #getMyListGroup()}で取得できます。<br>
+     *     this can get your own myList only, but may fail due to its accessibility.
+     *     get myList ID from {@link #getMyListGroup()}.
+     * @param ID target myList ID, can not be {@code null}
+     * @return Returns {@code null} if no target myList or invalid myList ID
+     */
+    public List<VideoInfo> getMyList (String ID){
+        if ( !loginInfo.isLogin() ){
+            return null;
+            //TODO
+        }
+        if ( ID == null ){
+            return null;
+            //TODO
+        }
+        MyListGetter getter = new MyListGetter();
+        return getter.getMyList(ID);
+    }
+
+    /**
      *{@link #getComment(VideoInfo, int)}の引数省略したもの、コメント数は動画長さに応じて適当に設定される<br>
      *     {@link #getComment(VideoInfo, int)} with omitted argument, number of comments is set corresponding to video length.
      */
@@ -151,7 +195,7 @@ public class NicoClient {
 
         private String rankingUrl = "http://www.nicovideo.jp/ranking/%s/%s/%s?rss=2.0";
 
-        public List<VideoInfo> get (String genre, String period, String rankKind){
+        protected List<VideoInfo> get (String genre, String period, String rankKind){
             if ( genre == null || period == null || rankKind == null ){
                 //TODO exception
                 return null;
@@ -174,7 +218,7 @@ public class NicoClient {
 
         private String recommendUrl = "http://flapi.nicovideo.jp/api/getrelation?page=10&sort=p&order=d&video=";
 
-        public List<VideoInfo> get (VideoInfo info){
+        protected List<VideoInfo> get (VideoInfo info){
                 String path = recommendUrl + info.getString(VideoInfo.ID);
                 if ( tryGet(path) ){
                     return RecommendVideoInfo.parse(super.response);
@@ -187,7 +231,7 @@ public class NicoClient {
 
         private String tempMyListUrl = "http://www.nicovideo.jp/api/deflist/list";
 
-        public List<VideoInfo> get (){
+        protected List<VideoInfo> get (){
             String path = tempMyListUrl;
             if ( tryGet(path,loginInfo.getCookieStore()) ){
                 return TempMyListVideoInfo.parse(super.response);
@@ -200,7 +244,7 @@ public class NicoClient {
 
         private String paramFormat = ".json/thread?version=20090904&thread=%s&res_from=-%d";
 
-        public List<CommentInfo> get(VideoInfo videoInfo, int max){
+        protected List<CommentInfo> get(VideoInfo videoInfo, int max){
             if ( max <= 0 ){
                 return null;
             }
@@ -230,6 +274,42 @@ public class NicoClient {
                 if ( tryGet(path,loginInfo.getCookieStore() )){
                     return CommentInfo.parse(super.response);
                 }
+            }
+            return null;
+        }
+    }
+
+    private class MyListGetter extends HttpResponseGetter {
+
+        private String myListGroupUrl = "http://www.nicovideo.jp/api/mylistgroup/list";
+        private String myListUrl = "http://www.nicovideo.jp/mylist/%d?rss=2.0";
+
+        protected Map<String, String> getMyListGroup (){
+            if ( tryGet(myListGroupUrl, loginInfo.getCookieStore()) ){
+                try{
+                    JSONObject json = new JSONObject(response);
+                    if ( !json.optString("status").equals("ok")){
+                        Log.d("myListGroup","invalid access");
+                        return null;
+                    }
+                    JSONArray array = json.optJSONArray("mylistgroup");
+                    Map<String,String> myListGroup = new HashMap<String,String>();
+                    for ( int i=0 ; i<array.length() ; i++){
+                        JSONObject item = array.optJSONObject(i);
+                        myListGroup.put(item.optString("name"),item.optString("id"));
+                    }
+                    return myListGroup;
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        protected List<VideoInfo> getMyList(String ID){
+            String path = String.format(myListUrl, ID);
+            if ( tryGet(path,loginInfo.getCookieStore()) ){
+                return RankingVideoInfo.parse(super.response,null,null,null);
             }
             return null;
         }

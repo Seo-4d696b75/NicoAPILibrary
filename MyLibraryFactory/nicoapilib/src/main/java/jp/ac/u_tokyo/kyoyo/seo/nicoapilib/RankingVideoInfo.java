@@ -12,22 +12,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Seo on 2017/01/15.
+ * 取得したニコ動のランキング情報またはマイリス情報をパースします<br>
+ * 　this class parses ranking or myList response from Nico.<br><br>
  *
- * this class extending VideoInfoManager provides methods to parse ranking and my list video in XML
- * from http://www.nicovideo.jp/ranking/{0}/{1}/{2}?rss=2.0
- *      params;
- *      {0} : rank kind param  (view,mylist,fav)
- *      {1} : target period param  (total,monthly,weekly,daily,hourly)
- *      {2} : target category param     list of valid params : http://dic.nicovideo.jp/a/%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E3%82%BF%E3%82%B0
+ * this class extending VideoInfoManager provides methods to parse ranking response in XML<br>
+ * from http://www.nicovideo.jp/ranking/{0}/{1}/{2}?rss=2.0<br>
+ *      params;<br>
+ *      {0} : rank kind param  (view,mylist,fav)<br>
+ *      {1} : target period param  (total,monthly,weekly,daily,hourly)<br>
+ *      {2} : target category param     list of valid params : http://dic.nicovideo.jp/a/%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E3%82%BF%E3%82%B0<br><br>
  *
- * reference;
- * how to get ranking : https://ja.osdn.net/projects/nicolib/wiki/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E8%A7%A3%E6%9E%90%E3%83%A1%E3%83%A2
- * usage of regex : http://nobuo-create.net/seikihyougen/
- * usage of Pattern and Matcher : http://www.ne.jp/asahi/hishidama/home/tech/java/regexp.html
- *                                  http://www.javadrive.jp/regex/ref/index2.html
- *                                  http://qiita.com/ha_g1/items/d41febac011df4601544
- *                                  http://www.javadrive.jp/regex/option/index4.html
+ * also parse myList response in XML<br>
+ *     from http://www.nicovideo.jp/mylist/{3}?rss=2.0<br>
+ *     {3} : target myList ID<br><br>
+ *
+ * reference;<br>
+ * how to get ranking : https://ja.osdn.net/projects/nicolib/wiki/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E8%A7%A3%E6%9E%90%E3%83%A1%E3%83%A2<br>
+ * usage of regex : http://nobuo-create.net/seikihyougen/<br>
+ * usage of Pattern and Matcher : http://www.ne.jp/asahi/hishidama/home/tech/java/regexp.html<br>
+ *                                  http://www.javadrive.jp/regex/ref/index2.html<br>
+ *                                  http://qiita.com/ha_g1/items/d41febac011df4601544<br>
+ *                                  http://www.javadrive.jp/regex/option/index4.html<br>
+ * @version 0.0 2017/01/15.
+ * @author Seo-4d696b75
  */
 
 public class RankingVideoInfo extends VideoInfoManager {
@@ -35,7 +42,7 @@ public class RankingVideoInfo extends VideoInfoManager {
     //pass XML to initialize fields
     //when ranking, also pass ranking params (can be null)
 
-    public RankingVideoInfo(String xml, String genre, String period, String rankKind){
+    private RankingVideoInfo(String xml, String genre, String period, String rankKind){
         this.genre = genre;
         this.period = period;
         this.rankKind = rankKind;
@@ -153,7 +160,26 @@ public class RankingVideoInfo extends VideoInfoManager {
         return null;
     }
 
-    public static List<VideoInfo> parse (String xml,String genre, String period, String rankKind){
+    /**
+     * ニコ動APIから取得したXML形式のランキングおよびマイリス情報をパースします<br>
+     *     parse xml text from Nico API about ranking or myList.<br>
+     * ランキングの場合は検索に用いたジャンル、期間、種類パラメータを渡してください。
+     * {@code null}を渡した場合はマイリスと判断されます。
+     * APIの詳細や有効なパラメータは{@link RankingVideoInfo ここから参照}できます。<br>
+     *     in case of ranking, pass genre period kind params used in search.
+     *     if pass {@code null}, response is interpreted to be myList.
+     *     more details and valid params are {@link RankingVideoInfo available here}.
+     * @param xml response from Nico in XML, can
+     * @param genre genre param, can be {@code null} in case of myList
+     * @param period period param, can be {@code null} in case of myList
+     * @param rankKind ranking kind param, can be {@code null} in case of myList
+     * @return Returns {@code null} if no response or invalid response, and returns empty list if no hit
+     */
+    protected static List<VideoInfo> parse (String xml,String genre, String period, String rankKind){
+        if ( xml == null ){
+            //TODO
+            return null;
+        }
         List<VideoInfo> list = new ArrayList<VideoInfo>();
         Matcher matcher = Pattern.compile("<item>.+?</item>",Pattern.DOTALL).matcher(xml);
         while ( matcher.find() ){
