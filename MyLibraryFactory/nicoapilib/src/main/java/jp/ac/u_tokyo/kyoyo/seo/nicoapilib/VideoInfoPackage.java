@@ -3,28 +3,41 @@ package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 import java.io.Serializable;
 
 /**
- * Created by Seo-4d696b75 on 2017/01/26.
+ * 動画情報をIntentで渡すためのクラスです<br>
+ * this class can be passed with Intent.<br>
+ *  Activity間をIntentで{@link VideoInfo}の子クラスは渡せません。
+ * {@link VideoInfo#pack()}で取得したこのクラスを代わりに渡してください。
+ * 渡した先で{@link #unpack()}を呼ぶことで{@link VideoInfoManager 子クラス}のメソッドが使えます。<br>
+ * child classes of {@link VideoInfo} can not be passed between Activities with Intent.
+ * substitute with this class instance gotten from {@link VideoInfo#pack()}.
+ * @author Seo-4d696b75
+ * @version on 2017/01/26.
  */
 
 public class VideoInfoPackage implements Serializable {
 
-    protected String genre;
-    protected String rankKind;
-    protected String period;
-    protected String pubDate;
-    protected String title;
-    protected String id;
-    protected String date;
-    protected String description;
-    protected String[] thumbnailUrl;
-    protected int length = -1;
-    protected int viewCounter = -1;
-    protected int commentCounter = -1;
-    protected int myListCounter = -1;
-    protected String[] tags;
-    protected float point = 0f;
+    private String genre;
+    private String rankKind;
+    private String period;
+    private String pubDate;
+    private String title;
+    private String id;
+    private String date;
+    private String description;
+    private String[] thumbnailUrl;
+    private int length = -1;
+    private int viewCounter = -1;
+    private int commentCounter = -1;
+    private int myListCounter = -1;
+    private String[] tags;
+    private float point = 0f;
 
-    public VideoInfoPackage (VideoInfo info){
+    /**
+     * Intentで渡せるようにSerializableなインスタンスを返します<br>
+     * convert into serializable instance so that it can be pass with Intent.
+     * @param info Returns serializable
+     */
+    protected VideoInfoPackage (VideoInfo info){
         if ( info == null ){
             //TODO exception
         }else{
@@ -46,6 +59,11 @@ public class VideoInfoPackage implements Serializable {
         }
     }
 
+    /**
+     * {@link VideoInfoManager 子クラス}のメソッドが使えるように変換します<br>
+     * convert this class so that methods of {@link VideoInfoManager child class} can be used.
+     * @return Returns instance keeping all the fields
+     */
     public VideoInfoManager unpack(){
         VideoInfoManager info = new VideoInfoManager();
         info.genre = this.genre;

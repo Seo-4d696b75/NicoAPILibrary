@@ -15,6 +15,9 @@ import java.util.regex.Pattern;
  * 取得したニコ動のランキング情報またはマイリス情報をパースします<br>
  * 　this class parses ranking or myList response from Nico.<br><br>
  *
+ * ニコ動ランキングAPIから取得できるフィールドは{@link #parse(String, String, String, String) こちらを参照}<br>
+ *   you can get {@link #parse(String, String, String, String) these fields} from ranking API.<br><br>
+ *
  * this class extending VideoInfoManager provides methods to parse ranking response in XML<br>
  * from http://www.nicovideo.jp/ranking/{0}/{1}/{2}?rss=2.0<br>
  *      params;<br>
@@ -166,9 +169,29 @@ public class RankingVideoInfo extends VideoInfoManager {
      * ランキングの場合は検索に用いたジャンル、期間、種類パラメータを渡してください。
      * {@code null}を渡した場合はマイリスと判断されます。
      * APIの詳細や有効なパラメータは{@link RankingVideoInfo ここから参照}できます。<br>
+     * 取得できる動画のフィールドは以下の通りです。<br>
+     *     {@link VideoInfo#title 動画タイトル}<br>
+     *     {@link VideoInfo#id 動画ID}<br>
+     *     {@link VideoInfo#pubDate ランキング発表日時}<br>
+     *     {@link VideoInfo#description 動画説明}<br>
+     *     {@link VideoInfo#length 動画長さ}<br>
+     *     {@link VideoInfo#date 動画投稿日時}<br>
+     *     {@link VideoInfo#viewCounter 再生数}<br>
+     *     {@link VideoInfo#commentCounter コメント数}<br>
+     *     {@link VideoInfo#myListCounter マイリス数}<br>
      *     in case of ranking, pass genre period kind params used in search.
      *     if pass {@code null}, response is interpreted to be myList.
-     *     more details and valid params are {@link RankingVideoInfo available here}.
+     *     more details and valid params are {@link RankingVideoInfo available here}.<br>
+     *     you can get following fields of videos;<br>
+     *     {@link VideoInfo#title title of video}<br>
+     *     {@link VideoInfo#id video ID}<br>
+     *     {@link VideoInfo#pubDate ranking published date}<br>
+     *     {@link VideoInfo#description video description}<br>
+     *     {@link VideoInfo#length length}<br>
+     *     {@link VideoInfo#date contributed date}<br>
+     *     {@link VideoInfo#viewCounter number of view}<br>
+     *     {@link VideoInfo#commentCounter number of comment}<br>
+     *     {@link VideoInfo#myListCounter number of myList registered}<br>
      * @param xml response from Nico in XML, can
      * @param genre genre param, can be {@code null} in case of myList
      * @param period period param, can be {@code null} in case of myList

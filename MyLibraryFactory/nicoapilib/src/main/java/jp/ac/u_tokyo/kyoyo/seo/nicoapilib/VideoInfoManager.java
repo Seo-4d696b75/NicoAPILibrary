@@ -21,25 +21,27 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Seo on 2017/01/15.
  *
- * this class extending VideoInfo provides additional utilities
+ * {@link VideoInfo}に関する追加メソッドを提供します<br>
+ * this class extending {@link VideoInfo} provides additional utilities.<br><br>
  *
- * reference;
- * format of ISO8601 : https://ja.wikipedia.org/wiki/ISO_8601
- *                      http://d.hatena.ne.jp/drambuie/20110219/p1
- * usage of Date.class: http://www.javaroad.jp/java_date1.htm
- * usage of SimpleDateFormat.class : http://www.javaroad.jp/java_date3.htm,
- *                                  http://java-reference.sakuraweb.com/java_date_format.html
- *                                  http://d.hatena.ne.jp/rudi/20101201/1291214680
- * usage of NumberFormat.class : http://java-reference.sakuraweb.com/java_number_format.html
- * algorithm of alignment :  東京大学出版会　情報科学入門 ISBN978-4-13-062452-7
+ * reference;<br>
+ * format of ISO8601 : https://ja.wikipedia.org/wiki/ISO_8601<br>
+ *                      http://d.hatena.ne.jp/drambuie/20110219/p1<br>
+ * usage of Date.class: http://www.javaroad.jp/java_date1.htm<br>
+ * usage of SimpleDateFormat.class : http://www.javaroad.jp/java_date3.htm,<br>
+ *                                  http://java-reference.sakuraweb.com/java_date_format.html<br>
+ *                                  http://d.hatena.ne.jp/rudi/20101201/1291214680<br>
+ * usage of NumberFormat.class : http://java-reference.sakuraweb.com/java_number_format.html<br>
+ * algorithm of alignment :  東京大学出版会　情報科学入門 ISBN978-4-13-062452-7<br><br>
  *
+ * @author Seo-4d696b75
+ * @version 0.0  on 2017/01/15.
  */
 
 public class VideoInfoManager extends VideoInfo {
 
-    public VideoInfoManager(){}
+    protected VideoInfoManager(){}
 
     //url from which details of video you can get
     private String thumbUrl = "http://ext.nicovideo.jp/api/getthumbinfo/";
@@ -65,9 +67,49 @@ public class VideoInfoManager extends VideoInfo {
         }
     };
      //basic date format in this app, based on ISO 8601
+    /**
+     * このライブラリでの日時表記の共通形式です。<br>
+     *     this is date format common in the library.<br>
+     *     ISO 8601標準形"yyyyMMdd'T'HHmmssZ"に従います。
+     */
     public static final SimpleDateFormat dateFormatBase = new SimpleDateFormat("yyyyMMdd'T'HHmmssZ");
 
     //some fields of Nico video may be empty, so this complete them
+    /**
+     * 欠損した動画のフィールド値を取得します<br>
+     * get lacking fields of video.<br>
+     * {@link VideoInfo 動画の取得元API}によっては欠損したフィールド値が存在しますので注意してください。
+     * このメソッドで取得できるフィールドは以下の通りです<br>
+     *     {@link VideoInfo#title 動画タイトル}<br>
+     *     {@link VideoInfo#id 動画ID}<br>
+     *     {@link VideoInfo#description 動画説明}<br>
+     *     {@link VideoInfo#length 動画長さ}<br>
+     *     {@link VideoInfo#date 動画投稿日時}<br>
+     *     {@link VideoInfo#viewCounter 再生数}<br>
+     *     {@link VideoInfo#commentCounter コメント数}<br>
+     *     {@link VideoInfo#myListCounter マイリス数}<br>
+     *     {@link VideoInfo#thumbnailUrl サムネイル画像のURL}<br>
+     *     {@link VideoInfo#tags 動画タグ}<br>
+     *     {@link VideoInfo#contributorID 投稿者のユーザID}<br>
+     *     {@link VideoInfo#contributorName 投稿者のニックネーム}<br>
+     *     {@link VideoInfo#contributorIconUrl 投稿者のユーザアイコン画像のURL}<br>
+     * be careful that there can be lacking fields {@link VideoInfo according to API}.
+     * by calling this, you can get;<br>
+     *     {@link VideoInfo#title title of video}<br>
+     *     {@link VideoInfo#id video ID}<br>
+     *     {@link VideoInfo#description video description}<br>
+     *     {@link VideoInfo#length length}<br>
+     *     {@link VideoInfo#date contributed date}<br>
+     *     {@link VideoInfo#viewCounter number of view}<br>
+     *     {@link VideoInfo#commentCounter number of comment}<br>
+     *     {@link VideoInfo#myListCounter number of myList registered}<br>
+     *     {@link VideoInfo#thumbnailUrl url of thumbnail}<br>
+     *     {@link VideoInfo#tags video tag}<br>
+     *     {@link VideoInfo#contributorID user ID of contributor}<br>
+     *     {@link VideoInfo#contributorName user name of contubutor}<br>
+     *     {@link VideoInfo#contributorIconUrl url of user icon of contributor}<br>
+     * @return Returns {@code true} if succeed
+     */
     public boolean complete(){
         String path = thumbUrl + id;
         HttpResponseGetter getter= new HttpResponseGetter();
@@ -194,7 +236,13 @@ public class VideoInfoManager extends VideoInfo {
         return null;
     }
 
-    public boolean getFlv (CookieStore cookieStore){
+    /**
+     * スレッドID,メッセージサーバURL,flvURLを取得します<br>
+     * get threadID, URL of message server and flv URL.
+     * @param cookieStore Nico login session
+     * @return Returns {@code true} if succeed
+     */
+    protected boolean getFlv (CookieStore cookieStore){
         String path = flvUrl + id;
         HttpResponseGetter getter = new HttpResponseGetter();
         if ( !getter.tryGet(path,cookieStore)){
@@ -226,6 +274,12 @@ public class VideoInfoManager extends VideoInfo {
         return true;
     }
 
+    /**
+     * Androidでの使用を前提にサムネイル画像を取得します<br>
+     * get thumbnail image, supposed to be used in Android.<br>
+     * 一度取得した画像は動画フィールドに保存されます。
+     * @return Returns {@code null} if fail to get
+     */
     public Drawable getThumbnail (){
         return getThumbnail(false);
     }
@@ -244,6 +298,12 @@ public class VideoInfoManager extends VideoInfo {
         return thumbnail;
     }
 
+    /**
+     * Androidでの使用を前提に投稿者のユーザアイコン画像を取得します<br>
+     * get user icon image of contributor, supposed to be used in Android.<br>
+     * 一度取得した画像は動画フィールドに保存されます。
+     * @return Returns {@code null} if fail to get
+     */
     public Drawable getContributorIcon(){
         if ( contributorIcon == null ) {
             if (contributorIconUrl == null) {
@@ -273,10 +333,10 @@ public class VideoInfoManager extends VideoInfo {
         return null;
     }
 
-    /**
-     *
-     * memo;
-     * 2016/12/28
+    /*
+
+     memo;
+     2016/12/28
      動画長さ
      nico ranking/myList(xml):	String.format("%d:%02d",min,sec)
      nico search(Json):	sec
@@ -299,7 +359,11 @@ public class VideoInfoManager extends VideoInfo {
      //parse時はsetTimeZone(TimeZone.getTimeZone("UTC"))でタイムゾーンを明示的に指定
      */
 
-
+    /**
+     * 表示のため動画長さをフォーマットします<br>
+     * format video length in order to be shown.<br>
+     * @return Returns in format "mm:ss"
+     */
     public String formatLength(){
         return String.format("%01d:%02d",length/60,length%60);
     }
@@ -323,7 +387,15 @@ public class VideoInfoManager extends VideoInfo {
         return numberFormat.format(counter);
     }
 
+    /**
+     * 動画投稿日をDateクラスに変換して返します<br>
+     *　convert contributed date into Date class.
+     * @return Returns {@code null} if date is null
+     */
     public Date parseDate(){
+        if ( date == null ){
+            return null;
+        }
         try{
             return dateFormatBase.parse(date);
         } catch (ParseException e) {
