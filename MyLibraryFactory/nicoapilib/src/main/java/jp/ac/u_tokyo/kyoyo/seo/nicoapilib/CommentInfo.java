@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * コメントの取得・管理をする<br>
- * this class keeps information of each comment
+ * This class keeps information of each comment
  * also provides methods to parse response in Json to this class.<br>
  *
  * reference<br>
@@ -24,13 +24,49 @@ import java.util.Map;
  *
  *
  * note<br>
- * Json passed to {@link #parse(JSONArray)}  } is supposed to gotten from message server like this;<br>
+ * JSONArray passed to {@link #parse(JSONArray)} is supposed to gotten from message server like this;<br>
  * http://msg.nicovideo.jp/10/api.json/thread?version=20090904&thread={0}&res_from=-{1}<br>
  * url of message server can be gotten from getflv API<br>
  * query should be like that (details is known)<br>
  *      params of query;<br>
  *      {0} : thread ID of target video, also can be gotten from getflv API<br>
- *      {1} : max number of comment, must not be over 1000
+ *      {1} : max number of comment, must not be over 1000<br><br>
+ *
+ * expected response format; JsonArray<br>
+ * <pre>
+ * [
+ *  {
+ *      "thread": {                     # no comment content
+ *          "resultcode": 0,            #
+ *          "thread": "1316253628",     #
+ *          ......                      #
+ *       }                              #
+ *  },
+ *  {
+ *      "leaf": {                       # no comment content
+ *          "thread": "1316253628",     #
+ *          "count": 474529,            #
+ *          ....                        #
+ *      }                               #
+ *  },
+ *  {
+ *      "chat": {                       # target JSONObject
+ *          "thread": "******",
+ *          "no": *****,
+ *          "date_usec": ******,
+ *          "premium": 1,
+ *          "user_id": "****************",
+ *          "anonymity": 1,                     # parse target
+ *          "vpos": 1445,                       #
+ *          "date": 1483679280,                 #
+ *          "mail": "184 big black device:3DS", #
+ *          "content": "contentOfComment"     #
+ *      }
+ *  },
+ *  .......
+ * ]</pre><br><br>
+ * references;<br>
+ * how to get comment form Nico : <a href=https://blog.hayu.io/web/nicovideo-comment-api>[NANOWAY]ニコニコ動画のコメント解析</a>
  *
  * @author Seo-4d696b75
  * @version 0.0 on 2017/01/01.
@@ -40,18 +76,18 @@ public class CommentInfo {
 
     /**
      * コメントが右から流れ始める時間　単位はミリ秒<br>
-     * time when the comment begins to flow from one side to the other. unit is milli sec.
+     * time when the comment begins to flow from one side to the other, measured in milli seconds.
      */
     public long start;
     private String[] mail;   //list of comment commands, not mail address
     /**
      * コメントの内容<br>
-     *     content of the comment
+     * content of the comment
      */
     public String content;  //comment
     /**
-     * コメントの投稿日時<br>
-     * date when the comment is contributed
+     * コメントの投稿日時、{@link VideoInfoManager#dateFormatBase 共通形式}に従う<br>
+     * date when the comment is contributed, based on {@link VideoInfoManager#dateFormatBase common format}
      */
     public String date;
     /**
@@ -65,32 +101,32 @@ public class CommentInfo {
 
     /**
      * 画面上のコメントの座標（ピクセル単位）<br>
-     * x,y-coordinate on screen (pix)
+     * x,y-coordinate on screen, measured in pixels
      */
     public float x,y;
     /**
-     * コメントの画面上での長さ(ピクセル)<br>
-     * length on screen (pix)
+     * コメントの画面上での長さ(ピクセル単位)<br>
+     * length on screen, measured in pixels
      */
     public float length = -1f;
     /**
-     * コメントの流れる速さ（ピクセル）<br>
-     *     speed with which the comment flows (pix)
+     * コメントの流れる速さ（ピクセル/s）<br>
+     *     speed with which the comment flows, measured in pixels per second
      */
     public float speed;
     /**
      * コメントの色<br>
-     *     color of the comment
+     * color of the comment
      */
     public int color = -1;
     /**
      * 表示行の高さに対するコメントサイズの比率<br>
-     *     ratio of comment size to max height, can be between 0.0 to 1.0
+     *    ratio of comment size to max height, can be between 0.0 to 1.0
      */
     public float size = -1f;
     /**
      * コメントの位置 POSITION定数<br>
-     *     position of the comment, can be the following constants
+     *     position of the comment, can be the following constants; POSITION_****
      */
     public int position = -1;
 
@@ -131,14 +167,7 @@ public class CommentInfo {
         }
     };
 
-    /**
-     * 初期化コンストラクタ <br>
-     *     constructor for initialization.<br><br>
-     * 適当なJSONを渡してパースする<br>
-     * pass Json relevant to each comment, then Json is parsed and fields are initialized
-     * @param item 一つのコメントに該当するＪＳＯＮ, Json relevant to each comment
-     */
-    protected CommentInfo (JSONObject item){
+    private CommentInfo (JSONObject item) throws NicoAPIException{
         initialize(item);
     }
 
@@ -160,7 +189,7 @@ public class CommentInfo {
             }
         }
     }
-    private void initialize (JSONObject item){
+    private void initialize (JSONObject item) throws NicoAPIException{
         try {
             //value of "vpos" seems to be time when comment appear,
             // but unit is decimal sec, not milli sec
@@ -176,7 +205,7 @@ public class CommentInfo {
             content = item.getString("content");
             setCommands();
         }catch (JSONException e){
-            e.printStackTrace();
+            throw new NicoAPIException.ParseException(e.getMessage(),item.toString());
         }
     }
 
@@ -186,13 +215,16 @@ public class CommentInfo {
 
     /**
      * 実際にCanvasに描写する際、必要なフィールドを初期化する<br>
-     *     initialize fields needed for being shown on Canvas.
+     * Initialize fields needed for being shown on Canvas.
      * @param width width of Canvas in pix
      * @param paint cannot be {@code null}
-     * @param span  time in which the comment from one side to the other in seconds
+     * @param span  time in which the comment flows from one side to the other in seconds
      * @param offset offset in the direction of y in pixels
      */
     public void initialize(float width, Paint paint, float span, float offset){
+        if ( paint == null ){
+            return;
+        }
         if ( ! initialized ){
             length = paint.measureText(content);
             speed = (width + length )/span;
@@ -211,12 +243,14 @@ public class CommentInfo {
 
     /**
      * APIからのレスポンスをパースして、時系列に整列したリストを返す<br>
-     * parse Json form message server and return items sorted along the time series
+     * Parses JSONObject form message server and return items sorted along the time series
      * @param root response from message server, cannot be {@code null}
-     * @return Returns {@code null} if {@code root} is invalid, see {@link CommentInfo description;"note"}<br>
-     *     Returns empty list if response contains no items
+     * @return Returns empty list if response contains no items
+     * @throws NicoAPIException if API response does not follow expected format or argument is {@code null}
+     * @see CommentInfo expected response format
+     *
      */
-    protected static List<CommentInfo> parse(JSONArray root){
+    protected static List<CommentInfo> parse(JSONArray root) throws NicoAPIException{
         List<CommentInfo>commentList = new ArrayList<CommentInfo>();
         try{
             for ( int i=0 ; i<root.length() ; i++){
@@ -231,23 +265,21 @@ public class CommentInfo {
             }
             return sortComment(commentList);
         } catch( JSONException e){
-            e.printStackTrace();
+            throw new NicoAPIException.ParseException(e.getMessage(),root.toString());
         }
-        return null;
     }
 
     /**
      * @see #parse(JSONArray) works as the same as this method
      * @param res response from message server in String, cannot be {@code null}
      */
-    protected static List<CommentInfo> parse(String res){
+    protected static List<CommentInfo> parse(String res) throws NicoAPIException{
         try{
             JSONArray root = new JSONArray(res);
             return parse(root);
         }catch (JSONException e){
-            e.printStackTrace();
+            throw new NicoAPIException.ParseException(e.getMessage(),res);
         }
-        return null;
     }
 
     //sort list of CommentInfo along the time series, using merge sort

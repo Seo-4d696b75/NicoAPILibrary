@@ -4,42 +4,43 @@ import java.io.Serializable;
 
 /**
  * 動画情報をIntentで渡すためのクラスです<br>
- * this class can be passed with Intent.<br>
+ * This class can be passed with Intent.<br>
  *  Activity間をIntentで{@link VideoInfo}の子クラスは渡せません。
  * {@link VideoInfo#pack()}で取得したこのクラスを代わりに渡してください。
  * 渡した先で{@link #unpack()}を呼ぶことで{@link VideoInfoManager 子クラス}のメソッドが使えます。<br>
- * child classes of {@link VideoInfo} can not be passed between Activities with Intent.
- * substitute with this class instance gotten from {@link VideoInfo#pack()}.
+ * Child classes of {@link VideoInfo} can not be passed between Activities with Intent.
+ * You substitute with this class instance gotten from {@link VideoInfo#pack()}.
  * @author Seo-4d696b75
  * @version on 2017/01/26.
  */
 
 public class VideoInfoPackage implements Serializable {
 
-    private String genre;
-    private String rankKind;
-    private String period;
-    private String pubDate;
-    private String title;
-    private String id;
-    private String date;
-    private String description;
-    private String[] thumbnailUrl;
-    private int length = -1;
-    private int viewCounter = -1;
-    private int commentCounter = -1;
-    private int myListCounter = -1;
-    private String[] tags;
-    private float point = 0f;
+    protected String genre;
+    protected String rankKind;
+    protected String period;
+    protected String pubDate;
+    protected String title;
+    protected String id;
+    protected String date;
+    protected String description;
+    protected String[] thumbnailUrl;
+    protected int length = -1;
+    protected int viewCounter = -1;
+    protected int commentCounter = -1;
+    protected int myListCounter = -1;
+    protected String[] tags;
+    protected float point = 0f;
 
     /**
      * Intentで渡せるようにSerializableなインスタンスを返します<br>
-     * convert into serializable instance so that it can be pass with Intent.
-     * @param info Returns serializable
+     * Converts into serializable instance so that it can be pass with Intent.
+     * @param info the target video, cannot be {@code null}
+     * @throws NicoAPIException if argument is {@code null}
      */
-    protected VideoInfoPackage (VideoInfo info){
+    protected VideoInfoPackage (VideoInfo info) throws NicoAPIException{
         if ( info == null ){
-            //TODO exception
+            throw new NicoAPIException.InvalidParamsException("no target video > pack");
         }else{
             genre = info.genre;
             rankKind = info.rankKind;
@@ -49,37 +50,31 @@ public class VideoInfoPackage implements Serializable {
             id = info.id;
             date = info.date;
             description = info.description;
-            thumbnailUrl = info.getThumbnailUrlArray();
+            try {
+                thumbnailUrl = info.getThumbnailUrlArray();
+            }catch(NicoAPIException.NotInitializedException e){
+                thumbnailUrl = null;
+            }
             length = info.length;
             viewCounter = info.viewCounter;
             commentCounter = info.commentCounter;
             myListCounter = info.myListCounter;
-            tags = info.getTags();
+            try {
+                tags = info.getTags();
+            }catch ( NicoAPIException.NotInitializedException e){
+                tags = null;
+            }
             point = info.point;
         }
     }
 
     /**
      * {@link VideoInfoManager 子クラス}のメソッドが使えるように変換します<br>
-     * convert this class so that methods of {@link VideoInfoManager child class} can be used.
+     * Converts itself so that methods of {@link VideoInfoManager child class} can be used.
      * @return Returns instance keeping all the fields
      */
     public VideoInfoManager unpack(){
-        VideoInfoManager info = new VideoInfoManager();
-        info.genre = this.genre;
-        info.rankKind = this.rankKind;
-        info.period = this.period;
-        info.pubDate = this.pubDate;
-        info.title = this.title;
-        info.id = this.id;
-        info.date = this.date;
-        info.description = description;
-        info.setThumbnailUrl(this.thumbnailUrl);
-        info.length = this.length;
-        info.viewCounter = this.viewCounter;
-        info.commentCounter = this.commentCounter;
-        info.myListCounter = this.myListCounter;
-        info.setTags(tags);
+        VideoInfoManager info = new VideoInfoManager(this);
         return info;
     }
 }

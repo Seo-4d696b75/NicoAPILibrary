@@ -12,10 +12,10 @@ import java.util.List;
 
 /**
  * ニコ動のユーザー情報を管理する<br>
- *     this class manages information of user.<br><br>
+ *     This class manages information of user.<br><br>
  *
  *     Intentで渡す場合を想定してSerializableにしてある<br>
- *     this is Serializable so that it can be passed with Intent.
+ *     This is Serializable so that it can be passed with Intent.
  *
  * @author Seo-4d696b75
  * @version 0.0 on 2017/01/21.
@@ -40,44 +40,59 @@ public class LoginInfo implements Serializable{
 
     /**
      * ログイン状態を返す<br>
-     *     check login status in boolean.
+     * Checks login status in boolean.
      * @return Returns {@code true} if login, otherwise {@code false}
      */
-    public boolean isLogin (){
+    public synchronized boolean isLogin (){
         return login;
     }
     /**
-     * ニックネームとか言われるあのユーザ名を取得、必ずログインしてからにしよう。<br>
-     *     get user name in String.
-     * @return can be {@code null} if not login
+     * ニックネームとか言われるあのユーザ名を取得、必ずログインしてから<br>
+     * Gets user name in String.
+     * @return user name in String
+     * @throws NicoAPIException if not login
      */
-    public String getUserName(){
+    public synchronized String getUserName() throws NicoAPIException.NoLoginException{
+        if ( !login ){
+            throw new NicoAPIException.NoLoginException("no login > user name");
+        }
         return userName;
     }
     /**
      * ユーザＩＤを取得する、必ずログインしてから取得すること。<br>
-     *     get userID, be sure to get after login.
-     * @return can be {@code null} if not login
+     * Gets userID, be sure to get after login.
+     * @return user ID
+     * @throws NicoAPIException if not login
      */
-    public int getUserID(){
+    public synchronized int getUserID() throws NicoAPIException.NoLoginException{
+        if ( !login ){
+            throw new NicoAPIException.NoLoginException("no login > user ID");
+        }
         return userID;
     }
     /**
      * supposed to be called by NicoLogin only.
      */
-    protected void setUserName (String userName){
+    protected synchronized void setUserName (String userName){
         this.userName = userName;
     }
     /**
      * supposed to be called by NicoLogin only.
      */
-    protected void setUserID (int userID){
+    protected synchronized void setUserID (int userID){
         this.userID = userID;
     }
+
     /**
-     * @deprecated supposed to be called within NicoAPI only.
+     * ログインセッションを含むCookieを取得する<br>
+     * Gets Cookie containing login session.
+     * @return CookieStore contains login session
+     * @throws NicoAPIException.NoLoginException if not login
      */
-    public CookieStore getCookieStore(){
+    public synchronized CookieStore getCookieStore() throws NicoAPIException.NoLoginException{
+        if ( !login ){
+            throw new NicoAPIException.NoLoginException("no login > getCookieStore");
+        }
         CookieStore cookieStore = new DefaultHttpClient().getCookieStore();
         for (int i = 0; i < cookieNum; i++) {
             BasicClientCookie cookie = new BasicClientCookie(cookieName[i], cookieValue[i]);
@@ -91,7 +106,7 @@ public class LoginInfo implements Serializable{
     /**
      * supposed to be called within NicoAPI only.
      */
-    protected void setCookieStore(CookieStore cookieStore){
+    protected synchronized void setCookieStore(CookieStore cookieStore){
         if ( cookieStore == null ){
             login = false;
             cookieNum = 0;

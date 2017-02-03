@@ -15,148 +15,167 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * NicoAPIの中心となるクラス,全ての機能はここから呼ぶ<br>
- *     this class the center of NicoAPI, all the functions are called from here.
+ * NicoAPIの中心となるクラスです<br>
+ * this class the center of NicoAPI, all the functions are called from here.<br><br>
+ *
+ * このライブラリの全機能はここから呼ぶことができます。このクラスは直列化可能ですのでアプリ起動時に
+ * 一度インスタンス化したらIntentでActivity間を渡して使いまわせます。
  *
  * @author Seo-4d696b75
  * @version 0.0 on 2017/01/21.
  */
 
-public class NicoClient {
+public class NicoClient extends LoginInfo{
 
-    private LoginInfo loginInfo;
     /**
      * アプリの名前、使用するＡＰＩによってはこの値が必要<br>
-     *     your application name, needed for some API.
+     * Your application name, needed for some API.
      */
     public static final String appName = "yourAppName";
 
     /**
-     * コンストラクタからインスタンスを取得します,全てはここから始まる<br>
-     *     get instance in this constructor.
+     * コンストラクタからインスタンスを取得します、全てはここから始まる<br>
+     * Gets instance of this constructor.
      */
-    public NicoClient (){
-        loginInfo = new LoginInfo();
-    }
+    public NicoClient (){}
 
+    /*
     /**
      * Intent等で{@link LoginInfo ログイン情報}が手元にある場合を想定したコンストラクタ<br>
      *     constructor in case where {@link LoginInfo login information} is available with Intent or so.
      * @param loginInfo can be {@code null}, but add new {@link LoginInfo login information} with no login
-     */
+     *//*
     public NicoClient (LoginInfo loginInfo){
         if ( loginInfo == null ){
             loginInfo = new LoginInfo();
         }
         this.loginInfo = loginInfo;
+    }*/
+
+    /**
+     * ニコ動にログインします<br>
+     * Tries to login in NicoNico. <br>
+     * ニコ動にアカウント登録された有効なメールアドレスとパスワードを渡してください。
+     * {@code null}または無効な値を渡すとログインに失敗します。
+     * ライブラリでは機能によってはログインが必須なので、必ずログインしてください。
+     * 各種ログイン情報は{@link LoginInfo 親クラス}の適当なメソッドを呼び参照できます。<br>
+     *  Pass valid mail address and pass word registered in NicoNico.
+     *  If invalid value or {@code null} is passed, you fail to login.
+     *  In this library, some function require login session, so be sure to login.
+     *  You can access various relevant information by calling methods of {@link LoginInfo super class}.
+     * @param mail cannot be {@code null}
+     * @param pass cannot be {@code null}
+     * @throws NicoAPIException if fail to login because of invalid params
+     */
+    public synchronized void login (String mail, String pass) throws NicoAPIException {
+        NicoLogin nicoLogin = new NicoLogin(NicoClient.this);
+        nicoLogin.login(mail, pass);
     }
 
     /**
-     * ニコ動にログインします、各種ログイン情報は{@link #loginInfo}から参照されたし<br>
-     *     try to login in NicoNico, you can access various relevant information from {@link #loginInfo}.
-     * @param mail should not be {@code null}, or fail
-     * @param pass should not be {@code null}, or fail
+     * ユーザのアイコンを取得する【ログイン必須】<br>
+     * Gets user icon image, be sure to login beforehand.<br>
+     * ログインしていないと取得に失敗して例外を投げます。<br>
+     * If not login, this fails to get the image and throws exception.
+     * @return Returns user icon, not {@code null}
+     * @throws NicoAPIException if fail to get image
      */
-    public void login (String mail, String pass){
-        NicoLogin nicoLogin = new NicoLogin(loginInfo);
-        nicoLogin.login(mail,pass);
-    }
-
-    /**
-     * ユーザのアイコンを取得する,ログインが必須<br>
-     *     get user icon image, be sure to login beforehand.
-     * @return Returns {@code null} if not login or fail in HTTP
-     */
-    public Drawable getUserIcon(){
-        NicoLogin nicoLogin = new NicoLogin(loginInfo);
+    public synchronized Drawable getUserIcon() throws NicoAPIException{
+        NicoLogin nicoLogin = new NicoLogin(NicoClient.this);
         return nicoLogin.getUserIcon();
     }
 
     /**
-     * ランキングを取得 {@link RankingVideoInfo パラメータの詳細}、ログインが必須<br>
-     *     get ranking, see {@link RankingVideoInfo details about params} and be sure to login beforehand.
-     * @param genre should not be {@code null}, or return {@code null}
-     * @param period should not be {@code null}, or return {@code null}
-     * @param rankKind should not be {@code null}, or return {@code null}
-     * @return Returns {@code null} if above params is invalid, not login or fail in HTTP
+     * ランキングを取得する【ログイン必須】<br>
+     * Gets ranking, be sure to login beforehand.<br>
+     * 有効なランキングパラメータは{@link RankingVideoInfo こちらから参照}してください。
+     * 不正なパラメータや{@code null}を渡すと取得に失敗して例外を投げます。<br>
+     * Details about valid params is {@link RankingVideoInfo available here}.
+     * If invalid params or {@code null} passed, this fails to get ranking and throws exception.
+     * @param genre cannot be {@code null}
+     * @param period cannot be {@code null}
+     * @param rankKind cannot be {@code null}
+     * @return Returns empty List if no hit, not {@code null}
+     * @throws NicoAPIException if fail to get ranking
      */
-    public List<VideoInfo> getRanking(String genre, String period, String rankKind){
+    public synchronized List<VideoInfo> getRanking(String genre, String period, String rankKind) throws NicoAPIException{
         RankingGetter getter = new RankingGetter();
-        return getter.get(genre,period,rankKind);
+        return getter.get(genre, period, rankKind);
     }
 
     /**
      * 対象の動画を引数に渡し、その動画に関するおすすめ動画を取得する<br>
-     *     get videos recommended about the target video passed in argument.
-     * @param videoInfo target video, should not be {@code null}, or return {@code null}
-     * @return Returns {@code null} if no target video or fail in HTTP
+     * Gets videos recommended about the target video passed in argument.
+     * @param videoInfo target video, cannot be {@code null}
+     * @return Returns empty List if no hit, not {@code null}
+     * @throws NicoAPIException if fail to get recommend video
      */
-    public List<VideoInfo> getRecommend(VideoInfo videoInfo){
+    public List<VideoInfo> getRecommend(VideoInfo videoInfo) throws NicoAPIException {
         if ( videoInfo == null ){
-            //TODO exception
-            return null;
+            throw new NicoAPIException.InvalidParamsException("target video is null > recommend");
         }
         RecommendGetter getter = new RecommendGetter();
         return getter.get(videoInfo);
     }
 
     /**
-     * とりあえずマイリストの取得、ログイン必須<br>
-     *     get temp my list, be sure to login beforehand.
-     * @return Returns {@code null} if not login or fail in HTTP
+     * とりあえずマイリストの取得【ログイン必須】<br>
+     * Gets temp myList, be sure to login beforehand.<br>
+     * ログインしていない、もしくはユーザの公開設定によっては取得に失敗して例外を投げます。<br>
+     * If not login or setting of user does not allow the access, this fails to get myList and throws exception.
+     * @return Returns empty List if no hit, not {@code null}
+     * @throws NicoAPIException if fail to get myList
      */
-    public List<VideoInfo> getTempMyList(){
-        if ( loginInfo.isLogin() ) {
+    public synchronized List<VideoInfo> getTempMyList()throws NicoAPIException{
+        if ( isLogin() ) {
             TempMyListGetter getter = new TempMyListGetter();
             return getter.get();
         }else{
-            //TODO
-            return null;
+            throw new NicoAPIException.NoLoginException("no login > temp myList");
         }
     }
 
     /**
      * 動画を検索するのに必要な{@link NicoSearch}のインスタンスを取得する、検索にはログインが要らない<br>
-     *     get {@link NicoSearch} instance in order to search videos in NicoNico, you don't have to login.
-     * @return use this to search videos
+     * Gets {@link NicoSearch} instance in order to search videos in NicoNico, you don't have to login.
+     * @return use this to search videos, not{@code null}
      */
     public NicoSearch getNicoSearch (){
         return new NicoSearch();
     }
 
     /**
-     * マイリスグループを取得します,ログインが必須です<br>
+     * マイリスグループを取得します【ログイン必須】<br>
      *     get myList group , be sure to login beforehand.<br>
      * @return Returns {@code Map<String,String>} of myList name and its ID
+     * @throws NicoAPIException if fail to get myList group
      */
-    public Map<String,String> getMyListGroup(){
-        if ( !loginInfo.isLogin() ){
-            return null;
-            //TODO
+    public synchronized Map<String,String> getMyListGroup() throws NicoAPIException{
+        if ( !isLogin() ){
+            throw new NicoAPIException.NoLoginException("no login > myList group");
         }
         MyListGetter getter = new MyListGetter();
         return getter.getMyListGroup();
     }
 
     /**
-     * 指定したIDのマイリスを取得します<br>
-     *     get myList identified with ID.<br>
+     * 指定したIDのマイリスを取得します【ログイン必須】<br>
+     * Gets myList identified with ID.<br>
      * このメソッドでは自身のマイリスのみ取得できます。
      * ただし、マイリスの公開設定によっては取得できません。
      * マイリスIDは{@link #getMyListGroup()}で取得できます。<br>
-     *     this can get your own myList only, but may fail due to its accessibility.
-     *     get myList ID from {@link #getMyListGroup()}.
-     * @param ID target myList ID, can not be {@code null}
-     * @return Returns {@code null} if no target myList or invalid myList ID
+     *     This can get your own myList only, but may fails due to its accessibility by user.
+     *     You can get myList ID from {@link #getMyListGroup()}.
+     * @param ID yhe target myList ID, cannot be {@code null}
+     * @return Returns empty List if no hit, not {@code null}
+     * @throws NicoAPIException if fail to get myList, which my be because of no target myList or invalid myList ID
      */
-    public List<VideoInfo> getMyList (String ID){
-        if ( !loginInfo.isLogin() ){
-            return null;
-            //TODO
+    public synchronized List<VideoInfo> getMyList (String ID) throws NicoAPIException{
+        if ( !isLogin() ){
+            throw new NicoAPIException.NoLoginException("no login > myList");
         }
         if ( ID == null ){
-            return null;
-            //TODO
+            throw new NicoAPIException.InvalidParamsException("myList ID is null");
         }
         MyListGetter getter = new MyListGetter();
         return getter.getMyList(ID);
@@ -164,28 +183,30 @@ public class NicoClient {
 
     /**
      *{@link #getComment(VideoInfo, int)}の引数省略したもの、コメント数は動画長さに応じて適当に設定される<br>
-     *     {@link #getComment(VideoInfo, int)} with omitted argument, number of comments is set corresponding to video length.
+     *{@link #getComment(VideoInfo, int)} with omitted argument, number of comments is set corresponding to video length.
      */
-    public List<CommentInfo> getComment (VideoInfo videoInfo){
+    public synchronized List<CommentInfo> getComment (VideoInfo videoInfo) throws NicoAPIException{
         if ( videoInfo == null ){
-            //TODO
-            return null;
+            throw new NicoAPIException.InvalidParamsException("target video is null > comment");
         }
         int max = (int)((float)videoInfo.getInt(VideoInfo.LENGTH) * 3.0f);
         return getComment(videoInfo,max);
     }
 
     /**
-     * 対象の動画を渡して、コメントを取得する、ログイン必須<br>
-     *     get comments of the video passed in argument, be sure to login.
-     * @param videoInfo should not be {@code null}, or return {@code null}
-     * @param max limit number comment response from 0 to 1000, if over 1000, fixed to 1000
-     * @return Returns {@code null} if no target video, {@code max}<=0 or fail in HTTP
+     * 対象の動画を渡して、コメントを取得する【ログイン必須】<br>
+     * Gets comments of the video passed in argument, be sure to login.
+     * @param videoInfo the target video, cannot be {@code null}
+     * @param max the limit number comment response from 0 to 1000, if over 1000, fixed to 1000
+     * @return Returns List of CommentInfo sorted along time series, not {@code null}
+     * @throws NicoAPIException if fail to get comment
      */
-    public List<CommentInfo> getComment (VideoInfo videoInfo, int max){
+    public synchronized List<CommentInfo> getComment (VideoInfo videoInfo, int max) throws NicoAPIException{
         if ( videoInfo == null ){
-            //TODO
-            return null;
+            throw new NicoAPIException.InvalidParamsException("target video is null > comment");
+        }
+        if ( !isLogin() ){
+            throw new NicoAPIException.NoLoginException("no login > comment");
         }
         CommentGetter getter = new CommentGetter();
         return getter.get(videoInfo,max);
@@ -195,21 +216,14 @@ public class NicoClient {
 
         private String rankingUrl = "http://www.nicovideo.jp/ranking/%s/%s/%s?rss=2.0";
 
-        protected List<VideoInfo> get (String genre, String period, String rankKind){
+        protected List<VideoInfo> get (String genre, String period, String rankKind) throws NicoAPIException{
             if ( genre == null || period == null || rankKind == null ){
-                //TODO exception
-                return null;
+                throw new NicoAPIException.InvalidParamsException("ranking params cannot be null > ranking");
             }else {
-                if ( loginInfo.isLogin() ) {
-                    String path = String.format(rankingUrl, rankKind, period, genre);
-                    if (tryGet(path, loginInfo.getCookieStore())) {
-                        return RankingVideoInfo.parse(super.response, genre, period, rankKind);
-                    }
-                }else{
-                    //TODO exception
-                }
+                String path = String.format(rankingUrl, rankKind, period, genre);
+                tryGet(path, getCookieStore());
+                return RankingVideoInfo.parse(super.response, genre, period, rankKind);
             }
-            return null;
         }
 
     }
@@ -218,12 +232,11 @@ public class NicoClient {
 
         private String recommendUrl = "http://flapi.nicovideo.jp/api/getrelation?page=10&sort=p&order=d&video=";
 
-        protected List<VideoInfo> get (VideoInfo info){
-                String path = recommendUrl + info.getString(VideoInfo.ID);
-                if ( tryGet(path) ){
-                    return RecommendVideoInfo.parse(super.response);
-                }
-            return null;
+        protected List<VideoInfo> get (VideoInfo info) throws NicoAPIException{
+            String path = recommendUrl + info.getString(VideoInfo.ID);
+            tryGet(path);
+            return RecommendVideoInfo.parse(super.response);
+
         }
     }
 
@@ -231,12 +244,10 @@ public class NicoClient {
 
         private String tempMyListUrl = "http://www.nicovideo.jp/api/deflist/list";
 
-        protected List<VideoInfo> get (){
+        protected List<VideoInfo> get () throws NicoAPIException {
             String path = tempMyListUrl;
-            if ( tryGet(path,loginInfo.getCookieStore()) ){
-                return TempMyListVideoInfo.parse(super.response);
-            }
-            return null;
+            tryGet(path, getCookieStore());
+            return TempMyListVideoInfo.parse(super.response);
         }
     }
 
@@ -244,38 +255,33 @@ public class NicoClient {
 
         private String paramFormat = ".json/thread?version=20090904&thread=%s&res_from=-%d";
 
-        protected List<CommentInfo> get(VideoInfo videoInfo, int max){
+        protected List<CommentInfo> get(VideoInfo videoInfo, int max) throws NicoAPIException{
             if ( max <= 0 ){
-                return null;
+                max = 100;
             }
             if ( max > 1000 ){
                 max = 1000;
             }
-            String threadID = videoInfo.getString(VideoInfo.THREAD_ID);
-            String path = videoInfo.getString(VideoInfo.MESSAGE_SERVER_URL);
-            if ( threadID == null || path == null ){
-                if ( loginInfo.isLogin() ){
-                    if ( ((VideoInfoManager)videoInfo).getFlv(loginInfo.getCookieStore()) ){
-                        threadID = videoInfo.getString(VideoInfo.THREAD_ID);
-                        path = videoInfo.getString(VideoInfo.MESSAGE_SERVER_URL);
-                    }else{
-                        return null;
-                    }
-                }else{
-                    //TODO
-                    return null;
-                }
+            String threadID = "";
+            String path = "";
+            try {
+                threadID = videoInfo.getString(VideoInfo.THREAD_ID);
+                path = videoInfo.getString(VideoInfo.MESSAGE_SERVER_URL);
+            }catch (NicoAPIException e){
+                ((VideoInfoManager)videoInfo).getFlv(getCookieStore());
+                threadID = videoInfo.getString(VideoInfo.THREAD_ID);
+                path = videoInfo.getString(VideoInfo.MESSAGE_SERVER_URL);
             }
             String param = String.format(paramFormat,threadID,max);
             Matcher matcher = Pattern.compile("(.+/api)/?").matcher(path);
             if ( matcher.find() ){
                 path = matcher.group(1);
                 path = path + param;
-                if ( tryGet(path,loginInfo.getCookieStore() )){
-                    return CommentInfo.parse(super.response);
-                }
+                tryGet(path,getCookieStore() );
+                return CommentInfo.parse(super.response);
+            }else{
+                throw new NicoAPIException.APIUnexpectedException("message server URL > " + path);
             }
-            return null;
         }
     }
 
@@ -284,13 +290,19 @@ public class NicoClient {
         private String myListGroupUrl = "http://www.nicovideo.jp/api/mylistgroup/list";
         private String myListUrl = "http://www.nicovideo.jp/mylist/%d?rss=2.0";
 
-        protected Map<String, String> getMyListGroup (){
-            if ( tryGet(myListGroupUrl, loginInfo.getCookieStore()) ){
+        protected Map<String, String> getMyListGroup () throws NicoAPIException{
+            if ( tryGet(myListGroupUrl, getCookieStore()) ){
                 try{
                     JSONObject json = new JSONObject(response);
                     if ( !json.optString("status").equals("ok")){
-                        Log.d("myListGroup","invalid access");
-                        return null;
+                        String message = "Unexpected API response status > myList group ";
+                        try{
+                            JSONObject error = json.getJSONObject("error");
+                            String code = error.getString("code");
+                            String description = error.getString("description");
+                            message += (code + ":" +description);
+                        }catch (JSONException e){}
+                        throw new NicoAPIException.APIUnexpectedException(message);
                     }
                     JSONArray array = json.optJSONArray("mylistgroup");
                     Map<String,String> myListGroup = new HashMap<String,String>();
@@ -300,18 +312,16 @@ public class NicoClient {
                     }
                     return myListGroup;
                 }catch (JSONException e){
-                    e.printStackTrace();
+                    throw new NicoAPIException.ParseException(e.getMessage(),response);
                 }
             }
             return null;
         }
 
-        protected List<VideoInfo> getMyList(String ID){
+        protected List<VideoInfo> getMyList(String ID)throws NicoAPIException{
             String path = String.format(myListUrl, ID);
-            if ( tryGet(path,loginInfo.getCookieStore()) ){
-                return RankingVideoInfo.parse(super.response,null,null,null);
-            }
-            return null;
+            tryGet(path, getCookieStore());
+            return RankingVideoInfo.parse(super.response,null,null,null);
         }
     }
 

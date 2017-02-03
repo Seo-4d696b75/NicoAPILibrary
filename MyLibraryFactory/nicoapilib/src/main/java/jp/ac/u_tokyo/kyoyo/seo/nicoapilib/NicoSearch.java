@@ -78,7 +78,7 @@ public class NicoSearch extends HttpResponseGetter {
 
     /**
      * 検索キーワードの設定を同時に行うコンストラクタ<br>
-     *     constructor setting search keyword at the same time.
+     * Constructs an instance, setting search keyword at the same time.
      * @param query can be {@code null}
      */
     protected NicoSearch (String query){
@@ -93,27 +93,27 @@ public class NicoSearch extends HttpResponseGetter {
 
     /**
      * 検索キーワードを全て自前で設定します,{@link SearchVideoInfo 検索ＡＰＩの詳細}<br>
-     *     set all the search keyword following {@link SearchVideoInfo this format}.
-     * @param query should not be {@code null}, or return null in {@link #search()}
+     * Sets all the search keyword following {@link SearchVideoInfo required format}.
+     * @param query should not be {@code null}, or throw exception in {@link #search()}
      */
     public void setQuery (String query){
         this.query = query;
     }
     /**
      * 検索キーワードをAND演算子で追加します<br>
-     *     add search keyword with AND operator.
+     * Adds search keyword with AND operator.
      * @param query should not be {@code null} or empty, or no change is applied
      */
     public void addQuery (String query){
-        addQuery(query,QUERY_OPERATOR_AND);
+        addQuery(query, QUERY_OPERATOR_AND);
     }
     /**
      * 検索キーワードを追加します,{@link #QUERY_OPERATOR_AND AND}/{@link #QUERY_OPERATOR_NOT NOT}/{@link #QUERY_OPERATOR_OR OR}の演算子が定数で指定できます<br>
-     *     add search keyword, you can set operator {@link #QUERY_OPERATOR_AND AND}/{@link #QUERY_OPERATOR_NOT NOT}/{@link #QUERY_OPERATOR_OR OR} in constant.
+     * Adds search keyword, with operator {@link #QUERY_OPERATOR_AND AND}/{@link #QUERY_OPERATOR_NOT NOT}/{@link #QUERY_OPERATOR_OR OR} in constant.
      * @param query should not be {@code null} or empty, or no change is applied
-     * @param operatorKey set from these constants:{@link #QUERY_OPERATOR_AND AND}/{@link #QUERY_OPERATOR_NOT NOT}/{@link #QUERY_OPERATOR_OR OR}
+     * @param operatorKey chosen from these constants; {@link #QUERY_OPERATOR_AND AND}/{@link #QUERY_OPERATOR_NOT NOT}/{@link #QUERY_OPERATOR_OR OR}, or no change is applied
      */
-    public void addQuery (String query, int operatorKey){
+    public void addQuery (String query, int operatorKey) {
         if ( query == null || query.isEmpty() ){
             return;
         }
@@ -124,14 +124,12 @@ public class NicoSearch extends HttpResponseGetter {
             }else{
                 this.query += addition;
             }
-        }else{
-            //TODO exception
         }
     }
 
     /**
      * タグ検索を行うか否か設定します<br>
-     *     set whether or not search videos with tags.
+     *  Sets whether or not search videos with tags.
      * @param tagsSearch search about tags or not
      */
     public void setTagsSearch (boolean tagsSearch){
@@ -139,23 +137,22 @@ public class NicoSearch extends HttpResponseGetter {
     }
 
     /**
-     * 検索結果をソートするパラメータを定数SORT_PARAM_****で指定します,
+     * 検索結果をソートするパラメータを定数SORT_PARAM_****で指定します<br>
+     * Sets sort param by constant; SORT_PARAM_****.<br>
      * デフォルトでは{@link #SORT_PARAM_VIEW 再生数}が選択されます<br>
-     *     set sort param by constant; SORT_PARAM_****,
-     *     default; {@link #SORT_PARAM_VIEW number of view}.
-     * @param paramKey choose from SORT_PARAM_****, or no change applied
+     * Default value is {@link #SORT_PARAM_VIEW number of view}.
+     * @param paramKey chosen from SORT_PARAM_****, or no change is applied
      */
     public void setSortParam (int paramKey){
         if ( sortParamMap.containsKey(paramKey) ){
             this.sortParam = sortParamMap.get(paramKey);
-        }else{
-            //TODO exception
         }
     }
 
     /**
-     * {@link #setSortParam(int) ソートパラメータ}に関して降順にソートするか否か(つまり昇順)を設定します,デフォルトは降順です<br>
-     *     set whether results is sorted in descending order or not, default is {@code true}.
+     * {@link #setSortParam(int) ソートパラメータ}に関して降順にソートするか否か(つまり昇順)を設定します<br>
+     * Sets whether results is sorted in descending order or not.<br>
+     * デフォルトは降順です。is {@code true}.
      * @param sortDown descending order or not
      */
     public void setSortDown (boolean sortDown){
@@ -164,12 +161,11 @@ public class NicoSearch extends HttpResponseGetter {
 
     /**
      * 最大検索結果数を設定します、上限は100です<br>
-     *     set max results under 100.
-     * @param resultMax must be in range 1-100, or no change is applied
+     * Sets max results number, under 100.
+     * @param resultMax the max number, must be in range 1-100 or no change is applied
      */
     public void setResultMax (int resultMax){
         if ( resultMax < 1 || resultMax > 100 ){
-            //TODO exception
             return;
         }
         this.resultMax = resultMax;
@@ -177,24 +173,24 @@ public class NicoSearch extends HttpResponseGetter {
 
     /**
      * 検索フィルターを動画IDに関して設定します<br>
-     *     set search filter about video ID.
-     * @param id target video ID, should not be {@code null}, or no change applied
+     * Sets search filter about video ID.
+     * @param id the target video ID, should not be {@code null}, or no change applied
      */
     public void setFilterID ( String id){
         setFilter(FILTER_ID,id);
     }
     /**
      * 検索フィルターを動画タグに関して設定します<br>
-     *     set search filter about video tag.
-     * @param tag target video tag, should not be {@code null}, or no change applied
+     * Sets search filter about video tag.
+     * @param tag the target video tag, should not be {@code null}, or no change applied
      */
     public void setFilterTags ( String tag){
         setFilter(FILTER_TAGS,tag);
     }
     /**
      * 検索フィルターをジャンル(カテゴリタグ)に関して設定します, 参照：{@link RankingVideoInfo 指定可能な値}<br>
-     *     set search filter about genre, what is called {@link RankingVideoInfo category tag}.
-     * @param genre target genre, should not be {@code null}, or no change applied
+     *  Sets search filter about genre, what is called {@link RankingVideoInfo category tag}.
+     * @param genre the target genre, should not be {@code null}, or no change applied
      */
     public void setFilterGenre( String genre){
         setFilter(FILTER_GENRE,genre);
@@ -214,7 +210,6 @@ public class NicoSearch extends HttpResponseGetter {
             case FILTER_DATE:
                 return;
             default:
-                //TODO exception
                 return;
         }
         String filter = String.format(filterFormat,param,filterExact,target);
@@ -223,59 +218,58 @@ public class NicoSearch extends HttpResponseGetter {
 
     /**
      * 検索フィルターを動画再生数に関して設定します<br>
-     *     set search filter about view counter.<br>
+     *     Sets search filter about view counter.<br>
      * 最小値と最大値を渡し範囲で指定するか、一方に負数を渡し片側からのみ絞ります。
      *     範囲で指定する場合、空集合だと無視されますので注意してください。<br>
-     *     set in range by passing min and max, but ignored if empty set.
-     *     you can set only one side by passing negative in the other.
-     * @param from min value, ignored if negative
-     * @param to max value, ignored if negative
+     *     The search filter is set in range by passing min and max, but ignored if empty set.
+     *     You can set only one side by passing negative in the other.
+     * @param from the min value, ignored if negative
+     * @param to the max value, ignored if negative
      */
     public void setFilterView (int from, int to){
         setFilter(FILTER_VIEW,from,to);
     }
     /**
      * 検索フィルターを動画コメント数に関して設定します　
-     *     set search filter about comment counter.<br>
+     *     Sets search filter about comment counter.<br>
      * 最小値と最大値を渡し範囲で指定するか、一方に負数を渡し片側からのみ絞ります。
      *     範囲で指定する場合、空集合だと無視されますので注意してください。<br>
-     *     set in range by passing min and max, but ignored if empty set.
-     *     you can set only one side by passing negative in the other.
-     * @param from min value, ignored if negative
-     * @param to max value, ignored if negative
+     *     The search filter is set in range by passing min and max, but ignored if empty set.
+     *     You can set only one side by passing negative in the other.
+     * @param from the min value, ignored if negative
+     * @param to the max value, ignored if negative
      */
     public void setFilterComment (int from, int to){
         setFilter(FILTER_COMMENT,from,to);
     }
     /**
      * 検索フィルターを動画長さに関して秒単位で設定します　
-     *     set search filter about length in seconds.<br>
+     *     Sets search filter about length in seconds.<br>
      * 最小値と最大値を渡し範囲で指定するか、一方に負数を渡し片側からのみ絞ります。
      *     範囲で指定する場合、空集合だと無視されますので注意してください。<br>
-     *     set in range by passing min and max, but ignored if empty set.
-     *     you can set only one side by passing negative in the other.
-     * @param from min value, ignored if negative
-     * @param to max value, ignored if negative
+     *     The search filter is set in range by passing min and max, but ignored if empty set.
+     *     You can set only one side by passing negative in the other.
+     * @param from the min value, ignored if negative
+     * @param to the max value, ignored if negative
      */
     public void setFilterLength (int from, int to ){
         setFilter(FILTER_LENGTH,from,to);
     }
     /**
      * 検索フィルターを動画マイリス数に関して設定します　
-     *     set search filter about my list counter.<br>
+     *     Sets search filter about my list counter.<br>
      * 最小値と最大値を渡し範囲で指定するか、一方に負数を渡し片側からのみ絞ります。
      *     範囲で指定する場合、空集合だと無視されますので注意してください。<br>
-     *     set in range by passing min and max, but ignored if empty set.
-     *     you can set only one side by passing negative in the other.
-     * @param from min value, ignored if negative
-     * @param to max value, ignored if negative
+     *     The search filter is set in range by passing min and max, but ignored if empty set.
+     *     You can set only one side by passing negative in the other.
+     * @param from the min value, ignored if negative
+     * @param to the max value, ignored if negative
      */
     public void setFilterMyList (int from, int to){
         setFilter(FILTER_MY_LIST,from,to);
     }
     private void setFilter (int filterKey, int from, int to){
         if ( from >= 0 && to >= 0 && to < from ){
-            //TODO exception
             return;
         }
         String param = "";
@@ -293,7 +287,6 @@ public class NicoSearch extends HttpResponseGetter {
                 param = "lengthSeconds";
                 break;
             default:
-                //TODO exception
                 return;
         }
         if ( from >= 0 ){
@@ -310,62 +303,66 @@ public class NicoSearch extends HttpResponseGetter {
 
     /**
      * 検索フィルターを投稿日時に関して設定します<br>
-     *     set search filter about contribution date.<br>
+     *     Sets search filter about contribution date.<br>
      * 最小値と最大値を渡し範囲で指定するか、一方に{@code null}を渡し片側からのみ絞ります。
      *     範囲で指定する場合、空集合だと無視されますので注意してください。<br>
-     *     set in range by passing min and max, but ignored if empty set.
-     *     you can set only one side by passing {@code null} in the other.
-     * @param from
-     * @param to
+     *     The search filter is set in range by passing min and max, but ignored if empty set.
+     *     You can set only one side by passing {@code null} in the other.
+     * @param from the earliest date, ignored if {@code null}
+     * @param to the latest date, ignored if {@code null}
      */
     public void setFilterDate(Date from, Date to){
-        setFilter(FILTER_DATE,from,to);
+        setFilter(from,to);
     }
-    private void setFilter (int filterKey, Date from, Date to){
-        if ( filterKey != FILTER_DATE ){
-            //TODO exception
-            return;
-        }
+    private void setFilter (Date from, Date to){
         if ( from == null && to == null ){
-            //TODO exception
             return;
         }
         if ( from != null && to != null && from.getTime() > to.getTime() ){
-            //TODO exception
             return;
         }
-        String target = dateFormat.format(from);
-        String filter = String.format(filterFormat,"startTime",filterFrom,target);
-        filterList.add(filter);
-        target = dateFormat.format(to);
-        filter = String.format(filterFormat,"startTime",filterTo,target);
-        filterList.add(filter);
+        if ( from != null ) {
+            String target = dateFormat.format(from);
+            String filter = String.format(filterFormat, "startTime", filterFrom, target);
+            filterList.add(filter);
+        }
+        if ( to != null ) {
+            String target = dateFormat.format(to);
+            String filter = String.format(filterFormat, "startTime", filterTo, target);
+            filterList.add(filter);
+        }
     }
 
     /**
      * {@link #setFilterDate(Date, Date)}と同様ですが日時形式に注意してください<br>
-     *     basically same as {@link #setFilterDate(Date, Date)}, but be careful about date format.<br>
+     *     Basically same as {@link #setFilterDate(Date, Date)}, but be careful about date format.<br>
      *     Stringで日時を渡す際には{@link #dateFormat 指定の形式}に従ってください。<br>
-     *     when you pass in String, argument must follow {@link #dateFormat this format}.
-     * @param from
-     * @param to
+     *     When you pass in String, argument must follow {@link #dateFormat this format}.
+     * @param from the earliest date, ignored if {@code null}
+     * @param to the latest date, ignored if {@code null}
      */
-    public void setFilter (String from, String to){
+    public void setFilterDate (String from, String to){
         try{
-            Date dateFrom = dateFormat.parse(from);
-            Date dateTo = dateFormat.parse(to);
-            setFilter(FILTER_DATE,dateFrom,dateTo);
+            Date dateFrom = null;
+            if ( from != null ){
+                dateFormat.parse(from);
+            }
+            Date dateTo = null;
+            if ( to != null ){
+                dateFormat.parse(to);
+            }
+            setFilter(dateFrom,dateTo);
         }catch (ParseException e){
-            //TODO exception
+            e.printStackTrace();
             return;
         }
     }
 
     /**
-     * ニコ動検索ＡＰＩでの日時形式です<br>
-     *     date format in Nico search API.<br>
+     * ニコ動検索ＡＰＩでの日時形式です"yyyy-MM-dd'T'HH:mm:ss'+09:00'"<br>
+     *  date format in Nico search API; "yyyy-MM-dd'T'HH:mm:ss'+09:00'".<br>
      *  基本的にはISO8601の拡張型に準拠しているが、タイムゾーンはJAPANで固定の模様でかつ、HHとmmの間に半角コロンが挿入されているので注意してください。<br>
-     *      based on extended ISO8691, but be careful that time zone seems fixed JAPAN and that ':' is inserted between HH and mm.
+     *  based on extended ISO8691, but be careful that time zone seems fixed JAPAN and that ':' is inserted between HH and mm.
      */
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'+09:00'"){
         {
@@ -375,15 +372,15 @@ public class NicoSearch extends HttpResponseGetter {
 
     /**
      * 検索を実行して結果を取得します<br>
-     *     search videos and get results.<br>
-     *     必ず{@link #setQuery(String)}/{@link #addQuery(String, int)}で検索ワードを設定してから呼んでください。<br>
-     *         be sure to call this after setting search keywords in {@link #setQuery(String)}/{@link #addQuery(String, int)}.
-     * @return Returns {@code null} if no query set or fail in HTTP
+     * Searches videos and gets results.<br>
+     * 必ず{@link #setQuery(String)}/{@link #addQuery(String, int)}で検索ワードを設定してから呼んでください。<br>
+     * Be sure to call this after setting search keywords in {@link #setQuery(String)}/{@link #addQuery(String, int)}.
+     * @return Returns empty List, not {@code null}
+     * @throws NicoAPIException if no query set or fail to parse response
      */
-    public List<VideoInfo> search (){
+    public List<VideoInfo> search () throws NicoAPIException{
         if ( query.isEmpty() ){
-            //TODO exception
-            return null;
+            throw new NicoAPIException.InvalidParamsException("no query is set > search");
         }
         String appName = NicoClient.appName;
         StringBuilder builder = new StringBuilder();
@@ -410,10 +407,8 @@ public class NicoSearch extends HttpResponseGetter {
         builder.append("&_context=");
         builder.append(appName);
         String path = builder.toString();
-        if ( tryGet(path) ){
-            return SearchVideoInfo.parse(super.response);
-        }
-        return null;
+        tryGet(path);
+        return SearchVideoInfo.parse(super.response);
     }
 
 

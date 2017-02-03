@@ -18,11 +18,11 @@ import java.util.Map;
 /**
  *
  *  HTTP通信の実装クラス<br>
- * this class defines the logic of http communication.<br><br>
+ * This class defines the logic of http communication.<br><br>
  *
  * reference;<br>
- * important point of URL encoder : http://weblabo.oscasierra.net/java-urlencode/<br>
- * usage of regular expression : http://nobuo-create.net/seikihyougen/#i-13<br>
+ * important point of URL encoder : <a href=http://weblabo.oscasierra.net/java-urlencode>[WEB ARCH LABO]JavaでURLエンコード/デコードする方法と注意点</a><br>
+ * usage of regular expression : <a href=http://nobuo-create.net/seikihyougen/#i-13>[一番かんたんなJava入門]【Java】正規表現って何？</a><br>
  *
  * @author Seo-4d696b75
  * @version 0.0 on 2016/12/17.
@@ -43,7 +43,7 @@ public class HttpResponseGetter {
 
     /**
      * apacheでpostしてクッキーとレスポンスを取得<br>
-     *     post in apache and get Cookie and response.
+     * Posts in apache and gets Cookie and response.
      * @param path target url, cannot be {@code null}
      * @param params map of name and param, corresponding to List of NameValuePair passed to HttpPost#setEntity
      * @return Returns {@code true} if success. Be sure to check this value before getting {@link #response} or {@link #cookieStore}.
@@ -81,7 +81,7 @@ public class HttpResponseGetter {
 
     /**
      * 引数簡略したもの <br>
-     *     {@link #tryGet(String, CookieStore) the method} with omitted argument.
+     * {@link #tryGet(String, CookieStore) The method} with omitted argument.
      * @param path target url, cannot be {@code null}
      * @return the same
      */
@@ -91,12 +91,13 @@ public class HttpResponseGetter {
 
     /**
      * apacheでgetしてクッキーとレスポンスを取得<br>
-     *     get in apache and catch response.
+     * Gets in apache and catches response.
      * @param path target url, cannot be {@code null}
      * @param cookieStore cookies needed for access, can be {@code null}
      * @return Returns {@code true} if success. Be sure to check this value before getting {@link #response}
      */
     public boolean tryGet(String path, CookieStore cookieStore){
+        response = null;
         try{
             //some characters cause IllegalArgumentException
             path = replaceMetaSymbol(path);

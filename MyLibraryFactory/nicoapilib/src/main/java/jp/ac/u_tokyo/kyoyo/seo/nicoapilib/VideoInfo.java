@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 各種APIから取得してきた動画情報を動画単位で管理します<br>
- *     manage information of each video.<br>
+ *     This manages information of each video.<br>
  * ニコ動から取得したすべての動画情報はこのクラスを継承した子クランスのインスタンスで管理されます。
  * 各種フィールドは継承先から設定される構造を想定しています。
  * 取得元のAPI毎に対応した子供クラスが存在し、APIからの情報の処理を定義します。<br>
@@ -22,15 +22,15 @@ import java.util.List;
  * ただし、各APIによって取得できるフィールドは異なりますので注意してください。
  * 欠損したフィールド値は{@link VideoInfoManager#complete()}、
  * {@link VideoInfoManager#getFlv(CookieStore)}で補うことができます。<br>
- * all the videos from Nico are managed by child classes extending this.
- * all the fields are supposed to be set by these child classes.
- * there are corresponding child class to each API, which defines how to parse response from it.
+ * All the videos from Nico are managed by child classes extending this.
+ * All the fields are supposed to be set by these child classes.
+ * There are corresponding child class to each API, which defines how to parse response from it.<br>
  * ranking/myList：{@link RankingVideoInfo}<br>
  * search：{@link SearchVideoInfo}<br>
  * temp myList：{@link TempMyListVideoInfo}<br>
  * recommended video：{@link RecommendVideoInfo}<br>
- * be careful that some fields may not be initialized depending on each API.
- * you can get these lacked field by calling {@link VideoInfoManager#complete()}, {@link VideoInfoManager#getFlv(CookieStore)}
+ * Be careful that some fields may not be initialized depending on each API.
+ * You can get these lacking field by calling {@link VideoInfoManager#complete()}, {@link VideoInfoManager#getFlv(CookieStore)}
  *
  * @author Seo-4d696b75
  * @version 0.0 on 2016/12/17.
@@ -196,61 +196,92 @@ public class VideoInfo {
     public static final int CONTRIBUTOR_ICON_URL = 20;
 
     protected VideoInfo(){}
-    public String getString(int key){
+
+    public synchronized String getString(int key) throws NicoAPIException{
+        String target = null;
         switch ( key ){
             case GENRE:
-                return genre;
+                target = genre;
+                break;
             case RANK_KIND:
-                return rankKind;
+                target = rankKind;
+                break;
             case PERIOD:
-                return period;
+                target = period;
+                break;
             case PUB_DATE:
-                return pubDate;
+                target = pubDate;
+                break;
             case TITLE:
-                return title;
+                target = title;
+                break;
             case ID:
-                return id;
+                target = id;
+                break;
             case DATE:
-                return date;
+                target = date;
+                break;
             case DESCRIPTION:
-                return description;
+                target = description;
+                break;
             case THREAD_ID:
-                return threadID;
+                target = threadID;
+                break;
             case MESSAGE_SERVER_URL:
-                return messageServerUrl;
+                target = messageServerUrl;
+                break;
             case FLV_URL:
-                return flvUrl;
+                target = flvUrl;
+                break;
             case CONTRIBUTOR_NAME:
-                return contributorName;
+                target = contributorName;
+                break;
             case CONTRIBUTOR_ICON_URL:
-                return contributorIconUrl;
+                target = contributorIconUrl;
+                break;
             default:
-                return null;
+                throw new NicoAPIException.InvalidParamsException("invalid video filed key : " + key);
+        }
+        if ( target == null ){
+            throw new NicoAPIException.NotInitializedException("requested video field not initialized");
+        }else{
+            return target;
         }
     }
-    public int getInt(int key){
+    public synchronized int getInt(int key) throws NicoAPIException{
+        int target = -1;
         switch ( key ){
             case LENGTH:
-                return length;
+                target = length;
+                break;
             case VIEW_COUNTER:
-                return viewCounter;
+                target = viewCounter;
+                break;
             case COMMENT_COUNTER:
-                return commentCounter;
+                target = commentCounter;
+                break;
             case MY_LIST_COUNTER:
-                return myListCounter;
+                target = myListCounter;
+                break;
             case CONTRIBUTOR_ID:
-                return contributorID;
+                target = contributorID;
+                break;
             default:
-                return 0;
+                throw new NicoAPIException.InvalidParamsException("invalid video filed key : " + key);
+        }
+        if ( target < 0 ){
+            throw new NicoAPIException.NotInitializedException("requested video field not initialized");
+        }else{
+            return  target;
         }
     }
 
     /**
      * 動画タグを設定します,配列はList<String>に変換されます</String><br>
-     *     set video tags.
+     *  Sets video tags.
      * @param tags can not be {@code null}
      */
-    protected void setTags(String[] tags){
+    protected synchronized void setTags(String[] tags){
         if ( this.tags == null ){
             this.tags = new ArrayList<String>();
             for ( String tag : tags){
@@ -258,36 +289,41 @@ public class VideoInfo {
             }
         }
     }
-
     /**
      * 動画タグを設定します<br>
-     *     set video tags.
+     *     Sets video tags.
      * @param tags can not be {@code null}
      */
-    protected void setTags(List<String> tags){
+    protected synchronized void setTags(List<String> tags){
         if ( tags != null ){
             this.tags = tags;
         }
     }
-
     /**
      * 動画のタグをリストで取得します<br>
-     *     get video tags in List.<br>
+     *     Gets video tags in List.<br>
      *     取得元のAPIによっては欠損している場合があります。{@link VideoInfo 詳細はこちら}<br>
-     *     this field may be lacking depending on API, {@link VideoInfo details are here}.
+     *     This field may be lacking depending on API, {@link VideoInfo details are here}.
      * @return Returns {@code null} if not initialized
      */
-    public List<String> getTagsList(){
-        return tags;
+    public synchronized List<String> getTagsList() throws NicoAPIException.NotInitializedException{
+        if ( tags == null ) {
+            throw new NicoAPIException.NotInitializedException("requested video tags not initialized > " + id);
+        }else{
+            return tags;
+        }
     }
     /**
      * 動画のタグを配列で取得します<br>
-     *     get video tags in array.<br>
+     *     Gets video tags in array.<br>
      *     取得元のAPIによっては欠損している場合があります。{@link VideoInfo 詳細はこちら}<br>
-     *     this field may be lacking depending on API, {@link VideoInfo details are here}.
+     *     This field may be lacking depending on API, {@link VideoInfo details are here}.
      * @return Returns {@code null} if not initialized
      */
-    public String[] getTags(){
+    public synchronized String[] getTags() throws NicoAPIException.NotInitializedException{
+        if ( tags == null ){
+            throw new NicoAPIException.NotInitializedException("requested video tags not initialized > " + id);
+        }
         String[] tags = new String[this.tags.size()];
         for ( int i=0 ; i<tags.length ; i++){
             tags[i] = this.tags.get(i);
@@ -297,10 +333,10 @@ public class VideoInfo {
 
     /**
      * 動画サムネイル画像のURLを配列で設定します<br>
-     *     set thumbnail image urls in array.
+     *     Sets thumbnail image urls in array.
      * @param thumbnailUrl can not be {@code null}
      */
-    protected void setThumbnailUrl (String[] thumbnailUrl){
+    protected synchronized void setThumbnailUrl (String[] thumbnailUrl){
         this.thumbnailUrl = new ArrayList<String>();
         for ( String url : thumbnailUrl ){
             this.thumbnailUrl.add(url);
@@ -308,28 +344,27 @@ public class VideoInfo {
     }
     /**
      * 動画サムネイル画像のURLをリストで設定します<br>
-     *     set thumbnail image urls in List.
+     *     Sets thumbnail image urls in List.
      * @param thumbnailUrl can not be {@code null}
      */
-    protected void setThumbnailUrl (List<String> thumbnailUrl){
+    protected synchronized void setThumbnailUrl (List<String> thumbnailUrl){
         this.thumbnailUrl = thumbnailUrl;
     }
-
     /**
      * 動画サムネイル画像のURLを追加します<br>
-     *     add thumbnail image URL.
+     *     Adds thumbnail image URL.
      * @param url can not be {@code null}
      */
-    protected void setThumbnailUrl(String url){
+    protected synchronized void setThumbnailUrl(String url){
         if ( thumbnailUrl == null){
             thumbnailUrl = new ArrayList<String>();
         }
         thumbnailUrl.add(url);
     }
 
-    public String getThumbnailUrl (boolean isHigh){
+    public synchronized String getThumbnailUrl (boolean isHigh) throws NicoAPIException.NotInitializedException{
         if ( thumbnailUrl == null || thumbnailUrl.isEmpty() ){
-            return null;
+            throw new NicoAPIException.NotInitializedException("requested video thumbnail URL not initialized > " + id);
         }
         if ( isHigh ){
             return thumbnailUrl.get(thumbnailUrl.size()-1);
@@ -337,18 +372,17 @@ public class VideoInfo {
             return thumbnailUrl.get(0);
         }
     }
-
     /**
      * 動画のサムネイル画像URLを取得します<br>
-     *     get URL from which you can get thumbnail image.
+     *     Gets URL from which you can get thumbnail image.
      * @return can be {@code null} if not initialized
      */
-    public String getThumbnailUrl (){
+    public synchronized String getThumbnailUrl () throws NicoAPIException.NotInitializedException{
         return getThumbnailUrl(false);
     }
-    public String[] getThumbnailUrlArray() {
+    public synchronized String[] getThumbnailUrlArray() throws NicoAPIException.NotInitializedException{
         if ( thumbnailUrl == null || thumbnailUrl.isEmpty() ){
-            return null;
+            throw new NicoAPIException.NotInitializedException("requested video thumbnail URL not initialized > " + id);
         }
         String[] array = new String[thumbnailUrl.size()];
         for ( int i=0 ; i<array.length ; i++){
@@ -356,16 +390,17 @@ public class VideoInfo {
         }
         return array;
     }
+
     public float getPoint(){
         return point;
     }
 
     /**
      * フィールドを保存したまま{@link VideoInfoPackage}クラスのインスタンスに変換します
-     * convert to {@link VideoInfoPackage} instance keeping all the fields.
+     * Converts itself into {@link VideoInfoPackage} instance keeping all the fields.
      * @return Returns serializable instance
      */
-    public VideoInfoPackage pack(){
+    public synchronized VideoInfoPackage pack(){
         return new VideoInfoPackage(this);
     }
 
