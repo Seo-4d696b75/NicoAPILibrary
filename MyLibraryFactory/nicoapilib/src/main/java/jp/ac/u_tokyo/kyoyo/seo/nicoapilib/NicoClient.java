@@ -86,21 +86,12 @@ public class NicoClient extends LoginInfo{
     }
 
     /**
-     * ランキングを取得する【ログイン必須】<br>
-     * Gets ranking, be sure to login beforehand.<br>
-     * 有効なランキングパラメータは{@link RankingVideoInfo こちらから参照}してください。
-     * 不正なパラメータや{@code null}を渡すと取得に失敗して例外を投げます。<br>
-     * Details about valid params is {@link RankingVideoInfo available here}.
-     * If invalid params or {@code null} passed, this fails to get ranking and throws exception.
-     * @param genre cannot be {@code null}
-     * @param period cannot be {@code null}
-     * @param rankKind cannot be {@code null}
-     * @return Returns empty List if no hit, not {@code null}
-     * @throws NicoAPIException if fail to get ranking
+     * ランキング検索に必要な{@link NicoRanking}のインスタンスを取得する<br>
+     * Gets instance of {@link NicoRanking}, in order to get ranking from Nico.
+     * @return not {@code null}
      */
-    public synchronized List<VideoInfo> getRanking(String genre, String period, String rankKind) throws NicoAPIException{
-        RankingGetter getter = new RankingGetter();
-        return getter.get(genre, period, rankKind);
+    public NicoRanking getNicoRanking (){
+        return new NicoRanking();
     }
 
     /**
@@ -138,7 +129,7 @@ public class NicoClient extends LoginInfo{
     /**
      * 動画を検索するのに必要な{@link NicoSearch}のインスタンスを取得する、検索にはログインが要らない<br>
      * Gets {@link NicoSearch} instance in order to search videos in NicoNico, you don't have to login.
-     * @return use this to search videos, not{@code null}
+     * @return use this to search videos, not {@code null}
      */
     public NicoSearch getNicoSearch (){
         return new NicoSearch();
@@ -210,22 +201,6 @@ public class NicoClient extends LoginInfo{
         }
         CommentGetter getter = new CommentGetter();
         return getter.get(videoInfo,max);
-    }
-
-    private class RankingGetter extends HttpResponseGetter {
-
-        private String rankingUrl = "http://www.nicovideo.jp/ranking/%s/%s/%s?rss=2.0";
-
-        protected List<VideoInfo> get (String genre, String period, String rankKind) throws NicoAPIException{
-            if ( genre == null || period == null || rankKind == null ){
-                throw new NicoAPIException.InvalidParamsException("ranking params cannot be null > ranking");
-            }else {
-                String path = String.format(rankingUrl, rankKind, period, genre);
-                tryGet(path, getCookieStore());
-                return RankingVideoInfo.parse(super.response, genre, period, rankKind);
-            }
-        }
-
     }
 
     private class RecommendGetter extends HttpResponseGetter {
