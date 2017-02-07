@@ -18,6 +18,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".RankingActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".TempMyListActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".RecommendActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".MyListActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

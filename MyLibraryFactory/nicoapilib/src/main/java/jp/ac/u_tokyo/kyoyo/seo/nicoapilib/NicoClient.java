@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
 
 public class NicoClient extends LoginInfo{
 
+    public static final String INTENT = "intent";
+
     /**
      * アプリの名前、使用するＡＰＩによってはこの値が必要<br>
      * Your application name, needed for some API.
@@ -263,7 +265,7 @@ public class NicoClient extends LoginInfo{
     private class MyListGetter extends HttpResponseGetter {
 
         private String myListGroupUrl = "http://www.nicovideo.jp/api/mylistgroup/list";
-        private String myListUrl = "http://www.nicovideo.jp/mylist/%d?rss=2.0";
+        private String myListUrl = "http://www.nicovideo.jp/mylist/%s?rss=2.0";
 
         protected Map<String, String> getMyListGroup () throws NicoAPIException{
             if ( tryGet(myListGroupUrl, getCookieStore()) ){

@@ -1,6 +1,7 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,8 @@ public class NicoRanking extends HttpResponseGetter {
     private String genre;
     private String kind;
     private String period;
+
+    private boolean isDone;
 
     public static final int GENRE_ALL = 400;
     public static final int GENRE_VOCALOID = 401;
@@ -76,7 +79,7 @@ public class NicoRanking extends HttpResponseGetter {
     public static final int PERIOD_DAILY = 603;
     public static final int PERIOD_HOURLY = 604;
 
-    private Map<Integer,String> genreNameMap = new HashMap<Integer, String>(){
+    private Map<Integer,String> genreNameMap = new LinkedHashMap<Integer, String>(){
         {
             put(GENRE_ALL, "カテゴリ合算");
             put(GENRE_VOCALOID, "VOCALOID");
@@ -111,7 +114,7 @@ public class NicoRanking extends HttpResponseGetter {
         }
     };
 
-    private Map<Integer,String> genreValueMap = new HashMap<Integer, String>(){
+    private Map<Integer,String> genreValueMap = new LinkedHashMap<Integer, String>(){
         {
             put(GENRE_ALL, "all");
             put(GENRE_VOCALOID, "vocaloid");
@@ -146,7 +149,7 @@ public class NicoRanking extends HttpResponseGetter {
         }
     };
 
-    private Map<Integer,String> periodNameMap = new HashMap<Integer, String>(){
+    private Map<Integer,String> periodNameMap = new LinkedHashMap<Integer, String>(){
         {
             put(PERIOD_TOTAL,"合計");
             put(PERIOD_MONTHLY,"月間");
@@ -156,7 +159,7 @@ public class NicoRanking extends HttpResponseGetter {
         }
     };
 
-    private Map<Integer,String> periodValueMap = new HashMap<Integer, String>(){
+    private Map<Integer,String> periodValueMap = new LinkedHashMap<Integer, String>(){
         {
             put(PERIOD_TOTAL,"total");
             put(PERIOD_MONTHLY,"monthly");
@@ -166,7 +169,7 @@ public class NicoRanking extends HttpResponseGetter {
         }
     };
 
-    private Map<Integer,String> kindNameMap = new HashMap<Integer, String>(){
+    private Map<Integer,String> kindNameMap = new LinkedHashMap<Integer, String>(){
         {
             put(KIND_FAV,"総合");
             put(KIND_VIEW,"再生");
@@ -175,7 +178,7 @@ public class NicoRanking extends HttpResponseGetter {
         }
     };
 
-    private Map<Integer,String> kindValueMap = new HashMap<Integer, String>(){
+    private Map<Integer,String> kindValueMap = new LinkedHashMap<Integer, String>(){
         {
             put(KIND_FAV,"fav");
             put(KIND_VIEW,"view");
@@ -188,6 +191,7 @@ public class NicoRanking extends HttpResponseGetter {
         genre = "";
         period = "";
         kind = "";
+        isDone = false;
     }
 
     /**
@@ -196,7 +200,7 @@ public class NicoRanking extends HttpResponseGetter {
      * @return Map of genreName and genreValue
      */
     public Map<String,String> getGenreMap(){
-        Map<String,String> genreMap = new HashMap<String, String>();
+        Map<String,String> genreMap = new LinkedHashMap<String, String>();
         for ( Integer key : genreValueMap.keySet() ){
             genreMap.put(genreNameMap.get(key),genreValueMap.get(key));
         }
@@ -209,7 +213,7 @@ public class NicoRanking extends HttpResponseGetter {
      * @return Map of kind param name and its value
      */
     public Map<String,String> getKindMap(){
-        Map<String,String> kindMap = new HashMap<String, String>();
+        Map<String,String> kindMap = new LinkedHashMap<String, String>();
         for ( Integer key : kindValueMap.keySet() ){
             kindMap.put(kindNameMap.get(key),kindValueMap.get(key));
         }
@@ -222,7 +226,7 @@ public class NicoRanking extends HttpResponseGetter {
      * @return Map of period param name and its value
      */
     public Map<String,String> getPeriodMap(){
-        Map<String,String> periodMap = new HashMap<String, String>();
+        Map<String,String> periodMap = new LinkedHashMap<String, String>();
         for ( Integer key : periodValueMap.keySet() ){
             periodMap.put(periodNameMap.get(key),periodValueMap.get(key));
         }
@@ -236,7 +240,7 @@ public class NicoRanking extends HttpResponseGetter {
      * If invalid value except the constant is passed, no change is applied.
      * @param key chosen from GENRE_*****, other value is ignored
      */
-    public void setGenre(int key){
+    public synchronized void setGenre(int key){
         if ( genreValueMap.containsKey(key) ){
             genre = genreValueMap.get(key);
         }
@@ -248,7 +252,7 @@ public class NicoRanking extends HttpResponseGetter {
      * You can get valid params with their names in {@link #getGenreMap()}.
      * @param genre invalid value is ignored
      */
-    public void setGenre(String genre){
+    public synchronized void setGenre(String genre){
         if ( genre != null && genreValueMap.containsValue(genre) ){
             this.genre = genre;
         }
@@ -261,7 +265,7 @@ public class NicoRanking extends HttpResponseGetter {
      * If invalid value except the constant is passed, no change is applied.
      * @param key chosen from KIND_*****, other value is ignored
      */
-    public void setKind(int key){
+    public synchronized void setKind(int key){
         if ( kindValueMap.containsKey(key) ){
             kind = kindValueMap.get(key);
         }
@@ -274,7 +278,7 @@ public class NicoRanking extends HttpResponseGetter {
      * You can get valid params with their names in {@link #getKindMap()}.
      * @param kind invalid value is ignored
      */
-    public void setKind(String kind){
+    public synchronized void setKind(String kind){
         if ( kind != null && kindValueMap.containsValue(kind) ){
             this.kind = kind;
         }
@@ -287,7 +291,7 @@ public class NicoRanking extends HttpResponseGetter {
      * If invalid value except the constant is passed, no change is applied.
      * @param key chosen from PERIOD_*****, other value is ignored
      */
-    public void setPeriod(int key){
+    public synchronized void setPeriod(int key){
         if ( periodValueMap.containsKey(key) ){
             period = periodValueMap.get(key);
         }
@@ -300,7 +304,7 @@ public class NicoRanking extends HttpResponseGetter {
      * You can get valid params with their names in {@link #getPeriodMap()}.
      * @param period invalid value is ignored
      */
-    public void setPeriod(String period){
+    public synchronized void setPeriod(String period){
         if ( period != null && periodValueMap.containsValue(period) ){
             this.period = period;
         }
@@ -310,18 +314,35 @@ public class NicoRanking extends HttpResponseGetter {
      * ランキングを取得します<br>
      * Gets ranking from Nico.<br>
      * カテゴリ、期間、種類の3パラメータを設定してから取得できます。
-     * 設定をしないとデフォルトでカテゴリ合算、期間合計、総合ランキングとして扱います。<br>
+     * 設定をしないとデフォルトでカテゴリ合算、期間合計、総合ランキングとして扱います。
+     * 再利用はできません、二度以上呼ぶと例外を投げます。<br>
      * This gets ranking from Nico after you set params; genre, kind and period.
      * If you not set them, this interprets as all category, entire period, overall ranking.
+     * You cannot reuse this instance. If called twice again, an exception is thrown.
      * @return Returns empty List if no hit, not {@code null}
-     * @throws NicoAPIException if fail to get
+     * @throws NicoAPIException if fail to get or call this twice again
      */
-    public List<VideoInfo> get () throws NicoAPIException {
+    public synchronized List<VideoInfo> get () throws NicoAPIException {
+        if ( isDone ){
+            throw new NicoAPIException.IllegalStateException("NicoRanking is not reusable > ranking");
+        }else{
+            isDone = true;
+        }
         if (  kind.isEmpty() ){
             kind = kindValueMap.get(KIND_FAV);
         }
         String path = String.format(rankingUrl, kind, period, genre);
         tryGet(path);
         return RankingVideoInfo.parse(super.response, genre, period, kind);
+    }
+
+    public synchronized String getGenre(){
+        return genre;
+    }
+    public synchronized String getKind(){
+        return kind;
+    }
+    public synchronized String getPeriod(){
+        return period;
     }
 }

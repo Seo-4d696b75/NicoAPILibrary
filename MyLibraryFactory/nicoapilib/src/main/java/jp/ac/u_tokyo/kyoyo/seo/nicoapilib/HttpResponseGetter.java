@@ -108,10 +108,11 @@ public class HttpResponseGetter {
             }
             //httpGet.setHeader("Connection", "keep-Alive");
             HttpResponse httpResponse = client.execute(httpGet);
+            String res = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
             int statusCode = httpResponse.getStatusLine().getStatusCode();
             client.getConnectionManager().shutdown();
             if ( statusCode == 200 ) {
-                response = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
+                response = res;
                 return true;
             }
         }catch ( Exception e){

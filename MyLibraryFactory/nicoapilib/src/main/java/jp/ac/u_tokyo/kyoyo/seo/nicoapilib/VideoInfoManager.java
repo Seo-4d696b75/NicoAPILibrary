@@ -1,6 +1,7 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
 import android.graphics.drawable.Drawable;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import org.apache.http.client.CookieStore;
@@ -121,7 +122,7 @@ public class VideoInfoManager extends VideoInfo {
 
     protected VideoInfoManager(){}
     protected VideoInfoManager(VideoInfoPackage info){
-
+        unPack(info);
     }
 
     private synchronized void unPack(VideoInfoPackage info){
@@ -140,6 +141,9 @@ public class VideoInfoManager extends VideoInfo {
         myListCounter = info.myListCounter;
         setTags(tags);
         point = info.point;
+        threadID = info.threadID;
+        messageServerUrl = info.messageServerURL;
+        flvUrl = info.flvURL;
     }
 
     //url from which details of video you can get
@@ -150,6 +154,7 @@ public class VideoInfoManager extends VideoInfo {
     private final Map<Integer,Pattern> patternMap = new HashMap<Integer,Pattern>(){
         {
             put(STATUS,Pattern.compile("<nicovideo_thumb_response status=\"(.+?)\">"));
+            put(VideoInfo.DESCRIPTION,Pattern.compile("<description>(.+?)</description>",Pattern.DOTALL));
             put(VideoInfo.THUMBNAIL_URL,Pattern.compile("<thumbnail_url>(.+?)</thumbnail_url>"));
             put(VideoInfo.DATE,Pattern.compile("<first_retrieve>(.+?)</first_retrieve>"));
             put(VideoInfo.VIEW_COUNTER,Pattern.compile("<view_counter>(.+?)</view_counter>"));
@@ -220,6 +225,10 @@ public class VideoInfoManager extends VideoInfo {
             check(res);
             String target;
             int num;
+            if ( description == null ){
+                target = extract(res,VideoInfo.DESCRIPTION);
+                description = target;
+            }
             if ( thumbnailUrl == null){
                 target = extract(res,VideoInfo.THUMBNAIL_URL);
                 setThumbnailUrl(target);
@@ -301,7 +310,7 @@ public class VideoInfoManager extends VideoInfo {
         while ( matcher.find() ){
             list.add(matcher.group(1));
         }
-        if ( tags.size() == 0 ){
+        if ( list.size() == 0 ){
             throw new NicoAPIException.ParseException("target sequence matched with " + matcher.pattern().pattern() + " not found > complete",res);
         }
         tags = list;
@@ -323,7 +332,7 @@ public class VideoInfoManager extends VideoInfo {
      * @param cookieStore the Nico login session
      * @return Returns {@code true} if succeed
      */
-    protected boolean getFlv (CookieStore cookieStore){
+    public boolean getFlv (CookieStore cookieStore){
         String path = flvUrl + id;
         HttpResponseGetter getter = new HttpResponseGetter();
         if ( !getter.tryGet(path,cookieStore)){
@@ -340,9 +349,9 @@ public class VideoInfoManager extends VideoInfo {
                 target = extract(res, VideoInfo.MESSAGE_SERVER_URL);
                 messageServerUrl = URLDecoder.decode(target);
             }
-            if (flvUrl == null) {
+            if (super.flvUrl == null) {
                 target = extract(res, VideoInfo.FLV_URL);
-                flvUrl = URLDecoder.decode(target);
+                super.flvUrl = URLDecoder.decode(target);
             }
         }catch(NicoAPIException e){
             e.printStackTrace();
@@ -456,23 +465,36 @@ public class VideoInfoManager extends VideoInfo {
         return String.format("%01d:%02d",length/60,length%60);
     }
 
-    public synchronized String formatCounter(int key){
+    public synchronized String formatCounter(int key) throws NicoAPIException{
         int counter = 0;
+        try {
         switch ( key ){
-            case VideoInfo.VIEW_COUNTER:
-                counter = viewCounter;
-                break;
-            case VideoInfo.COMMENT_COUNTER:
-                counter = commentCounter;
-                break;
-            case VideoInfo.MY_LIST_COUNTER:
-                counter = myListCounter;
-                break;
-            default:
-                Log.d("VideoManager","formatCounter : invalid key");
+                case VideoInfo.VIEW_COUNTER:
+                    counter = getViewCounter();
+                    break;
+                case VideoInfo.COMMENT_COUNTER:
+                    counter = getCommentCounter();
+                    break;
+                case VideoInfo.MY_LIST_COUNTER:
+                    counter = getMyListCounter();
+                    break;
+                default:
+                    throw new NicoAPIException.InvalidParamsException("invalid key at format > " + key);
+            }
+        }catch (NicoAPIException e){
+            throw e;
         }
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
         return numberFormat.format(counter);
+    }
+    public String formatViewCounter() throws NicoAPIException {
+        return formatCounter(VIEW_COUNTER);
+    }
+    public String formatMyListCounter() throws NicoAPIException {
+        return formatCounter(MY_LIST_COUNTER);
+    }
+    public String formatCommentCounter() throws NicoAPIException {
+        return formatCounter(COMMENT_COUNTER);
     }
 
     /**

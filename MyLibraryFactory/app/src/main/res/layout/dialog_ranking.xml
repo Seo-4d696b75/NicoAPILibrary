@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/dialogRankingRoot">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Genre"
+        android:layout_margin="5dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerRankingGenre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown">
+    </Spinner>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Kind"
+        android:layout_margin="5dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerRankingKind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown">
+    </Spinner>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Period"
+        android:layout_margin="5dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerRankingPeriod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown">
+    </Spinner>
+
+</LinearLayout>

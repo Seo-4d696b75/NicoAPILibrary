@@ -39,6 +39,13 @@ import java.util.List;
 
 public class VideoInfo {
 
+    /**
+     * In usual, not set in any field.<br>
+     * Video title and its ID are supposed to be set whenever succeeding in parsing response from Nico.
+     * But if not, return this value.
+     */
+    public final String UNKNOWN = "unknown";
+
     //in case of ranking
     /**
      * ランキングのジャンルパラメータ（ランキング限定）<br>
@@ -197,6 +204,42 @@ public class VideoInfo {
 
     protected VideoInfo(){}
 
+    public String getDate() throws NicoAPIException{
+        return getString(DATE);
+    }
+    public String getTitle() {
+        try {
+            return getString(TITLE);
+        }catch (NicoAPIException e){
+            return UNKNOWN;
+        }
+    }
+    public String getID() {
+        try {
+            return getString(ID);
+        }catch (NicoAPIException e){
+            e.printStackTrace();
+            return UNKNOWN;
+        }
+    }
+    public String getDescription() throws NicoAPIException{
+        return getString(DESCRIPTION);
+    }
+    public String getThreadID() throws NicoAPIException{
+        return getString(THREAD_ID);
+    }
+    public String getMessageServerUrl() throws NicoAPIException{
+        return getString(MESSAGE_SERVER_URL);
+    }
+    public String getFlvUrl() throws NicoAPIException{
+        return getString(FLV_URL);
+    }
+    public String getContributorName() throws NicoAPIException{
+        return getString(CONTRIBUTOR_NAME);
+    }
+    public String getContributorIconUrl() throws NicoAPIException{
+        return getString(CONTRIBUTOR_ICON_URL);
+    }
     public synchronized String getString(int key) throws NicoAPIException{
         String target = null;
         switch ( key ){
@@ -247,6 +290,21 @@ public class VideoInfo {
         }else{
             return target;
         }
+    }
+    public int getLength() throws NicoAPIException{
+        return getInt(LENGTH);
+    }
+    public int getViewCounter() throws NicoAPIException{
+        return getInt(VIEW_COUNTER);
+    }
+    public int getMyListCounter() throws NicoAPIException{
+        return getInt(MY_LIST_COUNTER);
+    }
+    public int getCommentCounter() throws NicoAPIException{
+        return getInt(COMMENT_COUNTER);
+    }
+    public int getContributorID() throws NicoAPIException{
+        return getInt(CONTRIBUTOR_ID);
     }
     public synchronized int getInt(int key) throws NicoAPIException{
         int target = -1;
@@ -400,7 +458,7 @@ public class VideoInfo {
      * Converts itself into {@link VideoInfoPackage} instance keeping all the fields.
      * @return Returns serializable instance
      */
-    public synchronized VideoInfoPackage pack(){
+    public synchronized VideoInfoPackage pack() throws NicoAPIException{
         return new VideoInfoPackage(this);
     }
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/dialogAccountRoot">
+
+    <EditText
+        android:id="@+id/editTextMail"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Mail"
+        android:maxLines="1"
+        android:background="#EEEEEE"
+        android:inputType="textEmailAddress"
+        android:layout_margin="5dp"/>
+
+    <EditText
+        android:id="@+id/editTextPass"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Pass"
+        android:background="#EEEEEE"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:layout_margin="5dp"/>
+
+</LinearLayout>

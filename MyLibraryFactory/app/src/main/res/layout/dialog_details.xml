@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/dialogDetailsRoot">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/imageViewDetailsThumbnail"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:src="@drawable/temp_thumbnail"
+                android:layout_margin="10dp"/>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Video Title"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsTitle"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="title is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Video ID"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsID"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="ID is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsDescription"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="description is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Video Length"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsLength"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="length is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="View Counter"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsView"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="view counter is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="My List Counter"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsMyList"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="my list counter is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Comment Counter"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsComment"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="comment counter is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Thumbnail URL"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsThumbnailURL"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="URL is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Contributed Date"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsDate"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="date is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Video Tags"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsTags"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="tags is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Contributor ID"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsContributorID"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="id is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Contributor Name"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsContributorName"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="name is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Contributor Icon URL"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsContributorIconUrl"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="URL is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Thread ID"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsThreadID"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="ID is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Message Server"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsMesServer"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="URL is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="Flv URL"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/textViewDetailsFlvURL"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:text="URL is shown here"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+
+

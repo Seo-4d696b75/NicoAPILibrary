@@ -20,7 +20,7 @@ InvalidParamsException  渡されたパラメータが不正
 APIUnexpectedException 予期されないＡＰＩからのレスポンス
 */
 
-class NicoAPIException extends Exception {
+public class NicoAPIException extends Exception {
 
     private NicoAPIException (String message){
         super(message);
@@ -107,6 +107,15 @@ class NicoAPIException extends Exception {
      */
     static class APIUnexpectedException extends NicoAPIException{
         APIUnexpectedException(String message){
+            super(message);
+        }
+    }
+
+    /**
+     * 想定してない状態を意味します
+     */
+    static class IllegalStateException extends NicoAPIException{
+        IllegalStateException(String message){
             super(message);
         }
     }

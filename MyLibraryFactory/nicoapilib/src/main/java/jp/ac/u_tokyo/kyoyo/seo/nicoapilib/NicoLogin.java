@@ -47,7 +47,7 @@ public class NicoLogin extends HttpResponseGetter {
     private LoginInfo loginInfo;
     private String loginUrl = "https://account.nicovideo.jp/api/v1/login?show_button_twitter=1&site=niconico&show_button_facebook=1&next_url=";
     private String myPageUrl = "http://www.nicovideo.jp/my";
-    private String userIconUrl = "http://usericon.nimg.jp/usericon/%d/%d";
+    private String userIconUrl = "http://usericon.nimg.jp/usericon/%d/%d.jpg";
     private String nicoSeigaUrl = "http://seiga.nicovideo.jp/api/user/info?id=";
     private int userID;
     private String userName;

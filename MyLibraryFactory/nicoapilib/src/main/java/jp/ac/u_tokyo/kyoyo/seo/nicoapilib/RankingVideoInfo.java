@@ -203,6 +203,15 @@ public class RankingVideoInfo extends VideoInfoManager {
                     default:
                 }
             }else{
+                if ( !ranking ){
+                    switch ( key ){
+                        case VideoInfo.COMMENT_COUNTER:
+                        case VideoInfo.MY_LIST_COUNTER:
+                        case VideoInfo.VIEW_COUNTER:
+                            continue;
+                        default:
+                    }
+                }
                 throw new NicoAPIException.ParseException(
                         "target partial sequence matched with \"" + matcher.pattern().pattern() + "\" not found",
                         xml
