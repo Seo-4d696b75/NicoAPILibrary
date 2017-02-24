@@ -6,6 +6,7 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -49,11 +50,11 @@ public class HttpResponseGetter {
      * @return Returns {@code true} if success. Be sure to check this value before getting {@link #response} or {@link #cookieStore}.
      */
     public boolean tryPost(String path,Map<String,String>params){
+        DefaultHttpClient client = new DefaultHttpClient();
         response = null;
         cookieStore = null;
         try {
-            HttpPost httpPost = new HttpPost(new URI(path));
-            DefaultHttpClient client = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(path);
 
             if ( params != null ) {
                 ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
@@ -68,12 +69,35 @@ public class HttpResponseGetter {
             int statusCode = httpResponse.getStatusLine().getStatusCode();
             if (statusCode == 200) {
                 cookieStore = client.getCookieStore();
-                response = EntityUtils.toString(httpResponse.getEntity());
+                response = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
                 return true;
             }
-            client.getConnectionManager().shutdown();
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            client.getConnectionManager().shutdown();
+        }
+        return false;
+    }
+
+    public boolean tryPost(String path ,String post){
+        DefaultHttpClient client = new DefaultHttpClient();
+        response = null;
+        cookieStore = null;
+        try {
+            HttpPost httpPost = new HttpPost(path);
+            httpPost.setEntity(new StringEntity(post,"UTF-8"));
+            HttpResponse httpResponse = client.execute(httpPost);
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            if (statusCode == 200) {
+                //cookieStore = client.getCookieStore();
+                response = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            client.getConnectionManager().shutdown();
         }
         return false;
     }
@@ -97,12 +121,12 @@ public class HttpResponseGetter {
      * @return Returns {@code true} if success. Be sure to check this value before getting {@link #response}
      */
     public boolean tryGet(String path, CookieStore cookieStore){
+        DefaultHttpClient client = new DefaultHttpClient();;
         response = null;
         try{
             //some characters cause IllegalArgumentException
             path = replaceMetaSymbol(path);
             HttpGet httpGet = new HttpGet(path);
-            DefaultHttpClient client = new DefaultHttpClient();
             if ( cookieStore != null){
                 client.setCookieStore(cookieStore);
             }
@@ -110,13 +134,14 @@ public class HttpResponseGetter {
             HttpResponse httpResponse = client.execute(httpGet);
             String res = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
             int statusCode = httpResponse.getStatusLine().getStatusCode();
-            client.getConnectionManager().shutdown();
             if ( statusCode == 200 ) {
                 response = res;
                 return true;
             }
         }catch ( Exception e){
             e.printStackTrace();
+        }finally {
+            client.getConnectionManager().shutdown();
         }
         return  false;
     }

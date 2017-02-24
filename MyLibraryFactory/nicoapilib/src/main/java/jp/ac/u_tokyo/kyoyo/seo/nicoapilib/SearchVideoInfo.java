@@ -32,7 +32,7 @@ public class SearchVideoInfo extends VideoInfoManager {
     private synchronized void initialize(JSONObject item) throws NicoAPIException.ParseException {
         try{
             title = item.getString("title");
-            id = item.getString("contentId");
+            setID( item.getString("contentId") );
             date = convertDate(item.getString("startTime"));
             description = item.getString("description");
             length = item.getInt("lengthSeconds");

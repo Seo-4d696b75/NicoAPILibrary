@@ -26,6 +26,7 @@ public class LoginInfo implements Serializable{
     private boolean login;
     private String userName;
     private int userID;
+    private boolean isPremium;
 
     private int cookieNum;
     private int[] cookieVersion;
@@ -70,17 +71,20 @@ public class LoginInfo implements Serializable{
         }
         return userID;
     }
-    /**
-     * supposed to be called by NicoLogin only.
-     */
+    public synchronized boolean isPremium () throws NicoAPIException.NoLoginException {
+        if ( !login ){
+            throw new NicoAPIException.NoLoginException("no login > isPremium");
+        }
+        return isPremium;
+    }
     protected synchronized void setUserName (String userName){
         this.userName = userName;
     }
-    /**
-     * supposed to be called by NicoLogin only.
-     */
     protected synchronized void setUserID (int userID){
         this.userID = userID;
+    }
+    protected synchronized void setPremium (boolean isPremium){
+        this.isPremium = isPremium;
     }
 
     /**

@@ -25,12 +25,13 @@ import java.util.TimeZone;
 
 public class NicoSearch extends HttpResponseGetter {
 
+    private String appName;
     private String searchUrl = "http://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search?q=";
     private String query = null;
     private boolean tagsSearch = false;
     private String sortParam = null;
     private boolean sortDown = true;
-    private int resultMax = 10;
+    private int resultMax = 50;
     private List<String> filterList;
 
     public static final int QUERY_OPERATOR_AND = 0;
@@ -72,16 +73,18 @@ public class NicoSearch extends HttpResponseGetter {
     private final String filterTo = "lte";
     private final String filterExact = "0";
 
-    protected NicoSearch (){
-        this(null);
+    protected NicoSearch (String appName){
+        this(appName,null);
     }
 
     /**
      * 検索キーワードの設定を同時に行うコンストラクタ<br>
      * Constructs an instance, setting search keyword at the same time.
      * @param query can be {@code null}
+     * @param appName your application name, cannot be {@code null}
      */
-    protected NicoSearch (String query){
+    protected NicoSearch (String appName,String query){
+        this.appName = appName;
         if ( query == null){
             this.query = "";
         }else {
@@ -379,10 +382,12 @@ public class NicoSearch extends HttpResponseGetter {
      * @throws NicoAPIException if no query set or fail to parse response
      */
     public List<VideoInfo> search () throws NicoAPIException{
+        if ( appName == null || appName.isEmpty() ){
+            throw new NicoAPIException.InvalidParamsException("appName is required in Search");
+        }
         if ( query.isEmpty() ){
             throw new NicoAPIException.InvalidParamsException("no query is set > search");
         }
-        String appName = NicoClient.appName;
         StringBuilder builder = new StringBuilder();
         builder.append(searchUrl);
         builder.append(query);

@@ -315,7 +315,7 @@ public class NicoRanking extends HttpResponseGetter {
      * Gets ranking from Nico.<br>
      * カテゴリ、期間、種類の3パラメータを設定してから取得できます。
      * 設定をしないとデフォルトでカテゴリ合算、期間合計、総合ランキングとして扱います。
-     * 再利用はできません、二度以上呼ぶと例外を投げます。<br>
+     * このインスタンスは再利用はできません、二度以上呼ぶと例外を投げます。<br>
      * This gets ranking from Nico after you set params; genre, kind and period.
      * If you not set them, this interprets as all category, entire period, overall ranking.
      * You cannot reuse this instance. If called twice again, an exception is thrown.

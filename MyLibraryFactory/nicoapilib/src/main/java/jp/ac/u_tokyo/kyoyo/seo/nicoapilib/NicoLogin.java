@@ -135,6 +135,7 @@ public class NicoLogin extends HttpResponseGetter {
             boolean isOver18 = Boolean.valueOf(matcher.group(4));
             boolean isMan = Boolean.valueOf(matcher.group(5));
             loginInfo.setUserID(userID);
+            loginInfo.setPremium(isPremium);
         }else{
             userID = 0;
             throw new NicoAPIException.ParseException("cannot find userID ",super.response);

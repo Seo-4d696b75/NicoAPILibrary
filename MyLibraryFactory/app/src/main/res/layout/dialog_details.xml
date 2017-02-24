@@ -262,6 +262,12 @@
                         android:layout_weight="3" />
                 </TableRow>
             </TableLayout>
+            <Button
+                android:id="@+id/buttonDetailsComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Comment"
+                android:layout_gravity="center_horizontal"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

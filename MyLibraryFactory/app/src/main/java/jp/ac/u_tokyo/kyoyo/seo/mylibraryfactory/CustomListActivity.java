@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,8 +18,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,8 +30,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.CommentInfo;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoAPIException;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoClient;
+import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoCommentPost;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfoManager;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfoPackage;
@@ -93,9 +99,9 @@ public abstract class CustomListActivity extends AppCompatActivity {
         if ( info == null ){
             return;
         }
-        new AsyncTask<String, Void, String>() {
+        new AsyncTask<Void, Void, String>() {
             private ProgressDialog progress;
-            private final String success = "success";
+            private final String SUCCESS = "success";
             @Override
             protected void onPreExecute() {
                 progress = new ProgressDialog(CustomListActivity.this);
@@ -104,16 +110,19 @@ public abstract class CustomListActivity extends AppCompatActivity {
                 progress.show();
             }
             @Override
-            protected String doInBackground(String... params) {
+            protected String doInBackground(Void... params) {
                 try {
                     if ( nicoClient.isLogin() ) {
-                        if (info.complete() && info.getFlv(nicoClient.getCookieStore())) {
-                            return success;
+                        if ( !info.isOfficial() ) {
+                            if (info.complete() && info.getFlv(nicoClient.getCookieStore())) {
+                                return SUCCESS;
+                            }else{
+                                return "fail to get details";
+                            }
                         }
-                    }else{
-                        if (info.complete() ) {
-                            return success;
-                        }
+                    }
+                    if (info.complete() ) {
+                        return SUCCESS;
                     }
                 }catch(NicoAPIException e){
                     return e.getMessage();
@@ -124,7 +133,7 @@ public abstract class CustomListActivity extends AppCompatActivity {
             protected void onPostExecute(String response) {
                 progress.cancel();
                 progress = null;
-                if ( response.equals(success) ){
+                if ( response.equals(SUCCESS) ){
                     if ( dialog != null ){
                         dialog.cancel();
                         dialog = null;
@@ -156,10 +165,22 @@ public abstract class CustomListActivity extends AppCompatActivity {
                         ((TextView)view.findViewById(R.id.textViewDetailsContributorID)).setText(String.valueOf(info.getContributorID()));
                         ((TextView)view.findViewById(R.id.textViewDetailsContributorName)).setText(info.getContributorName());
                         ((TextView)view.findViewById(R.id.textViewDetailsContributorIconUrl)).setText(info.getContributorIconUrl());
-                        if ( nicoClient.isLogin() ) {
+                        if ( nicoClient.isLogin() && !info.isOfficial() ) {
                             ((TextView) view.findViewById(R.id.textViewDetailsThreadID)).setText(info.getThreadID());
                             ((TextView) view.findViewById(R.id.textViewDetailsMesServer)).setText(info.getMessageServerUrl());
                             ((TextView) view.findViewById(R.id.textViewDetailsFlvURL)).setText(info.getFlvUrl());
+                        }
+                        Button buttonComment = (Button) view.findViewById(R.id.buttonDetailsComment);
+                        if ( nicoClient.isLogin() ){
+                            buttonComment.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.hide();
+                                    showComments(info);
+                                }
+                            });
+                        }else{
+                            buttonComment.setEnabled(false);
                         }
                         builder.setView(view);
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -183,6 +204,7 @@ public abstract class CustomListActivity extends AppCompatActivity {
                             }
                         });
                         dialog = builder.create();
+                        dialog.setCanceledOnTouchOutside(false);
                         dialog.show();
                     }catch (NicoAPIException e){
                         showMessage(e.getMessage());
@@ -192,6 +214,256 @@ public abstract class CustomListActivity extends AppCompatActivity {
                 }
             }
         }.execute();
+    }
+
+    private void showComments(final VideoInfo info){
+        new AsyncTask<Void, Void, String>() {
+            private ProgressDialog progress;
+            private final String SUCCESS = "success";
+            private List<CommentInfo> list;
+
+            @Override
+            protected void onPreExecute() {
+                progress = new ProgressDialog(CustomListActivity.this);
+                progress.setMessage("Getting comments...");
+                progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progress.show();
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    list = nicoClient.getComment(info);
+                    return SUCCESS;
+                } catch (NicoAPIException e) {
+                    return e.getMessage();
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String response) {
+                progress.cancel();
+                progress = null;
+                if (response.equals(SUCCESS)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CustomListActivity.this);
+                    builder.setTitle("Video Comments");
+                    Context context = CustomListActivity.this;
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    ViewGroup root = (ViewGroup) findViewById(R.id.dialogCommentRoot);
+                    View view = inflater.inflate(R.layout.dialog_comment, root, true);
+                    ((ListView)view.findViewById(R.id.listViewComment)).setAdapter(new CommentAdapter(CustomListActivity.this,list));
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            if ( dialog != null ){
+                                dialog.show();
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("PostComment", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            showCommentPost(info);
+                        }
+                    });
+                    builder.setView(view);
+                    AlertDialog commentDialog = builder.create();
+                    commentDialog.setCanceledOnTouchOutside(false);
+                    commentDialog.show();
+                }
+            }
+        }.execute();
+    }
+
+    private void showCommentPost(final VideoInfo info){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CustomListActivity.this);
+        builder.setTitle("Posting comment");
+        Context context = CustomListActivity.this;
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ViewGroup root = (ViewGroup) findViewById(R.id.dialogCommentPostRoot);
+        View view = inflater.inflate(R.layout.dialog_comment_post, root, true);
+        final TextView textTime = (TextView)view.findViewById(R.id.textViewCommentPostTime);
+        final EditText textComment = (EditText)view.findViewById(R.id.editTextCommentPost);
+        final View spinnerBack = view.findViewById(R.id.spinnerBackCommentPost);
+        final Spinner spinnerColor = (Spinner)view.findViewById(R.id.spinnerCommentPost);
+        final NumberPicker pickerMin = (NumberPicker)view.findViewById(R.id.numberPickerCommentPostMin);
+        final NumberPicker pickerSec = (NumberPicker)view.findViewById(R.id.numberPickerCommentPostSec);
+        final NumberPicker pickerDecimalSec = (NumberPicker)view.findViewById(R.id.numberPickerCommentPostDecimalSec);
+        pickerMin.setMinValue(0);
+        pickerSec.setMinValue(0);
+        pickerDecimalSec.setMinValue(0);
+        pickerSec.setMaxValue(59);
+        pickerDecimalSec.setMaxValue(99);
+        try {
+            final int length = info.getLength();
+            pickerMin.setMaxValue(length / 60);
+            pickerSec.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                    int min = pickerMin.getValue();
+                    int decimalSec = pickerDecimalSec.getValue();
+                    if ( min*60 + newVal >= length ){
+                        picker.setValue(oldVal);
+                    }
+                    int sec = picker.getValue();
+                    textTime.setText(String.format("%02d:%02d.%02d",min,sec,decimalSec));
+                }
+            });
+            pickerMin.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                    int sec = pickerSec.getValue();
+                    int decimalSec = pickerDecimalSec.getValue();
+                    textTime.setText(String.format("%02d:%02d.%02d",newVal,sec,decimalSec));
+                }
+            });
+            pickerDecimalSec.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                    int min = pickerMin.getValue();
+                    int sec = pickerSec.getValue();
+                    textTime.setText(String.format("%02d:%02d.%02d",min,sec,newVal));
+                }
+            });
+            final NicoCommentPost commentPost = nicoClient.getNicoCommentPost(info);
+            final Map<String,Integer> colorMap = commentPost.getColorMap();
+            spinnerColor.setAdapter(new ArrayAdapter(CustomListActivity.this, android.R.layout.simple_spinner_item){
+                {
+                    for ( String name : colorMap.keySet() ){
+                        add(name);
+                    }
+                }
+            });
+            spinnerColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String name = (String) parent.getSelectedItem();
+                    int color = colorMap.get(name);
+                    spinnerBack.setBackgroundColor(color);
+                    commentPost.setColor(color);
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+            spinnerBack.setBackgroundColor(NicoCommentPost.COLOR_WHITE);
+            builder.setView(view);
+            builder.setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String comment = textComment.getText().toString();
+                    int min = pickerMin.getValue();
+                    int sec = pickerSec.getValue();
+                    int decimalSec = pickerDecimalSec.getValue();
+                    if ( ! comment.isEmpty() ) {
+                        commentPost.setComment(comment);
+                        commentPost.setTime(6000*min+100*sec+decimalSec);
+                        postComment(commentPost, true);
+                    }
+                }
+            });
+            builder.setNegativeButton("Latest", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    postComment(commentPost,false);
+                }
+            });
+            builder.create().show();
+        }catch (NicoAPIException e){
+            showMessage( e.getMessage() );
+        }
+        pickerMin.setValue(0);
+        pickerSec.setValue(0);
+        pickerDecimalSec.setValue(0);
+    }
+
+    private void postComment(final NicoCommentPost commentPost, final boolean post){
+        new AsyncTask<Void, Void, String>() {
+            private ProgressDialog progress;
+            private final String SUCCESS = "success";
+            private List<CommentInfo> list;
+
+            @Override
+            protected void onPreExecute() {
+                progress = new ProgressDialog(CustomListActivity.this);
+                if ( post ){
+                    String comment = commentPost.getComment();
+                    int time = commentPost.getStartTime();
+                    int min = time / 6000;
+                    float sec = (time % 6000) / 100f;
+                    progress.setMessage(String.format("Posting comment :\n \"%s\" at %02d:%04.2f", comment, min, sec));
+                }else {
+                    progress.setMessage("Getting latest comments...");
+                }
+                progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progress.show();
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    if ( post ) {
+                        commentPost.post();
+                    }
+                    list = nicoClient.getComment(commentPost.getTargetVideo(),100);
+                    return SUCCESS;
+                } catch (NicoAPIException e) {
+                    return e.getMessage();
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String response) {
+                progress.cancel();
+                progress = null;
+                if (response.equals(SUCCESS)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CustomListActivity.this);
+                    builder.setTitle("Video Comments");
+                    Context context = CustomListActivity.this;
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    ViewGroup root = (ViewGroup) findViewById(R.id.dialogCommentRoot);
+                    View view = inflater.inflate(R.layout.dialog_comment, root, true);
+                    ((ListView)view.findViewById(R.id.listViewComment)).setAdapter(new CommentAdapter(CustomListActivity.this,list));
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            if ( dialog != null ){
+                                dialog.show();
+                            }
+                        }
+                    });
+                    builder.setView(view);
+                    AlertDialog commentDialog = builder.create();
+                    commentDialog.setCanceledOnTouchOutside(false);
+                    commentDialog.show();
+                }
+            }
+        }.execute();
+    }
+
+    private class CommentAdapter extends ArrayAdapter<CommentInfo>{
+        private LayoutInflater inflater;
+        protected CommentAdapter(Context context, List<CommentInfo> list){
+            super(context,0,list);
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+        @Override
+        public View getView(final int position, View convertView, final ViewGroup parent) {
+            View view = convertView;
+            CommentInfo item = this.getItem(position);
+            if ( view == null ){
+                view = inflater.inflate(R.layout.comment_cell,null);
+            }
+            if ( item != null ){
+                TextView textTime = (TextView)view.findViewById(R.id.textViewCommentTime);
+                TextView textComment = (TextView)view.findViewById(R.id.textViewComment);
+                String startTime = String.format("%02d:%02d %d",(int)item.start/60000,((int)item.start%60000)/1000,item.ngLevel);
+                textTime.setText(startTime);
+                textComment.setShadowLayer(5f,5f,5f,Color.BLACK);
+                textComment.setTextColor(item.color);
+                textComment.setText(item.content);
+            }
+            return view;
+        }
     }
 
     private class CustomListAdapter extends ArrayAdapter<VideoInfo>{
@@ -230,14 +502,14 @@ public abstract class CustomListActivity extends AppCompatActivity {
                     length.setText(item.formatLength());
                     viewCount.setText("views:" + item.formatCounter(VideoInfo.VIEW_COUNTER));
                     mylistCount.setText("myList:" + item.formatCounter(VideoInfo.MY_LIST_COUNTER));
-                    new AsyncTask<String, Void, String> (){
+                    new AsyncTask<Void, Void, String> (){
                         private Drawable thumbnailImage;
                         @Override
                         protected void onPreExecute() {
                             thumbnail.setImageDrawable(resources.getDrawable(R.drawable.temp_thumbnail));
                         }
                         @Override
-                        protected String doInBackground(String... params) {
+                        protected String doInBackground(Void... params) {
                             try {
                                 thumbnailImage = item.getThumbnail();
                                 return null;

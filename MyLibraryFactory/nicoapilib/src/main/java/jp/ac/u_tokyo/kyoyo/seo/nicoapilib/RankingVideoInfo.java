@@ -174,7 +174,7 @@ public class RankingVideoInfo extends VideoInfoManager {
                         title = value;
                         break;
                     case VideoInfo.ID:
-                        id = value;
+                        setID(value);
                         break;
                     case VideoInfo.DESCRIPTION:
                         description = value;

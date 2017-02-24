@@ -66,7 +66,7 @@ public class TempMyListVideoInfo extends VideoInfoManager {
 
     private synchronized void initialize(JSONObject item)  throws NicoAPIException.ParseException {
         try {
-            id = item.getString("video_id");
+            setID( item.getString("video_id") );
             title = item.getString("title");
             setThumbnailUrl( item.getString("thumbnail_url") );
             date = convertDate(item.getLong("first_retrieve"));

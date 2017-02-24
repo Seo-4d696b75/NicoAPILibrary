@@ -73,14 +73,32 @@ public class VideoInfo {
     //common
     /**
      * 動画のタイトル<br>
-     *     title of video
+     *     title of video.<br>
+     * 取得されたすべての動画でこのフィールド値は保証されます。<br>
+     * This value is always set in any video.
      */
     protected String title;
     /**
      * 動画ID、動画視聴URLの末尾にある"sm******"これです。<br>
-     *     video ID, which you can find in the end of watch URL.
+     *     video ID, which you can find in the end of watch URL.<br>
+     * 取得されたすべての動画でこのフィールド値は保証されます。<br>
+     * 動画ＩＤには大きく分けて"sm********"と"so*********"の二種類が存在し、
+     * 後者は公式動画を表します。公式動画の場合、一部フィールドの内容が通常と異なります。<br>
+     * {@link #contributorName}　投稿者名→チャンネル名<br>
+     * {@link #contributorID}　投稿者ID→チャンネルID<br>
+     * {@link #contributorIconUrl}　投稿者アイコンURL→チャンネルアイコンURL<br>
+     * {@link #contributorIcon}　投稿者アイコン→チャンネルアイコン<br>
+     * This value is always set in any video.<br>
+     * Video ID is categorized to two types; "sm********" and "so*********".
+     * The latter stands for an official video.
+     * In case of an official video, some fields have different value than usual;<br>
+     * {@link #contributorName}　contributor name→channel name<br>
+     * {@link #contributorID} contributor ID→channel ID<br>
+     * {@link #contributorIconUrl}　contributor icon URL→channel icon URL<br>
+     * {@link #contributorIcon}　contributor icon→channel icon<br>
      */
     protected String id;
+    private boolean official = false;
     /**
      * 動画の投稿日時<br>
      *     contribution date.<br>
@@ -161,24 +179,35 @@ public class VideoInfo {
     //contributor
     /**
      * 投稿者のユーザID<br>
-     *     user ID of video contributor.
+     * user ID of video contributor.<br>
+     * 公式動画の場合はチャンネルIDで代替されます。<br>
+     * In case of an official video, this is substituted with channel ID.
      */
     protected int contributorID = -1;
     /**
      * 投稿者のユーザ名<br>
-     *     name of contributor.
+     * name of contributor.<br>
+     * 公式動画の場合はチャンネル名で代替されます。<br>
+     * In case of an official video, this is substituted with channel name.
      */
     protected String contributorName;
     /**
      * 投稿者のユーザアイコンのURL,画像はJPG<br>
-     *     URL from which you can get user icon image of contributor.
+     * URL from which you can get user icon image of contributor.<br>
+     * 公式動画の場合はチャンネルアイコンで代替されます。<br>
+     * In case of an official video, this is substituted with channel icon.
      */
     protected String contributorIconUrl;
     /**
      * Androidでの使用が前提、投稿者のユーザアイコン<br>
-     *     user icon image of contributor, supposed to be used in Android.
+     *     user icon image of contributor, supposed to be used in Android.<br>
+     * 公式動画の場合はチャンネルアイコンで代替されます。<br>
+     * In case of an official video, this is substituted with channel icon.
      */
     protected Drawable contributorIcon;
+
+    //comment
+    protected CommentInfo.CommentGroup commentGroup;
 
     public static final int GENRE = 0;
     public static final int RANK_KIND = 1;
@@ -204,6 +233,12 @@ public class VideoInfo {
 
     protected VideoInfo(){}
 
+    protected void setID(String id){
+        this.id = id;
+        if ( id.indexOf("so") >= 0 ){
+            official = true;
+        }
+    }
     public String getDate() throws NicoAPIException{
         return getString(DATE);
     }
@@ -221,6 +256,9 @@ public class VideoInfo {
             e.printStackTrace();
             return UNKNOWN;
         }
+    }
+    public boolean isOfficial(){
+        return official;
     }
     public String getDescription() throws NicoAPIException{
         return getString(DESCRIPTION);
@@ -286,7 +324,7 @@ public class VideoInfo {
                 throw new NicoAPIException.InvalidParamsException("invalid video filed key : " + key);
         }
         if ( target == null ){
-            throw new NicoAPIException.NotInitializedException("requested video field not initialized");
+            throw new NicoAPIException.NotInitializedException("requested video field not initialized",key);
         }else{
             return target;
         }
@@ -328,7 +366,7 @@ public class VideoInfo {
                 throw new NicoAPIException.InvalidParamsException("invalid video filed key : " + key);
         }
         if ( target < 0 ){
-            throw new NicoAPIException.NotInitializedException("requested video field not initialized");
+            throw new NicoAPIException.NotInitializedException("requested video field not initialized",key);
         }else{
             return  target;
         }
@@ -366,7 +404,7 @@ public class VideoInfo {
      */
     public synchronized List<String> getTagsList() throws NicoAPIException.NotInitializedException{
         if ( tags == null ) {
-            throw new NicoAPIException.NotInitializedException("requested video tags not initialized > " + id);
+            throw new NicoAPIException.NotInitializedException("requested video tags not initialized > " + id, TAGS);
         }else{
             return tags;
         }
@@ -380,7 +418,7 @@ public class VideoInfo {
      */
     public synchronized String[] getTags() throws NicoAPIException.NotInitializedException{
         if ( tags == null ){
-            throw new NicoAPIException.NotInitializedException("requested video tags not initialized > " + id);
+            throw new NicoAPIException.NotInitializedException("requested video tags not initialized > " + id,TAGS);
         }
         String[] tags = new String[this.tags.size()];
         for ( int i=0 ; i<tags.length ; i++){
@@ -422,7 +460,7 @@ public class VideoInfo {
 
     public synchronized String getThumbnailUrl (boolean isHigh) throws NicoAPIException.NotInitializedException{
         if ( thumbnailUrl == null || thumbnailUrl.isEmpty() ){
-            throw new NicoAPIException.NotInitializedException("requested video thumbnail URL not initialized > " + id);
+            throw new NicoAPIException.NotInitializedException("requested video thumbnail URL not initialized > " + id, THUMBNAIL_URL);
         }
         if ( isHigh ){
             return thumbnailUrl.get(thumbnailUrl.size()-1);
@@ -440,7 +478,7 @@ public class VideoInfo {
     }
     public synchronized String[] getThumbnailUrlArray() throws NicoAPIException.NotInitializedException{
         if ( thumbnailUrl == null || thumbnailUrl.isEmpty() ){
-            throw new NicoAPIException.NotInitializedException("requested video thumbnail URL not initialized > " + id);
+            throw new NicoAPIException.NotInitializedException("requested video thumbnail URL not initialized > " + id, THUMBNAIL_URL);
         }
         String[] array = new String[thumbnailUrl.size()];
         for ( int i=0 ; i<array.length ; i++){

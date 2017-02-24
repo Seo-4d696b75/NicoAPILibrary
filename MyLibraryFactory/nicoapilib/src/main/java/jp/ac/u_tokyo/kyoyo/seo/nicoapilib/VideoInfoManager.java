@@ -162,9 +162,9 @@ public class VideoInfoManager extends VideoInfo {
             put(VideoInfo.MY_LIST_COUNTER,Pattern.compile("<mylist_counter>(.+?)</mylist_counter>"));
             put(VideoInfo.TAGS,Pattern.compile("<tags domain=\"jp\">(.+?)</tags>",Pattern.DOTALL));
             put(VideoInfo.TAG,Pattern.compile("<tag.*>(.+?)</tag>"));
-            put(VideoInfo.CONTRIBUTOR_ID,Pattern.compile("<user_id>([0-9]+?)</user_id>"));
-            put(VideoInfo.CONTRIBUTOR_NAME,Pattern.compile("<user_nickname>(.+?)</user_nickname>"));
-            put(VideoInfo.CONTRIBUTOR_ICON_URL,Pattern.compile("<user_icon_url>(.+?)</user_icon_url>"));
+            put(VideoInfo.CONTRIBUTOR_ID,Pattern.compile("<(user|ch)_id>([0-9]+?)</(user|ch)_id>"));
+            put(VideoInfo.CONTRIBUTOR_NAME,Pattern.compile("<(user_nickname|ch_name)>(.+?)</(user_nickname|ch_name)>"));
+            put(VideoInfo.CONTRIBUTOR_ICON_URL,Pattern.compile("<(user|ch)_icon_url>(.+?)</(user|ch)_icon_url>"));
             put(VideoInfo.THREAD_ID,Pattern.compile("thread_id=([0-9]+?)&"));
             put(VideoInfo.FLV_URL,Pattern.compile("url=(.+?)&"));
             put(VideoInfo.MESSAGE_SERVER_URL,Pattern.compile("ms=(.+?)&"));
@@ -194,9 +194,9 @@ public class VideoInfoManager extends VideoInfo {
      *     {@link VideoInfo#myListCounter マイリス数}<br>
      *     {@link VideoInfo#thumbnailUrl サムネイル画像のURL}<br>
      *     {@link VideoInfo#tags 動画タグ}<br>
-     *     {@link VideoInfo#contributorID 投稿者のユーザID}<br>
-     *     {@link VideoInfo#contributorName 投稿者のニックネーム}<br>
-     *     {@link VideoInfo#contributorIconUrl 投稿者のユーザアイコン画像のURL}<br>
+     *     {@link VideoInfo#contributorID 投稿者のユーザIDまたはチャンネルID}<br>
+     *     {@link VideoInfo#contributorName 投稿者のニックネームまたはチャンネル名}<br>
+     *     {@link VideoInfo#contributorIconUrl 投稿者のユーザアイコンまたはチャンネルアイコン画像のURL}<br>
      * Be careful that there can be lacking fields {@link VideoInfo according to API}.
      * By calling this, you can get;<br>
      *     {@link VideoInfo#title title of video}<br>
@@ -209,9 +209,9 @@ public class VideoInfoManager extends VideoInfo {
      *     {@link VideoInfo#myListCounter number of myList registered}<br>
      *     {@link VideoInfo#thumbnailUrl url of thumbnail}<br>
      *     {@link VideoInfo#tags video tag}<br>
-     *     {@link VideoInfo#contributorID user ID of contributor}<br>
-     *     {@link VideoInfo#contributorName user name of contubutor}<br>
-     *     {@link VideoInfo#contributorIconUrl url of user icon of contributor}<br>
+     *     {@link VideoInfo#contributorID user ID of contributor or channel ID}<br>
+     *     {@link VideoInfo#contributorName user name of contubutor or channel name}<br>
+     *     {@link VideoInfo#contributorIconUrl url of contributor icon or channel}<br>
      * @return Returns {@code true} if succeed
      */
     public boolean complete(){
@@ -239,11 +239,11 @@ public class VideoInfoManager extends VideoInfo {
                 date = target;
             }
             if ( contributorName == null){
-                target = extract(res,VideoInfo.CONTRIBUTOR_NAME);
+                target = extract(res,VideoInfo.CONTRIBUTOR_NAME,2);
                 contributorName = target;
             }
             if ( contributorIconUrl == null){
-                target = extract(res,VideoInfo.CONTRIBUTOR_ICON_URL);
+                target = extract(res,VideoInfo.CONTRIBUTOR_ICON_URL,2);
                 contributorIconUrl = target;
             }
             if ( viewCounter < 0 ){
@@ -271,7 +271,7 @@ public class VideoInfoManager extends VideoInfo {
                 myListCounter = num;
             }
             if ( contributorID <= 0 ){
-                target = extract(res,VideoInfo.CONTRIBUTOR_ID);
+                target = extract(res,VideoInfo.CONTRIBUTOR_ID,2);
                 num = Integer.parseInt(target);
                 if ( num < 0 ){
                     return false;
@@ -294,10 +294,13 @@ public class VideoInfoManager extends VideoInfo {
         }
     }
     private String extract (String res, int key) throws NicoAPIException{
+        return extract(res,key,1);
+    }
+    private String extract (String res, int key, int group) throws NicoAPIException{
         if ( patternMap.containsKey(key) ) {
             Matcher matcher = patternMap.get(key).matcher(res);
             if ( matcher.find() ){
-                return matcher.group(1);
+                return matcher.group(group);
             }
             throw new NicoAPIException.ParseException("target sequence matched with " + matcher.pattern().pattern() + " not found > complete",res);
         }
@@ -328,11 +331,19 @@ public class VideoInfoManager extends VideoInfo {
 
     /**
      * スレッドID,メッセージサーバURL,flvURLを取得します<br>
-     * Gets threadID, URL of message server and flv URL.
+     * Gets threadID, URL of message server and flv URL.<br>
+     * 必ずニコ動へのログインが必要で、そのセッション情報を格納したCookieを引数に渡します。
+     * 公式動画の場合は取得できず、常に{@code false}を返します。<br>
+     * Calling this method requires login to Nico.
+     * You have to pass that Cookie which stores the login session.
+     * In case of official video, you cannot get those values and {@code false} is always returned.
      * @param cookieStore the Nico login session
      * @return Returns {@code true} if succeed
      */
     public boolean getFlv (CookieStore cookieStore){
+        if ( isOfficial()){
+            return false;
+        }
         String path = flvUrl + id;
         HttpResponseGetter getter = new HttpResponseGetter();
         if ( !getter.tryGet(path,cookieStore)){
@@ -505,12 +516,90 @@ public class VideoInfoManager extends VideoInfo {
      */
     public synchronized Date parseDate() throws NicoAPIException{
         if ( date == null ){
-            throw new NicoAPIException.NotInitializedException("value of date is not initialized > " + id);
+            throw new NicoAPIException.NotInitializedException("value of date is not initialized > " + id,VideoInfo.DATE);
         }
         try{
             return dateFormatBase.parse(date);
         } catch (ParseException e) {
             throw new NicoAPIException.ParseException( e.getMessage() + " > " + id,date);
+        }
+    }
+
+    /**
+     * コメントを取得します<br>
+     * Gets comments.<br>
+     * メッセージサーバーのURLとスレッドＩＤが必要で、未取得の場合は例外を投げます。
+     * 必ず事前に{@link #getFlv(CookieStore)}を呼んでください。
+     * 取得するコメント数は動画長さに応じて適当に設定されます。
+     * ただし、すでにコメントを取得済みだった場合、そのコメントを返します。<br>
+     * This requires message server Url and Thread ID, and throws an exception if these values are not gotten.
+     * Be sure to call {@link #getFlv(CookieStore)} in advance.
+     * The number of comments is set corresponding to video length.
+     * If comments are already gotten, this returns them.
+     * @return Returns List of {@link CommentInfo} sorted along time series, not {@code null}
+     * @throws NicoAPIException if fail to get comment
+     */
+    public List<CommentInfo> getComment () throws NicoAPIException{
+        return  getComment(false);
+    }
+    public synchronized List<CommentInfo> getComment (boolean isNew) throws NicoAPIException{
+        if ( !isNew || commentGroup == null ){
+            if (threadID == null || messageServerUrl == null) {
+                throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown");
+            }
+            HttpResponseGetter getter = new HttpResponseGetter();
+            String postEntityFormat = "<packet><thread thread=\"%1$s\" version=\"20090904\"  /><thread_leaves scores=\"1\" thread=\"%1$s\">0-%2$d:100,1000</thread_leaves></packet>";
+            String postEntity = String.format(postEntityFormat, threadID, getLength() / 60 + 1);
+            getter.tryPost(messageServerUrl,postEntity);
+            commentGroup = CommentInfo.parse(getter.response);
+        }
+        return commentGroup.commentList;
+    }
+    /**
+     * コメントを取得します<br>
+     * Gets comments.<br>
+     * メッセージサーバーのURLとスレッドＩＤが必要で、未取得の場合は例外を投げます。
+     * 必ず事前に{@link #getFlv(CookieStore)}を呼んでください。<br>
+     * This requires message server Url and Thread ID, and throws an exception if these values are not gotten.
+     * Be sure to call {@link #getFlv(CookieStore)} in advance.
+     * @param max the limit number of comment response from 0 to 1000, if over 1000, fixed to 1000
+     * @return Returns List of {@link CommentInfo} sorted along time series, not {@code null}
+     * @throws NicoAPIException if fail to get comment
+     */
+    public synchronized List<CommentInfo> getComment (int max) throws NicoAPIException{
+        if (threadID == null || messageServerUrl == null) {
+            throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown");
+        }
+        if ( max <= 0 ){
+            max = 100;
+        }
+        if ( max > 1000 ){
+            max = 1000;
+        }
+        HttpResponseGetter getter = new HttpResponseGetter();
+        String postEntityFormat = "<thread res_from=\"-%d\" version=\"20061206\" scores=\"1\" thread=\"%s\" />";
+        String postEntity = String.format(postEntityFormat, max,threadID);
+        getter.tryPost(messageServerUrl,postEntity);
+        commentGroup = CommentInfo.parse(getter.response);
+        return commentGroup.commentList;
+    }
+    //Jsonでも取得できる
+    public synchronized List<CommentInfo> getCommentByJson (int max) throws NicoAPIException{
+        if (threadID == null || messageServerUrl == null) {
+            throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown");
+        }
+        String paramFormat = ".json/thread?version=20090904&thread=%s&res_from=-%d";
+        String param = String.format(paramFormat, threadID, max);
+        String path = messageServerUrl;
+        Matcher matcher = Pattern.compile("(.+/api)/?").matcher(path);
+        if (matcher.find()) {
+            path = matcher.group(1) + param;
+            HttpResponseGetter getter = new HttpResponseGetter();
+            getter.tryGet(path);
+            commentGroup = CommentInfo.parse(getter.response);
+            return commentGroup.commentList;
+        } else {
+            throw new NicoAPIException.APIUnexpectedException("format of message server URL is unexpected > " + path);
         }
     }
 

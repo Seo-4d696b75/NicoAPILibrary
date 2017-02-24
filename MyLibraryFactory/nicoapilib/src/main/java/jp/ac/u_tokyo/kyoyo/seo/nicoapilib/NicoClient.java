@@ -3,11 +3,18 @@ package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,28 +38,27 @@ public class NicoClient extends LoginInfo{
 
     /**
      * アプリの名前、使用するＡＰＩによってはこの値が必要<br>
-     * Your application name, needed for some API.
+     * Your application name, needed for some API.<br>
+     *  動画検索に用いる『スナップショット検索API v2』 に必要です。
      */
-    public static final String appName = "yourAppName";
+    protected String appName;
+    /**
+     * 使用するデバイスの名前 <br>
+     * コメントを投稿するときに必要です。<br>
+     * This value is needed when a comment is posted.
+     */
+    protected String deviceName;
 
     /**
      * コンストラクタからインスタンスを取得します、全てはここから始まる<br>
      * Gets instance of this constructor.
+     * @param appName your application name, cannot be {@code null}
+     * @param deviceName your device name, cannot be {@code null}
      */
-    public NicoClient (){}
-
-    /*
-    /**
-     * Intent等で{@link LoginInfo ログイン情報}が手元にある場合を想定したコンストラクタ<br>
-     *     constructor in case where {@link LoginInfo login information} is available with Intent or so.
-     * @param loginInfo can be {@code null}, but add new {@link LoginInfo login information} with no login
-     *//*
-    public NicoClient (LoginInfo loginInfo){
-        if ( loginInfo == null ){
-            loginInfo = new LoginInfo();
-        }
-        this.loginInfo = loginInfo;
-    }*/
+    public NicoClient (String appName,String deviceName){
+        this.appName = appName;
+        this.deviceName = deviceName;
+    }
 
     /**
      * ニコ動にログインします<br>
@@ -107,8 +113,11 @@ public class NicoClient extends LoginInfo{
         if ( videoInfo == null ){
             throw new NicoAPIException.InvalidParamsException("target video is null > recommend");
         }
-        RecommendGetter getter = new RecommendGetter();
-        return getter.get(videoInfo);
+        String recommendUrl = "http://flapi.nicovideo.jp/api/getrelation?page=10&sort=p&order=d&video=";
+        String path = recommendUrl + videoInfo.getID();
+        HttpResponseGetter getter = new HttpResponseGetter();
+        getter.tryGet(path);
+        return RecommendVideoInfo.parse(getter.response);
     }
 
     /**
@@ -121,8 +130,10 @@ public class NicoClient extends LoginInfo{
      */
     public synchronized List<VideoInfo> getTempMyList()throws NicoAPIException{
         if ( isLogin() ) {
-            TempMyListGetter getter = new TempMyListGetter();
-            return getter.get();
+            String tempMyListUrl = "http://www.nicovideo.jp/api/deflist/list";
+            HttpResponseGetter getter = new HttpResponseGetter();
+            getter.tryGet(tempMyListUrl, getCookieStore());
+            return TempMyListVideoInfo.parse(getter.response);
         }else{
             throw new NicoAPIException.NoLoginException("no login > temp myList");
         }
@@ -134,7 +145,7 @@ public class NicoClient extends LoginInfo{
      * @return use this to search videos, not {@code null}
      */
     public NicoSearch getNicoSearch (){
-        return new NicoSearch();
+        return new NicoSearch(appName);
     }
 
     /**
@@ -147,8 +158,33 @@ public class NicoClient extends LoginInfo{
         if ( !isLogin() ){
             throw new NicoAPIException.NoLoginException("no login > myList group");
         }
-        MyListGetter getter = new MyListGetter();
-        return getter.getMyListGroup();
+        String myListGroupUrl = "http://www.nicovideo.jp/api/mylistgroup/list";
+        HttpResponseGetter getter = new HttpResponseGetter();
+        if ( getter.tryGet(myListGroupUrl, getCookieStore()) ){
+            try{
+                JSONObject json = new JSONObject(getter.response);
+                if ( !json.optString("status").equals("ok")){
+                    String message = "Unexpected API response status > myList group ";
+                    try{
+                        JSONObject error = json.getJSONObject("error");
+                        String code = error.getString("code");
+                        String description = error.getString("description");
+                        message += (code + ":" +description);
+                    }catch (JSONException e){}
+                    throw new NicoAPIException.APIUnexpectedException(message);
+                }
+                JSONArray array = json.optJSONArray("mylistgroup");
+                Map<String,String> myListGroup = new HashMap<String,String>();
+                for ( int i=0 ; i<array.length() ; i++){
+                    JSONObject item = array.optJSONObject(i);
+                    myListGroup.put(item.optString("name"),item.optString("id"));
+                }
+                return myListGroup;
+            }catch (JSONException e){
+                throw new NicoAPIException.ParseException(e.getMessage(),getter.response);
+            }
+        }
+        throw new NicoAPIException.ParseException("no parse target > myList group",null);
     }
 
     /**
@@ -170,20 +206,35 @@ public class NicoClient extends LoginInfo{
         if ( ID == null ){
             throw new NicoAPIException.InvalidParamsException("myList ID is null");
         }
-        MyListGetter getter = new MyListGetter();
-        return getter.getMyList(ID);
+        String myListUrl = "http://www.nicovideo.jp/mylist/%s?rss=2.0";
+        HttpResponseGetter getter = new HttpResponseGetter();
+        String path = String.format(myListUrl, ID);
+        getter.tryGet(path, getCookieStore());
+        return RankingVideoInfo.parse(getter.response,null,null,null);
     }
 
     /**
-     *{@link #getComment(VideoInfo, int)}の引数省略したもの、コメント数は動画長さに応じて適当に設定される<br>
-     *{@link #getComment(VideoInfo, int)} with omitted argument, number of comments is set corresponding to video length.
+     * 対象の動画を渡して、コメントを取得する【ログイン必須】<br>
+     * Gets comments of the video passed in argument, be sure to login.<br>
+     * すでにコメントを取得済みだった場合、そのコメントを返します。
+     * 取得するコメント数は動画長さに応じて適当に設定されます。<br>
+     * If comments are already gotten, this returns them.
+     * The number of comments is set corresponding to video length.
+     * @param videoInfo the target video, cannot be {@code null}
+     * @return Returns List of CommentInfo sorted along time series, not {@code null}
+     * @throws NicoAPIException NicoAPIException if fail to get comment
      */
     public synchronized List<CommentInfo> getComment (VideoInfo videoInfo) throws NicoAPIException{
         if ( videoInfo == null ){
             throw new NicoAPIException.InvalidParamsException("target video is null > comment");
         }
-        int max = (int)((float)videoInfo.getInt(VideoInfo.LENGTH) * 3.0f);
-        return getComment(videoInfo,max);
+        try{
+            videoInfo.getMessageServerUrl();
+            videoInfo.getThreadID();
+        }catch (NicoAPIException e){
+            ((VideoInfoManager)videoInfo).getFlv(getCookieStore());
+        }
+        return ((VideoInfoManager)videoInfo).getComment(true);
     }
 
     /**
@@ -201,105 +252,32 @@ public class NicoClient extends LoginInfo{
         if ( !isLogin() ){
             throw new NicoAPIException.NoLoginException("no login > comment");
         }
-        CommentGetter getter = new CommentGetter();
-        return getter.get(videoInfo,max);
+        try{
+            videoInfo.getMessageServerUrl();
+            videoInfo.getThreadID();
+        }catch (NicoAPIException e){
+            ((VideoInfoManager)videoInfo).getFlv(getCookieStore());
+        }
+        return ((VideoInfoManager)videoInfo).getComment(max);
+        //return ((VideoInfoManager)videoInfo).getCommentByJson(max);
     }
 
-    private class RecommendGetter extends HttpResponseGetter {
-
-        private String recommendUrl = "http://flapi.nicovideo.jp/api/getrelation?page=10&sort=p&order=d&video=";
-
-        protected List<VideoInfo> get (VideoInfo info) throws NicoAPIException{
-            String path = recommendUrl + info.getString(VideoInfo.ID);
-            tryGet(path);
-            return RecommendVideoInfo.parse(super.response);
-
+    /**
+     * コメントの投稿に必要な{@link NicoCommentPost}のインスタンスを取得する<br>
+     * Gets instance of {@link NicoCommentPost} in order to post a comment to Nico.
+     * @param info the target video to which new comment is posted, cannot be {@code null}
+     * @return not {@code null}
+     * @throws NicoAPIException if not login or target video is {@code null}
+     */
+    public NicoCommentPost getNicoCommentPost(VideoInfo info) throws NicoAPIException{
+        if ( isLogin() ){
+            return new NicoCommentPost(info,this);
+        }else{
+            throw new NicoAPIException.NoLoginException("no login > posting comment");
         }
     }
 
-    private class TempMyListGetter extends HttpResponseGetter {
 
-        private String tempMyListUrl = "http://www.nicovideo.jp/api/deflist/list";
 
-        protected List<VideoInfo> get () throws NicoAPIException {
-            String path = tempMyListUrl;
-            tryGet(path, getCookieStore());
-            return TempMyListVideoInfo.parse(super.response);
-        }
-    }
-
-    private class CommentGetter extends HttpResponseGetter {
-
-        private String paramFormat = ".json/thread?version=20090904&thread=%s&res_from=-%d";
-
-        protected List<CommentInfo> get(VideoInfo videoInfo, int max) throws NicoAPIException{
-            if ( max <= 0 ){
-                max = 100;
-            }
-            if ( max > 1000 ){
-                max = 1000;
-            }
-            String threadID = "";
-            String path = "";
-            try {
-                threadID = videoInfo.getString(VideoInfo.THREAD_ID);
-                path = videoInfo.getString(VideoInfo.MESSAGE_SERVER_URL);
-            }catch (NicoAPIException e){
-                ((VideoInfoManager)videoInfo).getFlv(getCookieStore());
-                threadID = videoInfo.getString(VideoInfo.THREAD_ID);
-                path = videoInfo.getString(VideoInfo.MESSAGE_SERVER_URL);
-            }
-            String param = String.format(paramFormat,threadID,max);
-            Matcher matcher = Pattern.compile("(.+/api)/?").matcher(path);
-            if ( matcher.find() ){
-                path = matcher.group(1);
-                path = path + param;
-                tryGet(path,getCookieStore() );
-                return CommentInfo.parse(super.response);
-            }else{
-                throw new NicoAPIException.APIUnexpectedException("message server URL > " + path);
-            }
-        }
-    }
-
-    private class MyListGetter extends HttpResponseGetter {
-
-        private String myListGroupUrl = "http://www.nicovideo.jp/api/mylistgroup/list";
-        private String myListUrl = "http://www.nicovideo.jp/mylist/%s?rss=2.0";
-
-        protected Map<String, String> getMyListGroup () throws NicoAPIException{
-            if ( tryGet(myListGroupUrl, getCookieStore()) ){
-                try{
-                    JSONObject json = new JSONObject(response);
-                    if ( !json.optString("status").equals("ok")){
-                        String message = "Unexpected API response status > myList group ";
-                        try{
-                            JSONObject error = json.getJSONObject("error");
-                            String code = error.getString("code");
-                            String description = error.getString("description");
-                            message += (code + ":" +description);
-                        }catch (JSONException e){}
-                        throw new NicoAPIException.APIUnexpectedException(message);
-                    }
-                    JSONArray array = json.optJSONArray("mylistgroup");
-                    Map<String,String> myListGroup = new HashMap<String,String>();
-                    for ( int i=0 ; i<array.length() ; i++){
-                        JSONObject item = array.optJSONObject(i);
-                        myListGroup.put(item.optString("name"),item.optString("id"));
-                    }
-                    return myListGroup;
-                }catch (JSONException e){
-                    throw new NicoAPIException.ParseException(e.getMessage(),response);
-                }
-            }
-            return null;
-        }
-
-        protected List<VideoInfo> getMyList(String ID)throws NicoAPIException{
-            String path = String.format(myListUrl, ID);
-            tryGet(path, getCookieStore());
-            return RankingVideoInfo.parse(super.response,null,null,null);
-        }
-    }
 
 }

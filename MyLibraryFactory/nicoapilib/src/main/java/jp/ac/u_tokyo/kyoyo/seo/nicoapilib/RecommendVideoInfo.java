@@ -78,7 +78,7 @@ public class RecommendVideoInfo extends VideoInfoManager {
                 String value = valueMatcher.group(1);
                 switch ( key ){
                     case VideoInfo.ID:
-                        id = value;
+                        setID(value);
                         break;
                     case VideoInfo.TITLE:
                         title = value;

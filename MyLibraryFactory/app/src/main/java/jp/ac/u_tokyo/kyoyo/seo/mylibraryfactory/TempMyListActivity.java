@@ -49,6 +49,8 @@ public class TempMyListActivity extends CustomListActivity {
             }
             @Override
             protected void onPostExecute(String response) {
+                progress.cancel();
+                progress = null;
                 showMessage(response);
                 setVideos(list);
             }

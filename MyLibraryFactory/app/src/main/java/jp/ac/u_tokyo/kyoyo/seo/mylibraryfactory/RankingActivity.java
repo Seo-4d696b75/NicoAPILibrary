@@ -51,6 +51,7 @@ public class RankingActivity extends CustomListActivity {
         buttonGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                nicoRanking = nicoClient.getNicoRanking();
                 rankingDialog();
             }
         });
@@ -124,7 +125,6 @@ public class RankingActivity extends CustomListActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 new AsyncTask<String, Void, String> (){
-                    private Drawable thumbnailImage;
                     private ProgressDialog progress = null;
                     private List<VideoInfo> list;
                     @Override

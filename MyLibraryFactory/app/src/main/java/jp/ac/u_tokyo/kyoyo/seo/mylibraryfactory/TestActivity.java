@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.*;
 
 public class TestActivity extends AppCompatActivity {
+
+    private String appName = "NicoAPIDemoApp";
 
     private TextView textViewLoginStatus;
     private TextView textViewUserName;
@@ -48,8 +51,8 @@ public class TestActivity extends AppCompatActivity {
         buttonMyList = (Button)findViewById(R.id.buttonMyList);
         buttonTempMyList = (Button)findViewById(R.id.buttonTempMyList);
 
-        nicoClient = new NicoClient();
-        loginDialogShow();
+        nicoClient = new NicoClient(appName, Build.DEVICE);
+        //loginDialogShow();
 
         textViewLoginStatus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +93,15 @@ public class TestActivity extends AppCompatActivity {
                 }
             }
         });
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TestActivity.this, SearchActivity.class);
+                intent.putExtra(NicoClient.INTENT,nicoClient);
+                startActivity(intent);
+            }
+        });
+        login("sendakaoru509@gmail.com","testaccount");
     }
 
     private void showMessage(String message){

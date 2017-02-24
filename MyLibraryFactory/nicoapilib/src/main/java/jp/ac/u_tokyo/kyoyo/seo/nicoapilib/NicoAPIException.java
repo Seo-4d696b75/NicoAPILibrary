@@ -2,6 +2,9 @@ package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
 import org.apache.http.client.CookieStore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * この例外クラスはライブラリ内で発生したエラーを区分するものです<br>
@@ -22,10 +25,35 @@ APIUnexpectedException 予期されないＡＰＩからのレスポンス
 
 public class NicoAPIException extends Exception {
 
+    private int code = 0;
     private NicoAPIException (String message){
         super(message);
     }
+    private NicoAPIException (String message, int code ){
+        super(message);
+        this.code = code;
+    }
+    public int getCode (){
+        return code;
+    }
 
+
+    public static final int EXCEPTION_NOT_INITIALIZED_GENRE = VideoInfo.GENRE;
+    public static final int EXCEPTION_NOT_INITIALIZED_RANK_KIND = VideoInfo.RANK_KIND;
+    public static final int EXCEPTION_NOT_INITIALIZED_PERIOD = VideoInfo.PERIOD;
+    public static final int EXCEPTION_NOT_INITIALIZED_PUB_DATE = VideoInfo.PUB_DATE;
+    public static final int EXCEPTION_NOT_INITIALIZED_DATE = VideoInfo.DATE;
+    public static final int EXCEPTION_NOT_INITIALIZED_DESCRIPTION = VideoInfo.DESCRIPTION;
+    public static final int EXCEPTION_NOT_INITIALIZED_THREAD_ID = VideoInfo.THREAD_ID;
+    public static final int EXCEPTION_NOT_INITIALIZED_MESSAGE_SERVER = VideoInfo.MESSAGE_SERVER_URL;
+    public static final int EXCEPTION_NOT_INITIALIZED_FLV_URL = VideoInfo.FLV_URL;
+    public static final int EXCEPTION_NOT_INITIALIZED_CONTRIBUTOR_NAME = VideoInfo.CONTRIBUTOR_NAME;
+    public static final int EXCEPTION_NOT_INITIALIZED_CONTRIBUTOR_ICON_URL = VideoInfo.CONTRIBUTOR_ICON_URL;
+    public static final int EXCEPTION_NOT_INITIALIZED_LENGTH = VideoInfo.LENGTH;
+    public static final int EXCEPTION_NOT_INITIALIZED_VIEW_COUNTER = VideoInfo.VIEW_COUNTER;
+    public static final int EXCEPTION_NOT_INITIALIZED_COMMENT_COUNTER = VideoInfo.COMMENT_COUNTER;
+    public static final int EXCEPTION_NOT_INITIALIZED_MY_LIST_COUNTER = VideoInfo.MY_LIST_COUNTER;
+    public static final int EXCEPTION_NOT_INITIALIZED_CONTRIBUTOR_ID = VideoInfo.CONTRIBUTOR_ID;
     /**
      * 対象の動画フィールドが初期化されていない場合に投げられます<br>
      * Thrown if target video field is not initialized.<br><br>
@@ -46,8 +74,8 @@ public class NicoAPIException extends Exception {
      * {@link VideoInfoManager#complete()},{@link VideoInfoManager#getFlv(CookieStore)}
      */
     static class NotInitializedException extends NicoAPIException{
-        NotInitializedException (String message){
-            super(message);
+        NotInitializedException (String message, int code){
+            super(message,code);
         }
     }
 
