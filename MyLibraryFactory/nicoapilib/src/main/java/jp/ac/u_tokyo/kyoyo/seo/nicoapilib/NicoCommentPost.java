@@ -66,7 +66,7 @@ public class NicoCommentPost {
             throw new NicoAPIException.InvalidParamsException("login info not found > comment");
         }
         if ( !client.isLogin() ){
-            throw new NicoAPIException.NoLoginException("not login > comment");
+            throw new NicoAPIException.NoLoginException("not login > comment",NicoAPIException.EXCEPTION_NOT_LOGIN_COMMENT_POST);
         }
         this.targetVideo = targetVideo;
         this.client = client;
@@ -279,7 +279,7 @@ public class NicoCommentPost {
      */
     public void post() throws NicoAPIException{
         if ( isPost ){
-            throw new NicoAPIException.IllegalStateException("cannot post the comment again");
+            throw new NicoAPIException.IllegalStateException("cannot post the comment again",NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NON_REUSABLE);
         }
         if ( startTime < 0 || startTime >= targetVideo.getLength()*100 ){
             throw new NicoAPIException.InvalidParamsException("comment time is out of range");
@@ -376,7 +376,7 @@ public class NicoCommentPost {
             if (isPost) {
                 return commentNo;
             } else {
-                throw new NicoAPIException.IllegalStateException("not post a comment yet");
+                throw new NicoAPIException.IllegalStateException("not post a comment yet",NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST);
             }
         }
     }

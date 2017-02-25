@@ -55,7 +55,7 @@ public class LoginInfo implements Serializable{
      */
     public synchronized String getUserName() throws NicoAPIException.NoLoginException{
         if ( !login ){
-            throw new NicoAPIException.NoLoginException("no login > user name");
+            throw new NicoAPIException.NoLoginException("no login > user name", NicoAPIException.EXCEPTION_NOT_LOGIN_USER_NAME);
         }
         return userName;
     }
@@ -67,13 +67,13 @@ public class LoginInfo implements Serializable{
      */
     public synchronized int getUserID() throws NicoAPIException.NoLoginException{
         if ( !login ){
-            throw new NicoAPIException.NoLoginException("no login > user ID");
+            throw new NicoAPIException.NoLoginException("no login > user ID",NicoAPIException.EXCEPTION_NOT_LOGIN_USER_ID);
         }
         return userID;
     }
     public synchronized boolean isPremium () throws NicoAPIException.NoLoginException {
         if ( !login ){
-            throw new NicoAPIException.NoLoginException("no login > isPremium");
+            throw new NicoAPIException.NoLoginException("no login > isPremium",NicoAPIException.EXCEPTION_NOT_LOGIN_USER_PREMIUM);
         }
         return isPremium;
     }
@@ -95,7 +95,7 @@ public class LoginInfo implements Serializable{
      */
     public synchronized CookieStore getCookieStore() throws NicoAPIException.NoLoginException{
         if ( !login ){
-            throw new NicoAPIException.NoLoginException("no login > getCookieStore");
+            throw new NicoAPIException.NoLoginException("no login > getCookieStore",NicoAPIException.EXCEPTION_NOT_LOGIN_COOKIE);
         }
         CookieStore cookieStore = new DefaultHttpClient().getCookieStore();
         for (int i = 0; i < cookieNum; i++) {

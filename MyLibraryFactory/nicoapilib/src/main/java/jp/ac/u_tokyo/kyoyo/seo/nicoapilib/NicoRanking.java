@@ -324,7 +324,7 @@ public class NicoRanking extends HttpResponseGetter {
      */
     public synchronized List<VideoInfo> get () throws NicoAPIException {
         if ( isDone ){
-            throw new NicoAPIException.IllegalStateException("NicoRanking is not reusable > ranking");
+            throw new NicoAPIException.IllegalStateException("NicoRanking is not reusable > ranking", NicoAPIException.EXCEPTION_ILLEGAL_STATE_RANKING_NON_REUSABLE);
         }else{
             isDone = true;
         }

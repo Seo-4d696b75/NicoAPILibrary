@@ -1,0 +1,267 @@
+ニコニコ動画に関する主なＡＰＩの仕様まとめ
+
+
+
+このライブライ内で使用したＡＰＩ？の仕様や応答は、
+使用している各クラスのJavaDocにも簡単に説明があります。
+ここでは、備忘録的な目的も兼ねて詳細にまとめてあります。
+
+
+
+===注意=======================================================
+
+ニコニコ動画では一部を除いてＡＰＩの仕様は非公開です。
+ここに記載されているのは有志の方々が独自に調査した情報と
+実際に自分で確認が取れた分の情報をまとめたもので、その内容は保証できません。
+現段階では正常な動作が確認できても、APIの仕様変更に伴い
+将来的には記載通りの仕様ではない可能性が十分考えられます。
+予めご承知おきください。
+
+==============================================================
+
+
+
+それぞれ
+・Windows + Advanced REST client (Chromeの拡張機能)
+	要求ヘッダは
+	accept: */*
+	accept-language: ja
+	＊Cookieは勝手に付加される
+・Android + org.apache.http.*
+で確認しました。
+
+
+＊XMLやJSONは可読性向上のため適宜スペースや改行を加えてある
+
+＜ログイン＞
+RequestURL;
+https://account.nicovideo.jp/api/v1/login?show_button_twitter=1&site=niconico&show_button_facebook=1&next_url={0}
+	{0} : ログイン成功後にアクセスするURL、ただし空文字でもＯＫ
+Method; POST
+	postするパラメータは以下の二つ
+	mail_tel={1}　password={2}
+	{1} : 登録してある有効なアカウントのメールアドレス
+	{2} : アカウントのパスワード
+	
+通信に成功すれば302 Foundが得られるはず
+ログイン成功の可否によって応答ヘッダLocationとSet-Cookieの値が変わる
+
+ログインに成功すると以下のCookieが新たに取得できます。
+user_session=user_session_{userID}_****************
+user_session_secure=**********************          (*文字数は適当)
+Locationには{0}に渡したURLが入っている
+{0}を省略した場合は http://www.nicovideo.jp/に誘導される
+
+以降のログインセッションが必要なAPIにリクエストするときはこのCookieをセットすればよい
+
+不正なパスワードやメールアドレスをPostしてログインに失敗すると
+https://account.nicovideo.jp/login?site=niconico&next_url=&facebook=1&message=cant_login&twitter=1
+に誘導される
+(Cookieにmail_for_retry={postしたアドレス}がセットされている模様)
+
+参考：
+<a href=https://teratail.com/questions/31972>[teratail]Java_ニコニコ動画へのログイン</a><br>
+<a href=http://c-loft.com/blog/?p=1196>[夏研ブログ]HTTP POST/GET クッキー認証によるWebサイトへのログイン (Android, Java)</a><br>
+確認 on 2017.02.25
+
+
+
+＜ユーザ情報＞
+ユーザを一意に区別する基本的な値はUserIDでしょう。
+
+①UserIDの簡単な取得方法
+
+ログイン状態でCookieの値を確認するだけで、
+user_session=user_session_{userID}_****************
+から分かる。
+
+②他には、マイページから取得する方法も考えられる
+
+RequestURL; http://www.nicovideo.jp/my
+Method; GET
+	ログイン状態のCookieをセットすること
+
+レスポンスのHTMLから以下のような部分を探せば、
+
+var User = { id: {0}, age: {1}, isPremium: {2}, isOver18: {3}, isMan: {4} };
+
+	{0} : (int)UserID
+	{1} : (int)登録してある年齢
+	{2} : (boolean)プレミアム会員か否か　(true/false)
+	{3} : (boolean)１８歳以上か
+	{4} : (boolean)男性か否か
+
+と分かる。またユーザ名を取得するには
+
+<span id="siteHeaderUserNickNameContainer">{UserName}</span>
+
+を探せばいい。
+ユーザに関する情報を取得する方法は他にも多数存在するが、
+後述のアイコンＵＲＬなども含めてまとめて取得するには、
+このようにマイページのHTMLを解析するのが手っ取り早い。
+
+③UsrIDが既知な状況からUserNameを以下のように取得するのも可能
+
+(1)静画APIを叩く
+
+RequestURL; http://seiga.nicovideo.jp/api/user/info?id={5}
+	{5} : userID
+Method; GET
+Response;
+<?xml version="1.0" encoding="UTF-8" ?>
+<response>
+	<user>
+		<id>{userID}</id>
+		<nickname>{userName}</nickname>
+ 	</user>
+</response>
+
+特別ログインなど必要ないが、条件不明で取得に失敗することもある
+
+(2)投稿動画RSSから取得
+
+RequestURL; http://www.nicovideo.jp/user/{5}/video?rss=2.0
+Method; GET
+Response;
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+	<channel>
+		<title>{userName}さんの投稿動画‐ニコニコ動画</title>
+		<link>......</link>
+		<atom:link rel="self" type="application/rss+xml" href="http://www.nicovideo.jp/user/{5}/video?rss=2.0" />
+		<description>{userName}さんが公開している投稿動画の一覧</description>
+		<pubDate>Sat, 23 Jul 2016 09:35:38 +0900</pubDate>
+		<lastBuildDate>Sat, 23 Jul 2016 09:35:38 +0900</lastBuildDate>
+		<generator>ニコニコ動画</generator>
+		<dc:creator>{userName}</dc:creator>
+		<language>ja-jp</language>
+		<copyright>(c) DWANGO Co., Ltd.</copyright>
+		<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+		<item>
+			......
+		</item>
+	</channel>
+</rss>
+ただし、投稿動画の公開設定によっては取得できない。
+
+(3)プロフィールから取得
+
+RequestURL; http://ext.nicovideo.jp/thumb_user/{5}
+Method; GET
+Response;　プロフィールページのHTML
+
+レスポンスのHTMLから
+
+<title>{userName}さんのプロフィール‐ニコニコ動画</title>
+
+を探す。ただし、プロフィールの公開設定によっては取得できない
+
+参考：
+<a href=http://7cc.hatenadiary.jp/entry/nico-user-id-to-name>[Hatena Blog]ニコニコ動画で、ユーザーIDからニックネーム（ユーザーネーム）を取得する</a><br>
+確認　on 2017.02.25
+
+
+＜ユーザアイコン画像＞
+
+マイページのHTMLから探すと
+<img src="{userIconURL}" alt="{userName}" />
+と見つかる。
+
+また、以下のようにも取得できる
+RequestURL; http://usericon.nimg.jp/usericon/{0}/{1}.jpg
+	{0} : {userID}/10000 (小数点以下切り捨て、整数値)
+	{1} : {userID}
+Method; GET
+ただし、このフォーマットに従わないURLも多数確認できるから参考程度に
+
+いずれにせよ、ユーザが独自に画像を設定していな場合は
+............../usericon/defaults/blank.jpg   となっている
+
+ユーザの情報をまとめて簡易に取得するＡＰＩは結局見つからなかったので、
+面倒ではあるが、マイページのHTMLを解析するのが一番確実で安定だと思われる。
+
+確認 on 2017.02.25
+
+
+
+<getThumbInfo API>
+
+ログイン不要で動画の基本的な情報をまとめて取得できる。
+
+RequestURL;http://ext.nicovideo.jp/api/getthumbinfo/{0}
+	{0} : 動画ID
+Method; GET
+Response;
+<?xml version="1.0" encoding="UTF-8"?>
+<nicovideo_thumb_response status="ok">
+  <thumb>
+    <video_id>{動画ID}</video_id>
+    <title>{動画タイトル}</title>
+    <description>{動画の説明}</description>
+    <thumbnail_url>{サムネイル画像のURL}</thumbnail_url>
+    <first_retrieve>{動画投稿日時}</first_retrieve>
+    <length>{動画長さ}</length>
+    <movie_type>flv</movie_type>
+    <size_high>{動画サイズ(byte)}</size_high>
+    <size_low>{低画質時の動画サイズ}</size_low>
+    <view_counter>{再生数(int)}</view_counter>
+    <comment_num>{コメント数(int)}</comment_num>
+    <mylist_counter>{マイリス数(int)}</mylist_counter>
+    <last_res_body>{最新のコメント内容}</last_res_body>
+    <watch_url>http://www.nicovideo.jp/watch/{動画ID}</watch_url>
+    <thumb_type>{video または mymemory}</thumb_type>
+    <embeddable>{外部プレイヤーで再生可能か 0:false 1:true}</embeddable>
+    <no_live_play>{生放送プレイヤーで再生禁止か 0:false 1:true}</no_live_play>
+    <tags domain="jp">
+      <tag>{タグ}</tag>
+      ......
+      <tag>{タグ}</tag>
+    </tags>
+    <user_id>{投稿ユーザID}</user_id>
+    <user_nickname>{投稿ユーザ名}</user_nickname>
+    <user_icon_url>{投稿ユーザのアイコン画像URL}</user_icon_url>
+  </thumb>
+</nicovideo_thumb_response>
+
+＊日時の表示形式はISO 8601の拡張形"yyyy-MM-dd'T'HH:mm:ss'+90:00'"
+　タイムゾーンは固定の模様？　
+＊動画の長さは次のフォーマット"mm:ss" 秒は0埋めで二桁、一時間超えも分で表現される
+＊動画タグ要素のXMLタグ<tag>...</tag>に関して以下の属性を含む場合がある
+	category="{0/1}"	: タグがカテゴリタグ(ジャンル)であるか否か
+	lock="{0/1}"		: タグが固定タグであるか否か
+	いずれも　0:false 1:true　でfalaeの場合は省略される
+＊ユーザ投稿動画でないチャンネル動画の場合以下のような違いがある
+	投稿ユーザID→チャンネルID
+	投稿ユーザ名→チャンネル名
+	投稿ユーザのアイコン画像URL→チャンネルアイコンのURL
+	.....
+    </tags>
+    <ch_id>{チャンネルID}</ch_id>
+    <ch_name>{チャンネル名}</ch_name>
+    <ch_icon_url>{チャンネルアイコンのURL}</ch_icon_url>
+  </thumb>
+</nicovideo_thumb_response>
+
+取得に失敗した場合
+Reeponse;
+<?xml version="1.0" encoding="UTF-8" ?>
+<nicovideo_thumb_response status="fail">
+	<error>
+		<code>{errorCode(String)}</code>
+		<description>{エラーの内容}</description>
+	</error>
+</nicovideo_thumb_response>
+①存在しない動画
+code		:	NOT_FOUND
+description	:	not found or invalid
+②削除された動画
+code		:	DELETED
+description	:	deleted
+③コミュニティ動画
+code		:	COMMUNITY
+description	:	community
+
+参考：
+<a href=http://mntone.hateblo.jp/entry/2014/02/04/144711>[HatenaBlog]getthumbinfo のポイント</a>
+<a href=http://dic.nicovideo.jp/a/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E5%8B%95%E7%94%BBapi>[ニコニコ大百科]ニコニコ動画API</a>
+

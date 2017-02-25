@@ -1,8 +1,6 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
 import android.graphics.drawable.Drawable;
-import android.provider.MediaStore;
-import android.util.Log;
 
 import org.apache.http.client.CookieStore;
 
@@ -249,33 +247,21 @@ public class VideoInfoManager extends VideoInfo {
             if ( viewCounter < 0 ){
                 target = extract(res,VideoInfo.VIEW_COUNTER);
                 num = Integer.parseInt(target);
-                if ( num < 0 ){
-                    return false;
-                }
                 viewCounter = num;
             }
             if ( commentCounter < 0 ){
                 target = extract(res,VideoInfo.COMMENT_COUNTER);
                 num = Integer.parseInt(target);
-                if ( num < 0 ){
-                    return false;
-                }
                 commentCounter = num;
             }
             if ( myListCounter < 0){
                 target = extract(res,VideoInfo.MY_LIST_COUNTER);
                 num = Integer.parseInt(target);
-                if ( num < 0 ){
-                    return false;
-                }
                 myListCounter = num;
             }
             if ( contributorID <= 0 ){
                 target = extract(res,VideoInfo.CONTRIBUTOR_ID,2);
                 num = Integer.parseInt(target);
-                if ( num < 0 ){
-                    return false;
-                }
                 contributorID = num;
             }
             if ( tags == null ){
@@ -289,8 +275,26 @@ public class VideoInfoManager extends VideoInfo {
         }
     }
     private void check (String res) throws NicoAPIException{
-        if ( !extract(res,STATUS).equals("ok") ){
-            throw new NicoAPIException.APIUnexpectedException("Unexpected API response status > complete");
+        String statusCode = extract(res,STATUS);
+        if ( !statusCode.equals("ok") ){
+            if ( statusCode.equals("fail")) {
+                Matcher matcher = Pattern.compile("<error>.*<code>(.+?)</code>.*</error>",Pattern.DOTALL).matcher(res);
+                if ( matcher.find() ){
+                    String code = matcher.group(1);
+                    switch (code){
+                        case "NOT_FOUND":
+                            throw new NicoAPIException.InvalidParamsException("no such video found > complete",NicoAPIException.EXCEPTION_PARAM_GET_THUMBNAIL_INFO_NOT_FOUND);
+                        case "DELETED":
+                            throw new NicoAPIException.InvalidParamsException("requested video deleted > complete",NicoAPIException.EXCEPTION_PARAM_GET_THUMBNAIL_INFO_DELETED);
+                        case "COMMUNITY":
+                            throw new NicoAPIException.InvalidParamsException("requested video in community only > complete",NicoAPIException.EXCEPTION_PARAM_GET_THUMBNAIL_INFO_COMMUNITY);
+                        default:
+                            throw new NicoAPIException.APIUnexpectedException("Unexpected errorCode > complete",NicoAPIException.EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_ERROR_CODE);
+                    }
+                }
+            }else {
+                throw new NicoAPIException.APIUnexpectedException("Unexpected statusCode > complete",NicoAPIException.EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_STATUS_CODE);
+            }
         }
     }
     private String extract (String res, int key) throws NicoAPIException{
@@ -302,9 +306,9 @@ public class VideoInfoManager extends VideoInfo {
             if ( matcher.find() ){
                 return matcher.group(group);
             }
-            throw new NicoAPIException.ParseException("target sequence matched with " + matcher.pattern().pattern() + " not found > complete",res);
+            throw new NicoAPIException.ParseException("target sequence matched with " + matcher.pattern().pattern() + " not found > complete",res,NicoAPIException.EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NOT_FOUND);
         }
-        throw new NicoAPIException.ParseException("no such key",String.valueOf(key));
+        throw new NicoAPIException.ParseException("no such pattern",String.valueOf(key),NicoAPIException.EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NO_PATTERN);
     }
 
     private void parseTags(String res) throws NicoAPIException{
@@ -314,7 +318,7 @@ public class VideoInfoManager extends VideoInfo {
             list.add(matcher.group(1));
         }
         if ( list.size() == 0 ){
-            throw new NicoAPIException.ParseException("target sequence matched with " + matcher.pattern().pattern() + " not found > complete",res);
+            throw new NicoAPIException.ParseException("target sequence matched with " + matcher.pattern().pattern() + " not found > complete",res,NicoAPIException.EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NOT_FOUND);
         }
         tags = list;
     }
@@ -325,7 +329,7 @@ public class VideoInfoManager extends VideoInfo {
         try {
             return dateFormatBase.format(dateFormat.parse(date));
         }catch (ParseException e){
-            throw new NicoAPIException.ParseException(e.getMessage(),date);
+            throw new NicoAPIException.ParseException(e.getMessage(),date,NicoAPIException.EXCEPTION_PARSE_GET_THUMBNAIL_INFO_DATE);
         }
     }
 
@@ -391,13 +395,13 @@ public class VideoInfoManager extends VideoInfo {
                 try{
                     path = getThumbnailUrl(isHigh);
                 }catch (NicoAPIException.NotInitializedException ee){
-                    throw new NicoAPIException.DrawableFailureException("fail to get thumbnail URL > " + id);
+                    throw new NicoAPIException.DrawableFailureException("fail to get thumbnail URL > " + id, NicoAPIException.EXCEPTION_DRAWABLE_THUMBNAIL_URL);
                 }
             }
             thumbnail = getDrawable(path);
         }
         if ( thumbnail == null ){
-            throw new NicoAPIException.DrawableFailureException("fail to get thumbnail > " + id);
+            throw new NicoAPIException.DrawableFailureException("fail to get thumbnail > " + id, NicoAPIException.EXCEPTION_DRAWABLE_THUMBNAIL);
         }
         return thumbnail;
     }
@@ -413,13 +417,13 @@ public class VideoInfoManager extends VideoInfo {
         if ( contributorIcon == null ) {
             if (contributorIconUrl == null) {
                 if (!complete()) {
-                    throw new NicoAPIException.DrawableFailureException("fail to get contributor icon URL > " + id);
+                    throw new NicoAPIException.DrawableFailureException("fail to get contributor icon URL > " + id, NicoAPIException.EXCEPTION_DRAWABLE_CONTRIBUTOR_ICON_URL);
                 }
             }
             contributorIcon = getDrawable(contributorIconUrl);
         }
         if ( contributorIcon == null ){
-            throw new NicoAPIException.DrawableFailureException("fail to get contributor icon > " + id);
+            throw new NicoAPIException.DrawableFailureException("fail to get contributor icon > " + id, NicoAPIException.EXCEPTION_DRAWABLE_CONTRIBUTOR_ICON);
         }
         return contributorIcon;
     }
@@ -545,7 +549,7 @@ public class VideoInfoManager extends VideoInfo {
     public synchronized List<CommentInfo> getComment (boolean isNew) throws NicoAPIException{
         if ( !isNew || commentGroup == null ){
             if (threadID == null || messageServerUrl == null) {
-                throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown");
+                throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown",NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY);
             }
             HttpResponseGetter getter = new HttpResponseGetter();
             String postEntityFormat = "<packet><thread thread=\"%1$s\" version=\"20090904\"  /><thread_leaves scores=\"1\" thread=\"%1$s\">0-%2$d:100,1000</thread_leaves></packet>";
@@ -568,7 +572,7 @@ public class VideoInfoManager extends VideoInfo {
      */
     public synchronized List<CommentInfo> getComment (int max) throws NicoAPIException{
         if (threadID == null || messageServerUrl == null) {
-            throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown");
+            throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown",NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY);
         }
         if ( max <= 0 ){
             max = 100;
@@ -586,7 +590,7 @@ public class VideoInfoManager extends VideoInfo {
     //Jsonでも取得できる
     public synchronized List<CommentInfo> getCommentByJson (int max) throws NicoAPIException{
         if (threadID == null || messageServerUrl == null) {
-            throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown");
+            throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown",NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY);
         }
         String paramFormat = ".json/thread?version=20090904&thread=%s&res_from=-%d";
         String param = String.format(paramFormat, threadID, max);
@@ -742,5 +746,4 @@ public class VideoInfoManager extends VideoInfo {
         }
         return p;
     }
-
 }

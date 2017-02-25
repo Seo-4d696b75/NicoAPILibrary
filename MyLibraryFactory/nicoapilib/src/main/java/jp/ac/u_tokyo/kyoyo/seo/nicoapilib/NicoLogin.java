@@ -160,7 +160,7 @@ public class NicoLogin extends HttpResponseGetter {
         }catch (NicoAPIException.NoLoginException e){
             throw e;
         }catch (Exception e){
-            throw new NicoAPIException.DrawableFailureException("fail to get user icon");
+            throw new NicoAPIException.DrawableFailureException("fail to get user icon > "+e.getMessage(),NicoAPIException.EXCEPTION_DRAWABLE_USER_ICON);
         }
     }
 

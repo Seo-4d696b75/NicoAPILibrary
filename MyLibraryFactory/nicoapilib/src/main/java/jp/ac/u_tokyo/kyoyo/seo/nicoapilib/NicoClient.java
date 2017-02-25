@@ -135,7 +135,7 @@ public class NicoClient extends LoginInfo{
             getter.tryGet(tempMyListUrl, getCookieStore());
             return TempMyListVideoInfo.parse(getter.response);
         }else{
-            throw new NicoAPIException.NoLoginException("no login > temp myList");
+            throw new NicoAPIException.NoLoginException("no login > temp myList",NicoAPIException.EXCEPTION_NOT_LOGIN_TEMP_MYLIST);
         }
     }
 
@@ -156,7 +156,7 @@ public class NicoClient extends LoginInfo{
      */
     public synchronized Map<String,String> getMyListGroup() throws NicoAPIException{
         if ( !isLogin() ){
-            throw new NicoAPIException.NoLoginException("no login > myList group");
+            throw new NicoAPIException.NoLoginException("no login > myList group",NicoAPIException.EXCEPTION_NOT_LOGIN_MYLIST_GROUP);
         }
         String myListGroupUrl = "http://www.nicovideo.jp/api/mylistgroup/list";
         HttpResponseGetter getter = new HttpResponseGetter();
@@ -201,7 +201,7 @@ public class NicoClient extends LoginInfo{
      */
     public synchronized List<VideoInfo> getMyList (String ID) throws NicoAPIException{
         if ( !isLogin() ){
-            throw new NicoAPIException.NoLoginException("no login > myList");
+            throw new NicoAPIException.NoLoginException("no login > myList",NicoAPIException.EXCEPTION_NOT_LOGIN_MYLIST);
         }
         if ( ID == null ){
             throw new NicoAPIException.InvalidParamsException("myList ID is null");
@@ -250,7 +250,7 @@ public class NicoClient extends LoginInfo{
             throw new NicoAPIException.InvalidParamsException("target video is null > comment");
         }
         if ( !isLogin() ){
-            throw new NicoAPIException.NoLoginException("no login > comment");
+            throw new NicoAPIException.NoLoginException("no login > comment",NicoAPIException.EXCEPTION_NOT_LOGIN_COMMENT);
         }
         try{
             videoInfo.getMessageServerUrl();
@@ -273,7 +273,7 @@ public class NicoClient extends LoginInfo{
         if ( isLogin() ){
             return new NicoCommentPost(info,this);
         }else{
-            throw new NicoAPIException.NoLoginException("no login > posting comment");
+            throw new NicoAPIException.NoLoginException("no login > posting comment",NicoAPIException.EXCEPTION_NOT_LOGIN_COMMENT_POST);
         }
     }
 
