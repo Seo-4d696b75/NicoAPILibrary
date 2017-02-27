@@ -169,6 +169,9 @@ public class RankingVideoInfo extends VideoInfoManager {
                             rankingMatcher = Pattern.compile(".+：(.+)").matcher(value);
                             if ( rankingMatcher.find() ){
                                 value = rankingMatcher.group(1);
+                            }else{
+                                throw new NicoAPIException.ParseException("title format is not expected > ranking"
+                                        ,value,NicoAPIException.EXCEPTION_PARSE_RANKING_TITLE);
                             }
                         }
                         title = value;
@@ -214,7 +217,7 @@ public class RankingVideoInfo extends VideoInfoManager {
                 }
                 throw new NicoAPIException.ParseException(
                         "target partial sequence matched with \"" + matcher.pattern().pattern() + "\" not found",
-                        xml
+                        xml,NicoAPIException.EXCEPTION_PARSE_RANKING_MYLIST_NOT_FOUND
                 );
             }
         }
@@ -228,7 +231,7 @@ public class RankingVideoInfo extends VideoInfoManager {
         try{
             return numberFormat.parse(value).intValue();
         }catch (ParseException e){
-            throw new NicoAPIException.ParseException(e.getMessage(),value);
+            throw new NicoAPIException.ParseException(e.getMessage(),value,NicoAPIException.EXCEPTION_PARSE_RANKING_MYLIST_COUNTER);
         }
     }
 
@@ -239,7 +242,7 @@ public class RankingVideoInfo extends VideoInfoManager {
             int sec = Integer.parseInt(matcher.group(2));
             return min * 60 + sec;
         }else{
-            throw new NicoAPIException.ParseException("video length not following required format",value);
+            throw new NicoAPIException.ParseException("video length not following required format",value,NicoAPIException.EXCEPTION_PARSE_RANKING_MYLIST_LENGTH);
         }
     }
 
@@ -248,7 +251,7 @@ public class RankingVideoInfo extends VideoInfoManager {
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
             return dateFormatBase.format(dateFormat.parse(date));
         }catch (ParseException e){
-            throw new NicoAPIException.ParseException(e.getMessage(), date);
+            throw new NicoAPIException.ParseException(e.getMessage(), date,NicoAPIException.EXCEPTION_PARSE_RANKING_MYLIST_PUB_DATE);
         }
     }
 
@@ -257,7 +260,7 @@ public class RankingVideoInfo extends VideoInfoManager {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日' HH：mm：ss");
             return dateFormatBase.format(dateFormat.parse(date));
         }catch (ParseException e){
-            throw new NicoAPIException.ParseException(e.getMessage(),date);
+            throw new NicoAPIException.ParseException(e.getMessage(),date,NicoAPIException.EXCEPTION_PARSE_RANKING_MYLIST_DATE);
         }
     }
 
@@ -299,7 +302,7 @@ public class RankingVideoInfo extends VideoInfoManager {
      */
     protected static List<VideoInfo> parse (String xml,String genre, String period, String rankKind) throws NicoAPIException{
         if ( xml == null ){
-            throw new NicoAPIException.ParseException("parse target is null",null);
+            throw new NicoAPIException.ParseException("parse target is null",null,NicoAPIException.EXCEPTION_PARSE_RANKING_NO_TARGET);
         }
         boolean isRanking = true;
         if ( genre == null || period == null || rankKind == null ){
@@ -319,18 +322,18 @@ public class RankingVideoInfo extends VideoInfoManager {
         Matcher matcher = Pattern.compile("<channel>.+<title>.+?ランキング.+?‐ニコニコ動画</title>.+</channel>",Pattern.DOTALL).matcher(xml);
         if ( matcher.find() ){
             if ( !isRanking){
-                throw new NicoAPIException.InvalidParamsException("ranking params required > ranking");
+                throw new NicoAPIException.InvalidParamsException("ranking params required > ranking",NicoAPIException.EXCEPTION_PARAM_RANKING_NO_PARAM);
             }
             //ranking ok
         }else{
-            if ( !isRanking){
-                matcher = Pattern.compile("<channel>.+<title>マイリスト.+‐ニコニコ動画</title>.+</channel>",Pattern.DOTALL).matcher(xml);
-                if ( !matcher.find() ){
-                    throw  new NicoAPIException.APIUnexpectedException("Unexpected API response status > myList");
+            matcher = Pattern.compile("<channel>.+<title>マイリスト.+‐ニコニコ動画</title>.+</channel>", Pattern.DOTALL).matcher(xml);
+            if (matcher.find()) {
+                if ( isRanking ) {
+                    throw new NicoAPIException.InvalidParamsException("ranking params not acceptable in case of myList > myList",NicoAPIException.EXCEPTION_PARAM_MYLIST_NOT_RANKING);
                 }
                 //myList ok
-            }else{
-                throw new NicoAPIException.APIUnexpectedException("Unexpected API response status > ranking");
+            }else {
+                throw new NicoAPIException.ParseException("Unexpected response, not ranking or myList > ranking",xml,NicoAPIException.EXCEPTION_PARSE_NOT_RANKING_OR_MYLIST);
             }
         }
     }

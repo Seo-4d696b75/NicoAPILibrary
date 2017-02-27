@@ -42,6 +42,8 @@ public class HttpResponseGetter {
      */
     protected String response;
 
+    protected int statusCode;
+
     /**
      * apacheでpostしてクッキーとレスポンスを取得<br>
      * Posts in apache and gets Cookie and response.
@@ -50,12 +52,17 @@ public class HttpResponseGetter {
      * @return Returns {@code true} if success. Be sure to check this value before getting {@link #response} or {@link #cookieStore}.
      */
     public boolean tryPost(String path,Map<String,String>params){
+        return tryPost(path,params,null);
+    }
+    public boolean tryPost(String path,Map<String,String>params, CookieStore cookieStore){
         DefaultHttpClient client = new DefaultHttpClient();
         response = null;
         cookieStore = null;
         try {
             HttpPost httpPost = new HttpPost(path);
-
+            if ( cookieStore != null){
+                client.setCookieStore(cookieStore);
+            }
             if ( params != null ) {
                 ArrayList<NameValuePair> parameters = new ArrayList<NameValuePair>();
                 for ( String key : params.keySet() ) {
@@ -66,7 +73,7 @@ public class HttpResponseGetter {
 
             HttpResponse httpResponse = client.execute(httpPost);
             /* レスポンスコードの取得（Success:200、Auth Error:403、Not Found:404、Internal Server Error:500）*/
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            statusCode = httpResponse.getStatusLine().getStatusCode();
             if (statusCode == 200) {
                 cookieStore = client.getCookieStore();
                 response = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
@@ -88,7 +95,7 @@ public class HttpResponseGetter {
             HttpPost httpPost = new HttpPost(path);
             httpPost.setEntity(new StringEntity(post,"UTF-8"));
             HttpResponse httpResponse = client.execute(httpPost);
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            statusCode = httpResponse.getStatusLine().getStatusCode();
             if (statusCode == 200) {
                 //cookieStore = client.getCookieStore();
                 response = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
@@ -133,7 +140,7 @@ public class HttpResponseGetter {
             //httpGet.setHeader("Connection", "keep-Alive");
             HttpResponse httpResponse = client.execute(httpGet);
             String res = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            statusCode = httpResponse.getStatusLine().getStatusCode();
             if ( statusCode == 200 ) {
                 response = res;
                 return true;

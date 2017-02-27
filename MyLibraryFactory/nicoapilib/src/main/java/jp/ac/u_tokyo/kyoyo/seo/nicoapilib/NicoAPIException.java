@@ -192,6 +192,47 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_PARSE_GET_THUMBNAIL_INFO_DATE = 202;
     /**
+     * parse target about ranking is {@code null}
+     */
+    public static final int EXCEPTION_PARSE_RANKING_NO_TARGET = 203;
+    /**
+     * tried to parse response about myList or ranking, but the response format is neither of them.
+     */
+    public static final int EXCEPTION_PARSE_NOT_RANKING_OR_MYLIST = 204;
+    /**
+     * tried to parse response about myList or ranking, but target sequence matched with expected format not found.
+     */
+    public static final int EXCEPTION_PARSE_RANKING_MYLIST_NOT_FOUND = 205;
+    /**
+     * tried to parse video title of ranking, but its format is unexpected.
+     */
+    public static final int EXCEPTION_PARSE_RANKING_TITLE = 206;
+    /**
+     * failed to parse the counting number of views, comments and myLists in case of ranking or myList.
+     */
+    public static final int EXCEPTION_PARSE_RANKING_MYLIST_COUNTER = 207;
+    /**
+     * failed to parse video length of ranking or myList because its format is unexpected.
+     */
+    public static final int EXCEPTION_PARSE_RANKING_MYLIST_LENGTH = 208;
+    /**
+     * failed to parse video published-date of ranking or myList because its format is unexpected.
+     */
+    public static final int EXCEPTION_PARSE_RANKING_MYLIST_PUB_DATE = 209;
+    /**
+     * failed to parse video contributed-date of ranking or myList because its format is unexpected.
+     */
+    public static final int EXCEPTION_PARSE_RANKING_MYLIST_DATE = 210;
+    /**
+     * fail to find NicoAPI.token from page HTML.
+     */
+    public static final int EXCEPTION_PARSE_MYLIST_TOKEN = 211;
+    /**
+     * failed to parse delete counting
+     */
+    public static final int EXCEPTION_PARSE_TEMP_MYLIST_DELETE_COUNT = 212;
+
+    /**
      * APIからのレスポンスのパースに失敗すると投げられます<br>
      * Thrown if fail to parse API response.<br><br>
      *
@@ -225,6 +266,38 @@ public class NicoAPIException extends Exception {
      * tried to get information of the video at getThumbnailInfo API, but requested video is available only for specific communities.
      */
     public static final int EXCEPTION_PARAM_GET_THUMBNAIL_INFO_COMMUNITY = 302;
+    /**
+     * tried to parse ranking response without passing required params.
+     */
+    public static final int EXCEPTION_PARAM_RANKING_NO_PARAM = 303;
+    /**
+     * tried to parse myList response while passing ranking params.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_NOT_RANKING = 304;
+    /**
+     * target video not found when trying to edit myList.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_EDIT_VIDEO_NOT_FOUND = 305;
+    /**
+     * specified video already exists in target myList.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_EDIT_VIDEO_ALREADY_EXIST = 306;
+    /**
+     * passed NicoAPI.token is invalid.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_EDIT_INVALID_TOKEN = 307;
+    /**
+     * passed NicoAPI.token is expired. New token is required.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_EDIT_OLD_TOKEN = 308;
+    /**
+     * passed param is invalid or required param is missing.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_EDIT_PARAM = 309;
+    /**
+     * fail to delete some of passed videos because they do not exist in tempMyList.
+     */
+    public static final int EXCEPTION_PARAM_TEMP_MYLIST_DELETE = 310;
     /**
      * 不正な引数を渡すと投げられます<br>
      * Thrown if invalid argument is passed.
@@ -275,6 +348,10 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_NOT_LOGIN_COMMENT_POST = 408;
     /**
+     * tried to edit myList without login.
+     */
+    public static final int EXCEPTION_NOT_LOGIN_MYLIST_EDIT = 409;
+    /**
      * ログインしていない状態でログイン必須の機能を使おうとすると投げます<br>
      * Thrown if try to use login-required method without login.
      */
@@ -295,7 +372,15 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_ERROR_CODE = 501;
     /**
-     * APIからのレスポンスの状態が想定外の場合に投げます<br>
+     * status code of response is unexpected when trying to edit MyList.
+     */
+    public static final int EXCEPTION_UNEXPECTED_MYLIST_EDIT_STATUS_CODE = 502;
+    /**
+     * error code is unexpected when trying to edit MyList.
+     */
+    public static final int EXCEPTION_UNEXPECTED_MYLIST_EDIT_ERROR_CODE = 503;
+    /**
+     * APIからのレスポンスの各値が想定外の場合に投げます<br>
      * Thrown if status of API response is not expected.<br>
      * 各種不正なパラメータやユーザアカウントの設定、APIのアクセス制限などが考えられます。<br>
      * Various things may be a cause; invalid params, setting of user account in Nico, access limit ro API....
@@ -333,6 +418,44 @@ public class NicoAPIException extends Exception {
         IllegalStateException(String message, int code){
             super(message,code);
         }
+    }
+
+    /**
+     * http failure while trying to add video in tempMyList.
+     */
+    public static final int EXCEPTION_HTTP_TEMP_MYLIST_ADD = 700;
+    /**
+     * http failure while trying to get NicoAPI.token in order to edit myList.
+     */
+    public static final int EXCEPTION_HTTP_MYLIST_TOKEN = 701;
+    /**
+     * http failure while trying to update tempMyList.
+     */
+    public static final int EXCEPTION_HTTP_TEMP_MYLIST_UPDATE = 702;
+    /**
+     * http failure while trying to delete a video of tempMyList.
+     */
+    public static final int EXCEPTION_HTTP_TEMP_MYLIST_DELETE = 703;
+    /**
+     * http failure while trying to move a video from tempMyList to another myList.
+     */
+    public static final int EXCEPTION_HTTP_TEMP_MYLIST_MOVE = 704;
+    /**
+     * HTTP通信に失敗
+     */
+    static class HttpException extends NicoAPIException{
+        private int statusCode;
+        private String path;
+        private String method;
+        HttpException(String message, int code, int statusCode, String path, String method){
+            super(message,code);
+            this.statusCode = statusCode;
+            this.path = path;
+            this.method = method;
+        }
+        public int getStatusCode(){return statusCode;}
+        public String getPath(){return path;}
+        public String getMethod(){return method;}
     }
 
 }

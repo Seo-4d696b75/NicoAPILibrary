@@ -264,4 +264,1077 @@ description	:	community
 参考：
 <a href=http://mntone.hateblo.jp/entry/2014/02/04/144711>[HatenaBlog]getthumbinfo のポイント</a>
 <a href=http://dic.nicovideo.jp/a/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E5%8B%95%E7%94%BBapi>[ニコニコ大百科]ニコニコ動画API</a>
+確認　on 2017.02.26
 
+＜ランキング取得＞
+
+ログイン不要で以下のようなRSS(実態はXML)で取得できる
+
+RequestURL;
+http://www.nicovideo.jp/ranking/{0}/{1}/{2}?rss=2.0
+     {0} : ランキング種類パラメータ、どの値で動画をソートしてランキングを生成するか（省略不可）  view,mylist,fav,res
+     	view	再生
+     	mylist	マイリスト
+     	fav		総合
+     	res		コメント
+     {1} : 対象期間パラメータ（省略可）  (total,monthly,weekly,daily,hourly)<br>
+     	total	合計
+     	monthly	月間
+     	weekly	週間
+     	daily	24時間
+     	hourly	毎時
+     	＊dailyはレスポンスの<p class="nico-info">統計情報タグ内でのみ名称表記が"日間"
+     {2} : 対象カテゴリパラメータ（省略可）
+		all			カテゴリ合算
+		vocaloid	VOCALOID
+		music		音楽
+		anime		アニメ
+		game		ゲーム
+		dance		踊ってみた
+		sing		歌ってみた
+		play		演奏してみた
+		toho		東方
+		imas		アイドルマスター
+		ent			エンターテイメント
+		animal		動物
+		radio		ラジオ
+		sport		スポーツ
+		politics	政治
+		science		科学
+		history		歴史
+		cooking		料理
+		nature		自然
+		diary		日記
+		lecture		ニコニコ動画講座
+		nicoindies	ニコニコインディーズ
+		drive		車載動画
+		tech		ニコニコ技術部
+		handcraft	ニコニコ手芸部
+		make		作ってみた
+		draw		描いてみた
+		travel		旅行
+		are			例のアレ
+		other		その他
+		r18			R-18
+     *{1}を省略した場合、{2}の値にかかわらずdaily(24時間)、all(カテゴリ合算)として解釈される
+     *{1}に空文字でない不正な値を渡した場合、daily(24時間)として解釈される
+     *{2}に空文字も含む不正値を渡すとall(カテゴリ合算)として解釈される
+     *{0}を省略する、または不正な値を渡すとRSSではなくランキングページのHTMLが返ってくる
+Method; GET
+Response;
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>{指定したカテゴリ名}の{指定したランキング種類名}ランキング({指定した期間名})‐ニコニコ動画</title>
+		<link>http://www.nicovideo.jp/ranking/{0}/{期間パラメータ}/{カテゴリパラメータ}</link>
+		<description>{ランキングの更新時刻に関する説明}</description>
+		<pubDate>{ランキング発行日時＊}</pubDate>
+		<lastBuildDate>{？<pubDate>要素と同じ場合しか確認できなかった}</lastBuildDate>
+		<generator>ニコニコ動画</generator>
+		<language>ja-jp</language>
+		<copyright>(c) DWANGO Co., Ltd.</copyright>
+		<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+		<atom:link rel="self" type="application/rss+xml" href="http://www.nicovideo.jp/ranking/{0}/{1}/{2}?rss=2.0"/>
+		<item>
+        	<title>第{順位1~100}位：{動画タイトル}</title>
+        	<link>http://www.nicovideo.jp/watch/{動画ＩＤ}</link>
+        	<guid isPermaLink="false">.....</guid>
+        	<pubDate>{ランキング発行日時＊}</pubDate>
+        	<description>
+        		<![CDATA[
+            	<p class="nico-thumbnail">
+                	<img
+                		alt="{動画タイトル}" 
+                      	src="{動画サムネイル画像URL}" 
+                      	width="{サムネイル横幅}" 
+                      	height="{サムネイル縦幅}" 
+                      	border="{0/1}"/>
+                </p>
+                <p class="nico-description">{動画説明}</p>
+                <p class="nico-info">
+                	<small>
+                		<strong class="nico-info-number">{ランキングソートに用いた値}</strong>pts.｜
+                		<strong class="nico-info-length">{動画長さ}</strong>｜
+                		<strong class="nico-info-date">{投稿日時}</strong> 投稿<br/>
+                		<strong>合計</strong>&nbsp;&#x20;再生：
+                		<strong class="nico-info-total-view">{合計再生数}</strong>&nbsp;&#x20;コメント：
+                		<strong class="nico-info-total-res">{合計コメント数}</strong>&nbsp;&#x20;マイリスト：
+                		<strong class="nico-info-total-mylist">{合計マイリス数}</strong><br/>
+                		<strong>{指定した期間名}</strong>&nbsp;&#x20;再生：
+                		<strong class="nico-info-{1}-view">{指定した期間での再生数}</strong>&nbsp;&#x20;コメント：
+                		<strong class="nico-info-{1}-res">{指定した期間でのコメント数}</strong>&nbsp;&#x20;マイリスト：
+                		<strong class="nico-info-{1}-mylist">{指定した期間でのマイリス数}</strong><br/>
+                	</small>
+                </p>
+                ]]>
+            </description>
+    	</item>
+	</channel>
+</rss>
+
+＊ランキング発行日時の表示形式は"EEE, dd MMM yyyy HH:mm:ss Z"、曜日と月は英語略表記　
+		（例）"Thu, 02 Feb 2017 20:00:00 +0900"
+＊動画投稿日時の表示形式は　"yyyy'年'MM'月'dd'日' HH：mm：ss"
+＊再生数、コメント数、マイリス数は半角かつコンマ三桁区切り
+＊<p class="nico-info">統計情報タグの要素に関して
+ランキング対象期間パラメータが合計"total"以外は上記の通りだが、合計"total"の場合、
+上記と同じフォーマットで合計、毎時、日間、週間、月間の順に各情報が加わる。
+＊<strong class="nico-info-number">の要素について
+この値に関して降順にランキングがソートされている。
+指定した期間{1}における指定した種類{0}の値になっているのが確認される。
+ただし、ランキング種類が総合の場合何の値を表すかは不明。
+
+参考；
+<a href=http://dic.nicovideo.jp/a/%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E3%82%BF%E3%82%B0>available here; "ニコニコ大百科".</a><br>
+<a href=https://ja.osdn.net/projects/nicolib/wiki/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E8%A7%A3%E6%9E%90%E3%83%A1%E3%83%A2>[ニコ★リブ]ニコニコ解析メモ</a><br>
+確認　on 2017.02.26
+
+
+
+＜マイリストグループの取得＞
+
+ログインした状態で以下のAPIから取得する
+
+RequestURL;	http://www.nicovideo.jp/api/mylistgroup/list
+Method;		GET
+Response;
+{
+"mylistgroup":
+	[
+		{
+		"id":"{(int)マイリストＩＤ}",
+		"user_id":"{(int)ユーザＩＤ}",
+		"name":"{マイリストの名前}",
+		"description":"{マイリスト説明}",
+		"public":"{公開設定 1:true 0:false}",
+		"default_sort":"{ソートの種類}",
+		"create_time":{マイリス生成日時},
+		"update_time":{マイリスの最終編集日時},
+		"sort_order":"{unknown}",
+		"icon_id":"{マイリスのアイコン種類}"
+		}
+		............
+	],
+"status":"ok"
+} 
+＊JSON形式だが2byte文字はUTF-16にエンコードされているので適宜でコードする
+＊日時の表現形式はUNIX時間(long)
+＊"update_time"は動画を追加しても変わらない
+＊アイコンについて、以下の画像のようなアイコンで左から0,1,2....と指定する
+　　http://efcl.info/wp-content/uploads/2009/11/ss-2009-11-12-20-25-10.png
+＊ソートに関して
+	登録が古い順			0
+	登録が新しい順			1
+	メモ昇順				2
+	メモ降順				3
+	タイトルに関して昇順	4
+	タイトルに関して降順	5
+	投稿が新しい順			6
+	投稿が古い順			7
+	再生数降順				8
+	再生数昇順				9
+	コメントが新しい順		10
+	コメントが古い順		11
+	コメント数降順			12
+	コメント数昇順			13
+	マイリス数降順			14
+	マイリス数昇順			15
+	動画長さ降順			16
+	動画長さ昇順			17
+　　
+ログインしていない状態でアクセスして失敗すると以下のようなレスポンスを取得する
+{
+"error":
+	{
+	"code":"NOAUTH",
+	"description":"認証できませんでした"
+	},
+"status":"fail"
+}
+
+
+＊逆にマイリスＩＤからこれらパラメータを詳細に取得もできる
+RequestURL;	http://www.nicovideo.jp/api/mylistgroup/get
+Method;		POST
+   postするパラメータは　group_id={マイリスＩＤ}   だけ
+Response;
+マイリス要素の配列が目的のマイリス要素になっただけのJSON
+
+確認　on 2017.02.26
+
+＜マイリストの取得＞
+
+①ログインした状態で以下のようなRSSを取得する
+ただし、公開マイリスはログインしていなくても他ユーザでログインしていても自由に参照できる
+
+RequestURL;	http://www.nicovideo.jp/mylist/{マイリスＩＤ}?rss=2.0
+Method;		GET
+Response;
+基本的にはランキングのRSSと同様の形式
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+    	<title>マイリスト {マイリス名}‐ニコニコ動画</title>
+    	<link>http://www.nicovideo.jp/mylist/{マイリスＩＤ}</link>
+    	<atom:link rel="self" type="application/rss+xml" href="http://www.nicovideo.jp/mylist/{マイリスＩＤ}?rss=2.0"/>
+    	<description>{マイリス説明}</description>
+    	<pubDate>{マイリス生成日時}</pubDate>
+    	<lastBuildDate>{何かの日時}</lastBuildDate>
+    	<generator>ニコニコ動画</generator>
+    	<dc:creator>{ユーザ名}</dc:creator>
+    	<language>ja-jp</language>
+    	<copyright>(c) DWANGO Co., Ltd.</copyright>
+    	<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    	<item>
+      		<title>{動画タイトル}</title>
+      		<link>http://www.nicovideo.jp/watch/{動画ＩＤ}</link>
+      		<guid isPermaLink="false">......</guid>
+      		<pubDate>{マイリスへの登録日時}</pubDate>
+      		<description>
+      			<![CDATA[
+      				<p class="nico-thumbnail">
+      					<img 
+      						alt="{動画タイトル}" 
+                      		src="{動画サムネイル画像URL}" 
+                      		width="{サムネイル横幅}" 
+                      		height="{サムネイル縦幅}" 
+                      		border="{0/1}"/>
+      				</p>
+      				<p class="nico-description"></p>
+      				<p class="nico-info">
+      					<small>
+      						<strong class="nico-info-length">{動画長さ}</strong>｜
+      						<strong class="nico-info-date">{動画投稿日時}</strong> 投稿
+      					</small>
+      				</p>
+      			]]>
+      		</description>
+    	</item>
+	</channel>
+</rss>
+＊マイリス生成・登録日時の表示形式は"EEE, dd MMM yyyy HH:mm:ss Z"、曜日と月は英語略表記　
+＊動画投稿日時の表示形式は　"yyyy'年'MM'月'dd'日' HH：mm：ss"
+
+取得に失敗した場合
+(1)ログインしていない、または他ユーザの非公開マイリスを取得しようとした場合
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>マイリスト‐ニコニコ動画</title>
+    	<link>http://www.nicovideo.jp/</link>
+    	<atom:link rel="self" type="application/rss+xml" href="http://www.nicovideo.jp/mylist/{渡したＩＤ}?rss=2.0"/>
+    	<description>このマイリストは非公開に設定されています。</description>
+    	<generator>ニコニコ動画</generator>
+    	<language>ja-jp</language>
+    	<copyright>(c) DWANGO Co., Ltd.</copyright>
+    	<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+	</channel>
+</rss>
+(2)存在しない不正なマイリスＩＤをクエリに渡した
+"ページが見つかりません"ページのHTMLが返る
+
+②JSONで取得する
+各動画の統計情報やスレッドＩＤ，登録時のコメントなど取得できるフィールドが多い
+
+RequestURL;	http://www.nicovideo.jp/api/mylist/list
+Method;		POST
+	postするパラメータは　group_id={マイリスＩＤ}
+Response;
+後述の＜とりあえずマイリスの取得＞と同じ形式
+また、失敗時のレスポンスは後述の＜マイリスト・とりあえずマイリストの編集＞参照
+
+ただし必ずログインが必要で、ログインしていても他人の公開マイリスは参照できず、
+{"mylistitem":[],"status":"ok"}が返る
+
+参考：https://ja.osdn.net/projects/nicolib/wiki/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E8%A7%A3%E6%9E%90%E3%83%A1%E3%83%A2
+確認　on 2017.02.26
+
+＜とりあえずマイリスの取得＞
+
+ログイン状態で以下にアクセス
+
+RequestURL;	http://www.nicovideo.jp/api/deflist/list
+Method;		GET
+Response;
+{
+"mylistitem":[
+	{
+	"item_type":"{コンテンツの種類 0:動画 5:静画 etc?}",
+	"item_id":"{動画のスレッドＩＤ}",
+	"description":"{登録時に添えたコメント}",
+	"item_data":{
+		"video_id":"{動画ＩＤ}",
+		"title":"{動画タイトル}",
+		"thumbnail_url":"{動画サムネイル画像URL}",
+		"first_retrieve":{動画投稿日時},
+		"update_time":{何か日時},
+		"view_counter":"{再生数}",
+		"mylist_counter":"{マイリス数}",
+		"num_res":"{コメント数}",
+		"group_type":"default",
+		"length_seconds":"{動画長さ}",
+		"deleted":"{削除されたか否か 1;true 0:false}",
+		"last_res_body":"{最新？コメント}",
+		"watch_id":"{動画ＩＤ}"
+		},
+	"watch":{0しか確認できない},
+	"create_time":{とりあえずマイリス登録日時},
+	"update_time":{とりあえずマイリスのコメントを最後に編集した日時}
+	},
+	......
+	],
+"status":"ok"
+}
+＊JSON形式だが2byte文字はUTF-16にエンコードされているので適宜デコードする
+＊日時の表現形式はUNIX時間(long)
+＊"update_time"は動画を追加しても変わらない
+
+ログインしていない状態でアクセスして失敗すると以下のようなレスポンスを取得する
+{
+"error":
+	{
+	"code":"NOAUTH",
+	"description":"認証できませんでした"
+	},
+"status":"fail"
+}
+
+参考；https://ja.osdn.net/projects/nicolib/wiki/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E8%A7%A3%E6%9E%90%E3%83%A1%E3%83%A2http://d.hatena.ne.jp/aTaGo/20100811/1281552243
+
+確認　on 2017.02.26
+
+
+＜マイリスト・とりあえずマイリストの編集＞
+
+以下の一連の作業にはログインが必要で
+まず変更を加えるのに必要なトークン（"NicoAPI.token"）を取得する
+この時必ずしも注目している動画のＩＤを用いなくても構わない
+
+RequestURL;	http://www.nicovideo.jp/mylist_add/video/{0}
+	{0} : なんでもいいから動画ＩＤ
+Method;		GET
+Response;
+マイリス登録ページのHTMLが返されるので
+NicoAPI.token = '{token}';
+を探せばトークンを取得完了
+
+ログインしないでアクセスすると
+"エラーが発生しました　ログインしてください。"ページのHTMLが返る
+
+トークンを取得したら実際に変更を加えていく。
+失敗時には共通して以下のJSONが返る
+{
+"error":
+	{
+	"code":"{エラーコード(String)}",
+	"description":"{エラーの説明}"
+	},
+"status":"fail"
+}
+＊JSON形式だが2byte文字はUTF-16にエンコードされているので適宜デコードする
+(1)ログインしていない
+code:NOAUTH			description:認証できませんでした
+(2)スレッドＩＤで指定した動画が存在しない
+code:NONEXIST		description:アイテムが存在しません
+(3)NicoAPI.tokenが不正な値
+code:INVALIDTOKEN	description:不正なトークンです
+(4)スレッドＩＤで指定した動画がすでに登録されている
+code:EXIST			description:すでに登録されています
+(5)パラメータの値が不正または必要なパラメータが欠けている
+code:PARAMERROR		description:パラメータエラー
+(6)トークンが古い
+code:EXPIRETOKEN	description:期限切れのトークンです
+
+①とりあえずマイリスへの登録
+
+RequestURL;	http://www.nicovideo.jp/api/deflist/add
+Method;		POST
+	次のパラメータをPOSTする
+	item_id={1} description={2} token={3}
+	{1} : 追加したい動画のスレッドＩＤ（動画ＩＤではない）
+	{2} : コメント（省略可能）
+	{3} : NicoAPI.token
+Response;
+成功時には以下のJSONが返る
+{"status":"ok"}
+
+
+②マイリスへの登録
+RequestURL; http://www.nicovideo.jp/api/mylist/add
+Method;		POST
+	POSTするパラメータはとりあえずマイリスの場合とほぼ同様だが、
+	登録先のマイリスをＩＤで指定する
+	item_id={1} description={2} token={3} gruop_id={4}
+	{1} : 追加したい動画のスレッドＩＤ（動画ＩＤではない）
+	{2} : コメント（省略可能）
+	{3} : NicoAPI.token
+	{4} : 登録先のマイリスID
+Response;
+成功時には以下のJSONが返る
+{"status":"ok"}
+
+③マイリスの追加
+
+どの動画でもいいから、登録時と同じ要領でNicoAPI.tokenを適当に取ってくる
+
+RequestURL; http://www.nicovideo.jp/api/mylistgroup/add
+Method;		POST
+	POSTするパラメータ
+	token={3} name={5} pulic={6} icon_id={7} default_sort={8} description={9}
+	{3} : NicoAPI.token
+	{5} : マイリス名（既存マイリス名と重複可能、空文字ＯＫ）
+	{6} : 公開設定 0:false 1:true
+	{7} : アイコンの指定(int)
+	{8} : ソートパラメータ(int)
+	{9} : マイリストの説明（空文字可能、パラメータ自体省略可能）
+	＊パラメータの詳細は＜マイリスの取得＞参照
+Response;
+成功するとマイリスＩＤを教えてくれる
+{"id":{マイリスＩＤ},"status":"ok"}
+失敗時は動画登録時と同様
+
+④とりあえずマイリスの動画情報編集
+
+各動画の説明(コメント)を上書きできる
+対象の動画のNicoAPI.tokenを用意してから以下のようにする
+
+RequestURL; http://www.nicovideo.jp/api/deflist/update
+Method;		POST
+	POSTするパラメータ
+	item_id={1} token={3} description={2}
+	{1} : 対象動画のスレッドＩＤ
+	{3} : NicoAPI.token
+	{2} : とりあえずマイリストでの説明・コメント（空文字可能、パラメータ自体は省略不可）
+Response;
+成功すると
+{"status":"ok"}
+失敗時は動画登録時と同様
+
+⑤とりあえずマイリスからの削除
+
+適当にNicoAPI.token用意してから以下のようにPOST
+パラメータid_listは二次元配列で扱われるようで、
+インデックスはそれぞれコンテンツ種類(int),複数指定時の添え字の模様
+以下のようにまとめて複数も削除できる
+
+RequestURL; http://www.nicovideo.jp/api/deflist/delete
+Method;		POST
+	POSTするパラメータ
+	token={3} id_list[{10}][0]={1} id_list[{10}][1]={1} .....
+	{1} : 対象動画のスレッドＩＤ
+	{3} : NicoAPI.token
+	{10} : コンテンツ種類(int) 動画:0
+Reponse;
+{"delete_count":{11},"status":"ok"}
+{11} : 削除した動画数　
+パラメータの形式が適正でも削除済みや存在しない動画スレッドＩＤを渡して失敗すると0
+
+パラメータid_listの配列インデックスを囲む角括弧がおかしいと
+500 Internal Server Error　　を投げる
+
+⑥とりあえずマイリスからの移動
+
+削除と同じ要領で複数指定可能
+
+RequestURL; http://www.nicovideo.jp/api/deflist/move
+Method;		POST
+	POSTするパラメータ
+	token={3} target_group_id={12} id_list[{10}][0]={1} id_list[{10}][1]={1} .....
+	{1} : 対象動画のスレッドＩＤ
+	{3} : NicoAPI.token
+	{10} : コンテンツ種類(int) 動画:0
+	{12} : 対象マイリスＩＤ
+Reponse;
+{
+"matches":{			##検出された移動元動画
+	"item":[
+		{
+		"type":{10},
+		"id":{1}
+		},
+		........
+	]
+},
+"duplicates":{		##検出された移動元と先での重複動画
+	"item":[
+		{
+		"type":{10},
+		"id":{1}
+		},
+		........
+	]
+},
+"targets"{			##移動した動画
+	"item":[
+		{
+		"type":{10},
+		"id":{1}
+		},
+		........
+	]
+},
+"status":"ok"
+}
+
+ステータスコードが"ok"でも重複などの関係で実は移動に失敗している可能性もあるので注意
+実在しない、マイリスに存在しない不正なスレッドＩＤを指定しても"matches"されないだけでステータスは"ok"。
+
+⑦とりあえずマイリスからの複製
+
+移動と全く同じ作業、唯一の違いはPOST先のみ
+
+RequestURL; http://www.nicovideo.jp/api/deflist/copy
+
+⑧マイリストの編集
+
+RequestURL; http://www.nicovideo.jp/api/mylistgroup/update
+Method;		POST
+	POSTするパラメータ
+	token={3} name={5} public={6} icon_id={7} default_sort={8} description={9} group_id={12} 
+	{3} : NicoAPI.token
+	{5} : マイリス名（既存マイリス名と重複可能、空文字可能、パラメータ自体省略可能）
+	{6} : 公開設定 0:false 1:true（パラメータ省略可能）
+	{7} : アイコンの指定(int)（パラメータ省略可能）
+	{8} : ソートパラメータ(int)（パラメータ省略可能）
+	{9} : マイリストの説明（空文字可能、パラメータ自体省略可能）
+	{12} : 対象マイリスＩＤ
+	＊パラメータの詳細は＜マイリスの取得＞参照
+	＊{5}~{9}全て省略するとパラメータエラーになる
+Reponse;
+成功すると
+{"status":"ok"}
+
+⑨マイリスの削除
+
+RequestURL; http://www.nicovideo.jp/api/mylistgroup/delete
+Method;		POST
+	POSTするパラメータ
+	token={3} group_id={12} 
+	{3} : NicoAPI.token
+	{12} : 対象マイリスＩＤ
+Reponse;
+成功すると
+{"status":"ok"}
+
+⑩マイリス内の動画をソート
+
+パラメータgroup_id_listは一次元配列で扱われるようで、以下のように複数のマイリス内をまとめてソートできる
+
+RequestURL; http://www.nicovideo.jp/api/mylistgroup/sort
+Method;		POST
+	POSTするパラメータ
+	token={3} group_id_list[0]={12} group_id_list[1]={12} ........
+	{3} : NicoAPI.token
+	{12} : 対象マイリスＩＤ
+Reponse;
+成功すると
+{
+"group_id_list":[{12},{12}.....],
+"status":"ok"
+}
+
+⑪マイリスの動画情報編集
+
+登録時に添えるコメントを編集できる
+
+RequestURL; http://www.nicovideo.jp/api/mylist/update
+Method;		POST
+	POSTするパラメータ
+	item_id={1} description={2} token={3} item_type={10} group_id={12} 
+	{1} : 対象動画のスレッドＩＤ
+	{2} : マイリストでの説明・コメント（空文字可能、パラメータ自体は省略不可）
+	{3} : NicoAPI.token
+	{10} : コンテンツ種類(int) 動画:0
+	{12} : 対象マイリスＩＤ
+Reponse;
+成功すると{"status":"ok"}
+
+⑫マイリスからの動画削除
+
+とりあえずマイリスと同じ要領で複数指定可能
+
+RequestURL; http://www.nicovideo.jp/api/mylist/move
+Method;		POST
+	POSTするパラメータ
+	token={3} group_id={12} id_list[{10}][0]={1} id_list[{10}][1]={1}......
+	{1} : 対象動画のスレッドＩＤ
+	{3} : NicoAPI.token
+	{10} : コンテンツ種類(int) 動画:0
+	{12} : 対象マイリスＩＤ
+Reponse;
+{"delete_count":{11},"status":"ok"}
+{11} : 削除した動画数？
+指定した動画すべての削除に成功していないものの、
+一つでも動画の削除に成功すると渡したスレッドＩＤの数がそのまま返るのを確認。
+これは一つずつ削除するのが無難（一方とりあえずマイリスでは大丈夫そう）
+
+⑬マイリスから別マイリスへの動画移動
+
+とりあえずマイリスと同じ要領
+
+RequestURL; http://www.nicovideo.jp/api/mylist/delete
+Method;		POST
+	POSTするパラメータ
+	token={3} group_id={12} target_group_id={13} id_list[{10}][0]={1} id_list[{10}][1]={1}......
+	{1} : 対象動画のスレッドＩＤ
+	{3} : NicoAPI.token
+	{10} : コンテンツ種類(int) 動画:0
+	{12} : 移動元マイリスＩＤ
+	{13] : 移動先マイリスＩＤ
+Reponse;
+とりあえずマイリスからの移動と全く同じ。
+やはり、移動に失敗していてもステータスが"ok"になるから注意
+
+⑭マイリスから別マイリスへの動画複製
+
+移動と全く同じ作業、唯一の違いはPOST先のみ
+
+RequestURL; http://www.nicovideo.jp/api/mylist/copy
+
+＊ここまで多数の編集手段が用意されているが、マイリスからとりあえずマイリスへの
+動画移動・複製の手段は存在しないようである。
+とりあえずマイリスはマイリスにお気に入りコンテンツを登録する前段階の保留段階のものを保存する場所なので
+確かにこの操作は需要ないとも考えられる。
+
+参考；
+https://ja.osdn.net/projects/nicolib/wiki/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E8%A7%A3%E6%9E%90%E3%83%A1%E3%83%A2
+http://efcl.info/niconicoapi/
+http://d.hatena.ne.jp/aTaGo/20100811/1281552243
+
+確認　on 2017.02.26-27
+
+
+
+
+＜関連動画の取得＞
+
+ログイン不要で以下からおすすめ動画を取得
+
+RequestURL; http://flapi.nicovideo.jp/api/getrelation?page={0}&video={3}
+		{0} : 整数、詳細不明
+		{3} : 動画ＩＤ，またはスレッドＩＤ
+Method;		GET
+Response;
+<related_video status="ok">
+	<total_count>{(int)??}</total_count>
+	<page_count>{(int)??}</page_count>
+	<data_count>{(int)取得した動画数}</data_count>
+	<type>recommend</type>
+	<video>
+		<url>http://www.nicovideo.jp/watch/{動画ＩＤ}</url>
+		<thumbnail>{動画サムネイル画像URL}</thumbnail>
+		<title>{動画タイトル}</title>
+		<view>{再生数}</view>
+		<comment>{コメント数}</comment>
+		<mylist>{マイリス数}</mylist>
+		<length>{動画長さsec}</length>
+		<time>{投稿日時}</time>
+	</video>
+	.............
+</related_video>
+＊日時の表現形式はUNIX時間(long)
+
+不正な動画ＩＤなど指定して失敗すると
+<related_video status="fail">
+	<error>
+		<code>PARAMERROR</code>
+		<description>パラメータが不正です</description>
+	</error>
+</related_video>
+
+
+＊以下のようにソート方法を指定できるらしい情報もあったが確認できなかった。
+RequestURL; http://flapi.nicovideo.jp/api/getrelation?page={0}&sort={1}&order={2}&video={3}
+		{1} : ソートパラメータ p:おすすめ度　r:コメント数　v:再生数 m:マイリス数 f:投稿日時
+		{2} : ソートの順序 d:降順 a:昇順
+	
+参考；
+http://d.hatena.ne.jp/picas/20080202/1201955339
+
+確認 on 2017.02.27
+
+
+
+＜動画検索＞
+
+数少ない公開API『スナップショット検索API v2』 を使う
+
+検索ＡＰＩの公開ガイドライン
+http://site.nicovideo.jp/search-api-docs/snapshot.html
+
+簡単にメモ書き
+
+RequestURL; http://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search
+Method;		POST
+		postするパラメータ（クエリに＆で連結してGETしてもいい）
+		q={0} targets={1} fields={2} filters[{3}][{4}]={5}.... _sort={6} _offset={7} _limit={8} _context={9}
+		{0} : 検索キーワード　以下の書式に従うこと
+			and検索：半角空白で連結
+			or検索："OR"で区切る（前後に半角空白を入れること）
+			not検索："-"をキーワードの前に連結（間に空白は入れない）
+			＊空白を検索キーワードに含める場合は””で囲む
+			＊演算子and,orは等位で前から順に評価する
+		{1} : 検索対象フィールド
+			ここで指定されたフィールドに対して検索され、その値をＪＳＯＮで返される
+			複数を指定するには、","半角カンマで区切る
+			フィールド値；
+			contentId,title,description,tags,categoryTags,viewCounter,mylistCounter,
+			commentCounter,startTime,lastCommentTime,lengthSenconds
+		{2} : レスポンスに含むフィールド値、複数指定可能　（省略可能）
+		{3,4,5}:フィルター指定				（省略可能）
+		{3} : フィルター対象のフィールド
+		{4} : フィルターパラメータ
+		{5} : フィルター検索の値
+				特定の値に一致するかで検索：filters[field0][0]=val0&filters[field0][1]=val1
+				範囲で検索：filters[field1][gt]=val0&filters[field1][lt]=val1(両端の値は含まず)
+				範囲の値も含めたい場合gteとlteを使用します
+		{6} : レスポンスのソート方法をフィールド値で指定
+				そのまま,または"-"を前に連結すると降順、"+"を連結すると昇順
+		{7} : 取得オフセット　（省略可能）
+		{8} : 最大レスポンス数　（省略可能）
+		{9} : アプリケーション名
+Response;
+{
+"meta":{
+	"status":200,
+	"totalCount":{ヒット数},
+	"id":"{???}"
+},
+"data":[
+	{
+	"startTime":"{投稿日時}",
+	"description":"{動画説明}",
+	"mylistCounter":{マイリス数},
+	"lengthSeconds":{動画長さ},
+	"viewCounter":{再生数},
+	"contentId":"{動画ＩＤ}",
+	"title":"{動画タイトル}",
+	"commentCounter":{コメント数}
+	},
+	..............
+	]
+}
+＊日時の表示形式はISO 8601の拡張形"yyyy-MM-dd'T'HH:mm:ss'+90:00'"
+　タイムゾーンは固定の模様？
+
+ 
+
+＜getFlv API＞
+
+スレッドＩＤやコメント取得に必要なメッセージサーバーURLなどを取得する
+ログインが必要
+
+RequestURL; http://flapi.nicovideo.jp/api/getflv/{動画ＩＤ}
+Method;		GET
+Response;
+thread_id={動画スレッドＩＤ}
+&l={動画長さ秒}
+&url={動画の在処}
+&link={??}
+&ms=メッセージサーバURL}
+&user_id={ユーザID}
+&is_premium={プレミアム会員か否か 0:false 1:true}
+&nickname={ユーザ名}
+&time={動画投稿日時}
+&done={true/false??}
+&feedrev={??}
+&ng_up={??}
+&hms={??}
+&hmsp={???}
+&hmst={????}
+&hmstk={?????}
+&rpu={
+	"count":{???},
+　　"users":[
+　　	"{ユーザ名}",
+　　	........
+　　　　],
+	"extra":{?}
+}
+＊値はそれぞれURLエンコードされているので、適宜デコードする
+
+失敗した場合のレスポンス
+(1)不正なクエリ；
+error=invalid_thread&done=true
+(2)ログインしていない；
+closed=1&done=true
+
+参考；
+http://d.hatena.ne.jp/MineAP/20100819/1282201560
+確認　on 2017.02.27
+
+
+＜コメントの取得＞
+
+メッセージサーバと通信するのでそのURLをgetFlvAPIで取得すること
+このメッセージサーバURL取得にはログイン必須だが、
+サーバとの通信にログインは要らない。
+
+①GETで直近をXMLで取得する
+
+RequestURL; {0}/thread?version=20090904&thread={1}&res_from=-{2}
+		{0} : メッセージサーバURL
+		{1} : 対象の動画スレッドＩＤ
+		{2} : 最大レスポンス数（最大直近1000コメ）
+		こんな感じになる；http://msg.nicovideo.jp/10/api/thread?version=20090904&thread=1173108780&res_from=-100
+Method;		GET
+Response;
+直近のコメントを以下のフォーマットで取得できる
+<?xml version="1.0" encoding="UTF-8"?>
+<packet>
+	<thread 
+		resultcode="0" 
+		thread="{動画スレッドＩＤ}" 
+		server_time="{メッセージサーバとの通信日時}" 
+		last_res="{最新コメント数}" 
+		ticket="{コメント投稿に必要な値}" 
+		revision="{?}" 
+		click_revision="{??}"/>
+	<leaf ......../>
+	....
+	<chat 
+		thread="{動画スレッドＩＤ}" 
+		no="{コメントＩＤ(int)}" 
+		vpos="{投稿タイミング 1/100秒単位}" 
+		leaf="{??}" 
+		date="{コメント投稿日時}" 
+		premium="{プレミアム会員か否か 0:false 1:true}" 
+		anonymity="{匿名コメントか 1:true 0:false}" 
+		user_id="{投稿者のユーザＩＤ}" 
+		mail="{コマンド}">
+			{コメント内容}
+	</chat>
+	......
+</packet>
+＊匿名性は投稿デフォルト値がtrueなので基本trueでユーザ名は暗号化されている
+＊日時の表現形式はUNIX時間(long)
+＊コマンドに関して
+	以下のコマンド値が半角スペース区切りで得られる
+	(1)コメントの匿名化
+		値；184
+		このコマンドによってanonymity="1"となりユーザ名が暗号化される
+	(2)コマンドの色
+		値			色コード（１６進法αRGB）
+		white		0xffffffff
+		red			0xffff0000
+		pink		0xffff8080
+		orange		0xffffcc00
+		yellow		0xffffff00
+		green		0xff00ff00
+		cyan		0xff00ffff
+		blue		0xff0000ff
+		purple		0xffc000ff
+		black		0xff000000
+		＊省略時はwhite
+	(3)コメントの位置
+		値			位置
+		naka		通常通り右から左へ流れる
+		ue			画面上部に一定時間固定
+		shita		画面下部に一定時間固定
+		＊省略時はnaka
+	(4)コメントサイズ
+		値			大きさ
+		medium		通常の大きさ
+		small		小さくなる
+		big			大きくなる
+		＊省略時はmedium扱い
+	以上が全会員に開かれた基本コマンド
+	他にもプレミアム会員限定のコマンドが存在するが割愛
+	
+＊削除されたコメントも残っているから注意
+<chat 
+	thread="..."
+	no="..."
+	vpos="....."
+	leaf="..."
+	date="..........."
+	date_usec="..........."
+	anonymity="1"
+	deleted="2"/>
+	
+失敗時には以下のXMLが返る
+<?xml version="1.0" encoding="UTF-8"?>
+<packet>
+	<thread resultcode="{5}" thread="{動画スレッドＩＤ}" server_time="{メッセージサーバとの通信日時}"/>
+</packet>
+{5} : ステータスコード
+0 : 成功
+1 : 動画スレッドＩＤが不正値、または欠損している
+3 : version値が不正、または欠損している
+
+②GETで直近をJSONで取得する
+
+JSONフォーマットでもGETできる
+
+RequestURL; {0}/api.json/thread?version=20090904&thread={1}&res_from=-{2}
+		{0} : メッセージサーバURL
+		{1} : 対象の動画スレッドＩＤ
+		{2} : 最大レスポンス数（最大直近1000コメ、不正な数値だと1000?）
+Method;		GET
+Response;
+[
+	{
+	"thread": {
+		"resultcode": 0, 
+		"thread": "{動画スレッドＩＤ}", 
+		"server_time": {メッセージサーバとの通信日時}, 
+		"last_res": {最新コメント数}, 
+		"ticket": "{コメント投稿に必要な値}", 
+		"revision": {?}, 
+		"click_revision": {??}
+		}
+	}, 
+	{
+		"leaf": {..........},
+		.........
+	},
+	{
+		"chat": {
+			"thread": "{動画スレッドＩＤ}", 
+			"no": {コメントＩＤ}, 
+			"vpos": {投稿タイミング 1/100秒単位}, 
+			"leaf": {?}, 
+			"date": {コメント投稿日時}, 
+			"date_usec": {??}, 
+			"anonymity": {匿名コメントか 1:true 0:false}, 
+			"user_id": "{投稿者のユーザＩＤ}", 
+			"mail": "{コマンド}", 
+			"content": "{コメント内容}"
+		}
+	},
+	......
+]
+各種要素の詳細は①参照
+
+③POSTで直近コメを取得
+
+RequestURL; {0}
+Method;		POST
+		Post対象；
+		<thread res_from="-{2}" version="20061206" scores="{3}" thread="{1}" />
+		
+		{0} : メッセージサーバURL
+		{1} : 対象の動画スレッドＩＤ
+		{2} : 最大レスポンス数（最大直近1000コメ）
+		{3} : ＮＧスコアを表示するか 1:true（2以上の値も1で解釈されている模様）
+		{4} : 動画長さ（分単位で分未満切り上げ）
+		
+Response;
+基本的に①と同様のフォーマット
+ただし、{3}でＮＧスコア取得を設定すると
+		score="{NGスコア}" 
+の属性が各コメントの<chat>タグに加わる。
+
+＊ＮＧスコアに関して
+	値0が最も健全で他ユーザからNGされると値が減少する
+	この値が大きいほどＮＧされていないコメントであることを意味する
+	ただし、投稿時に投稿者のＮＧスコアで始まるらしい。
+	値とＮＧ共有レベルの関係はおおよそ、
+	
+	レベル			範囲				　ＮＧレベル無・弱・中・強
+	・微NG～NG無し	-1000<score<=0					〇	〇	〇	〇
+	・少NG			-4800<score<=-1000				〇	〇	〇	×
+	・中NG			-10000<scoee<=-4800				〇	〇	×	×
+	・多NG			score<=-10000					〇	×	×	×
+
+
+
+④POSTでコメント取得
+
+以前は直近コメントを順に取得表示する形式が公式でしたが、
+単位長さ当たり一定数のコメント数を保ちつつ取得する新方式が導入されて
+現在はこれら混合形式の模様
+
+おそらくこの方法がムラなく全体的にコメントを取得出来て便利
+
+RequestURL; {0}
+Method;		POST
+		Post対象；
+		<packet>
+			<thread thread="{1}" version="20090904"  />
+			<thread_leaves scores="{3}" thread="{1}">0-{4}:100,1000</thread_leaves>
+		</packet>
+		
+		{0} : メッセージサーバURL
+		{1} : 対象の動画スレッドＩＤ
+		{3} : ＮＧスコアを表示するか 1:true
+		{4} : 動画長さ（分単位で分未満切り上げ）
+		
+Response;
+③と同じ
+
+
+versionの値に関しては詳細は不明だがコメント取得の確認が取れたのは
+20090904、20061206
+
+参考；
+https://blog.hayu.io/web/nicovideo-comment-api
+http://blog.livedoor.jp/mgpn/archives/51886270.html
+http://dic.nicovideo.jp/a/ng%E5%85%B1%E6%9C%89%E6%A9%9F%E8%83%BD
+http://dic.nicovideo.jp/a/%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88
+確認　on 2017.02.27
+
+
+
+＜コメントの投稿＞
+
+まずは投稿に必要なPostKeyをログイン状態で以下から取得する
+
+RequestURL; 
+http://flapi.nicovideo.jp/api/getpostkey/?version=1&yugi=&device=1&block_no={0}&thread={1}&version_sub=2
+	{0} : 最新のコメント数/100　（取得時のメタ内のlast_res）
+	{1} : 対象動画ＩＤ
+Method;		GET
+Response;
+postkey={6}  の文字列だけ
+
+成功すればkey値が入っているが、ログインしていないスレッドＩＤが不正などの理由で取得失敗すると空文字が返る
+＊コメント総数は刻々と変化するため、最新のコメント数を取得推奨
+
+keyを取得したらＸＭＬをメッセージサーバーにPostする
+
+RequestURL; {メッセージサーバURL}
+Method;		POST
+	post対象
+	<chat 
+		thread="{1}" 
+      	ticket="{2}" 
+      	user_id="{3}" 
+      	vpos="{4}" 
+      	mail="{5}" 
+      	postkey="{6}" 
+      	premium="{7}">
+     	{8}
+	</chat>
+	
+	{2} : ticket値　取得時のメタ内に存在
+	{3} : ユーザＩＤ
+	{4} : 投稿タイミング　1/100秒単位
+	{5} : コマンド
+	{7} : プレミアム会員か否か 0;false 1;true
+	{8} : コメント内容
+	＊PostKeyは最新のものを使うこと
+	
+Response；
+<?xml version="1.0" encoding="UTF-8"?>
+<packet>
+    <chat_result thread="...." status="{ステータスコード}" no="{投稿したコメントのＩＤ}" leaf="{?}"/>
+</packet>
+
+status(int): 投稿ステータス
+0 = SUCCESS(投稿完了)
+1 = FAILURE(投稿拒否)
+2 = INVALID_THREAD(スレッドIDがおかしい)
+3 = INVALID_TICKET(投稿チケットが違う)
+4 = INVALID_POSTKEY(ポストキーがおかしい or ユーザーIDがおかしい)
+5 = LOCKED(コメントはブロックされている)
+6 = READONLY(コメントは書き込めない)
+8 = TOO_LONG(コメント内容が長すぎる)
+
+参考：
+http://qiita.com/tor4kichi/items/be55e177f0e4a0753f5d
+http://blog.livedoor.jp/mgpn/archives/51968685.html
