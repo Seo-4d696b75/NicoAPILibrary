@@ -57,7 +57,7 @@ public class HttpResponseGetter {
     public boolean tryPost(String path,Map<String,String>params, CookieStore cookieStore){
         DefaultHttpClient client = new DefaultHttpClient();
         response = null;
-        cookieStore = null;
+        this.cookieStore = null;
         try {
             HttpPost httpPost = new HttpPost(path);
             if ( cookieStore != null){
@@ -75,7 +75,7 @@ public class HttpResponseGetter {
             /* レスポンスコードの取得（Success:200、Auth Error:403、Not Found:404、Internal Server Error:500）*/
             statusCode = httpResponse.getStatusLine().getStatusCode();
             if (statusCode == 200) {
-                cookieStore = client.getCookieStore();
+                this.cookieStore = client.getCookieStore();
                 response = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
                 return true;
             }

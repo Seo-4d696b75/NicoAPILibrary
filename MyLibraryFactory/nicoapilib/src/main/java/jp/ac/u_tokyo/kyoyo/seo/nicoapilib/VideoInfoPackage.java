@@ -7,7 +7,7 @@ import java.io.Serializable;
  * This class can be passed with Intent.<br>
  *  Activity間をIntentで{@link VideoInfo}の子クラスは渡せません。
  * {@link VideoInfo#pack()}で取得したこのクラスを代わりに渡してください。
- * 渡した先で{@link #unpack()}を呼ぶことで{@link VideoInfoManager 子クラス}のメソッドが使えます。<br>
+ * 渡した先で{@link #unpack()}を呼ぶことで{@link VideoInfo 子クラス}のメソッドが使えます。<br>
  * Child classes of {@link VideoInfo} can not be passed between Activities with Intent.
  * You substitute with this class instance gotten from {@link VideoInfo#pack()}.
  * @author Seo-4d696b75
@@ -43,7 +43,7 @@ public class VideoInfoPackage implements Serializable {
      * @param info the target video, cannot be {@code null}
      * @throws NicoAPIException if argument is {@code null}
      */
-    protected VideoInfoPackage (VideoInfo info) throws NicoAPIException{
+    protected VideoInfoPackage (VideoInfoStorage info) throws NicoAPIException{
         if ( info == null ){
             throw new NicoAPIException.InvalidParamsException("no target video > pack");
         }else{
@@ -77,12 +77,12 @@ public class VideoInfoPackage implements Serializable {
     }
 
     /**
-     * {@link VideoInfoManager 子クラス}のメソッドが使えるように変換します<br>
-     * Converts itself so that methods of {@link VideoInfoManager child class} can be used.
+     * {@link VideoInfo 子クラス}のメソッドが使えるように変換します<br>
+     * Converts itself so that methods of {@link VideoInfo child class} can be used.
      * @return Returns instance keeping all the fields
      */
-    public VideoInfoManager unpack(){
-        VideoInfoManager info = new VideoInfoManager(this);
+    public VideoInfo unpack(){
+        VideoInfo info = new VideoInfo(this);
         return info;
     }
 }

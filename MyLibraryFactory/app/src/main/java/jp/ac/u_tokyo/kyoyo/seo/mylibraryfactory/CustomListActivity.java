@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,6 @@ import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoAPIException;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoClient;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoCommentPost;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
-import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfoManager;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfoPackage;
 
 /**
@@ -81,21 +81,25 @@ public abstract class CustomListActivity extends AppCompatActivity {
         }
     }
 
-    protected void setVideos(final List<VideoInfo> list){
+    protected void setVideos(final List<? extends VideoInfo> list){
         if ( list != null ){
-            listViewVideos.setAdapter(new CustomListAdapter(CustomListActivity.this, list));
+            List<VideoInfo> newList = new ArrayList<VideoInfo>();
+            for ( VideoInfo item : list){
+                newList.add(item);
+            }
+            listViewVideos.setAdapter(new CustomListAdapter(CustomListActivity.this, newList));
             listViewVideos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     CustomListAdapter adapter = (CustomListAdapter)parent.getAdapter();
                     VideoInfo info = adapter.getItem(position);
-                    shoeVideoDetails((VideoInfoManager)info);
+                    shoeVideoDetails(info);
                 }
             });
         }
     }
 
-    private void shoeVideoDetails (final VideoInfoManager info){
+    private void shoeVideoDetails (final VideoInfo info){
         if ( info == null ){
             return;
         }
@@ -478,7 +482,7 @@ public abstract class CustomListActivity extends AppCompatActivity {
         @Override
         public View getView(final int position, View convertView, final ViewGroup parent) {
             View view = convertView;
-            final VideoInfoManager item = (VideoInfoManager)this.getItem(position);
+            final VideoInfo item = (VideoInfo)this.getItem(position);
             if (view == null) {
                 view = inflater.inflate(R.layout.video_cell, null);
                 view.setTag(index);

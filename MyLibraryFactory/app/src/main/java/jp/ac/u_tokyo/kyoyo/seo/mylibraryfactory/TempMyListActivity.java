@@ -3,13 +3,9 @@ package jp.ac.u_tokyo.kyoyo.seo.mylibraryfactory;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-
-import java.util.List;
 
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoAPIException;
-import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.TempMyListVideoInfo;
-import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
+import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.TempMyListVideoGroup;
 
 /**
  * Created by Seo-4d696b75 on 2017/02/06.
@@ -17,7 +13,7 @@ import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
 
 public class TempMyListActivity extends CustomListActivity {
 
-    List<VideoInfo> list;
+    private TempMyListVideoGroup group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +37,7 @@ public class TempMyListActivity extends CustomListActivity {
             @Override
             protected String doInBackground(String... params) {
                 try {
-                    list = nicoClient.getTempMyList();
+                    group = nicoClient.getTempMyList();
                     return null;
                 } catch (NicoAPIException e) {
                     return e.getMessage();
@@ -52,7 +48,7 @@ public class TempMyListActivity extends CustomListActivity {
                 progress.cancel();
                 progress = null;
                 showMessage(response);
-                setVideos(list);
+                setVideos(group.getVideoList());
             }
         }.execute();
 

@@ -318,9 +318,9 @@ public class NicoCommentPost {
                 targetVideo.getThreadID();
                 targetVideo.getMessageServerUrl();
             } catch (NicoAPIException e) {
-                ((VideoInfoManager) targetVideo).getFlv(client.getCookieStore());
+                targetVideo.getFlv(client.getCookieStore());
             }
-            ((VideoInfoManager) targetVideo).getComment(1);
+            targetVideo.getComment(1);
             CommentInfo.CommentGroup group = targetVideo.commentGroup;
             String command = "";
             if (!commandList.isEmpty()) {

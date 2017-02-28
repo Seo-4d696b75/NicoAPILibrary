@@ -16,14 +16,14 @@ import java.util.TimeZone;
  * ニコ動ＡＰＩからの検索結果をパースします<br>
  * This parses search results in JSON.<br><br>
  *
- * This class extending VideoInfoManager provides methods to parse JSON
+ * This class extending VideoInfo provides methods to parse JSON
  * from http://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search?q={your query}<br>
  *      details of this API : <a href=http://site.nicovideo.jp/search-api-docs/snapshot.html>[niconico]ニコニコ動画 『スナップショット検索API v2』 ガイド</a><br>
  * @author Seo-4d696b75
  * @version 0.0  on 2017/01/16.
  */
 
-public class SearchVideoInfo extends VideoInfoManager {
+public class SearchVideoInfo extends VideoInfo {
 
     private SearchVideoInfo (JSONObject item) throws NicoAPIException.ParseException {
         initialize(item);

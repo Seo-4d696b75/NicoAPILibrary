@@ -125,16 +125,16 @@ public class NicoAPIException extends Exception {
      *     {@link RankingVideoInfo ランキング・マイリスト}<br>
      *     {@link RecommendVideoInfo おすすめ動画}<br>
      *     {@link SearchVideoInfo 動画検索}<br>
-     *     {@link TempMyListVideoInfo とりあえずマイリスト}<br>
-     * {@link VideoInfoManager#complete()},{@link VideoInfoManager#getFlv(CookieStore)}を呼ぶことで
+     *     {@link MyListVideoInfo とりあえずマイリスト}<br>
+     * {@link VideoInfo#complete()},{@link VideoInfo#getFlv(CookieStore)}を呼ぶことで
      * 欠損したフィールド値を取得できます。<br>
      * You can get following fields from each API;<br>
      *     {@link RankingVideoInfo ranking and myList}<br>
      *     {@link RecommendVideoInfo reccomend}<br>
      *     {@link SearchVideoInfo search}<br>
-     *     {@link TempMyListVideoInfo temp myList}<br>
+     *     {@link MyListVideoInfo temp myList}<br>
      * You can get lacking field by calling
-     * {@link VideoInfoManager#complete()},{@link VideoInfoManager#getFlv(CookieStore)}
+     * {@link VideoInfo#complete()},{@link VideoInfo#getFlv(CookieStore)}
      */
     static class NotInitializedException extends NicoAPIException{
         NotInitializedException (String message, int code){
@@ -149,22 +149,22 @@ public class NicoAPIException extends Exception {
     public static final int EXCEPTION_DRAWABLE_USER_ICON = 100;
     /**
      * tried to get thumbnail image of video, but its url is unknown.
-     * at {@link VideoInfoManager#getThumbnail()}
+     * at {@link VideoInfo#getThumbnail()}
      */
     public static final int EXCEPTION_DRAWABLE_THUMBNAIL_URL = 101;
     /**
      * failed to get thumbnail image of video via HTTP.
-     * at {@link VideoInfoManager#getThumbnail()}
+     * at {@link VideoInfo#getThumbnail()}
      */
     public static final int EXCEPTION_DRAWABLE_THUMBNAIL = 102;
     /**
      * tried to get contributor icon of video, but its url is unknown.
-     * at {@link VideoInfoManager#getContributorIcon()}
+     * at {@link VideoInfo#getContributorIcon()}
      */
     public static final int EXCEPTION_DRAWABLE_CONTRIBUTOR_ICON_URL = 103;
     /**
      * failed to get contributor icon of video via HTTP.
-     * at {@link VideoInfoManager#getContributorIcon()}
+     * at {@link VideoInfo#getContributorIcon()}
      */
     public static final int EXCEPTION_DRAWABLE_CONTRIBUTOR_ICON = 104;
     /**
@@ -179,16 +179,16 @@ public class NicoAPIException extends Exception {
 
     /**
      * tried to parse response from getThumbnailInfo API, but target sequence matched with expected format not found.
-     * at {@link VideoInfoManager#complete()}
+     * at {@link VideoInfo#complete()}
      */
     public static final int EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NOT_FOUND = 200;
     /**
      * tried to parse response from getThumbnailInfo API by using java.util.regex.Pattern, but requested pattern not found.
-     * at {@link VideoInfoManager#complete()}
+     * at {@link VideoInfo#complete()}
      */
     public static final int EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NO_PATTERN = 201;
     /**
-     * failed to parse contributed date into {@link VideoInfoManager#dateFormatBase common format}, while succeeding in getting its raw value.
+     * failed to parse contributed date into {@link VideoInfo#dateFormatBase common format}, while succeeding in getting its raw value.
      */
     public static final int EXCEPTION_PARSE_GET_THUMBNAIL_INFO_DATE = 202;
     /**
@@ -231,6 +231,22 @@ public class NicoAPIException extends Exception {
      * failed to parse delete counting
      */
     public static final int EXCEPTION_PARSE_TEMP_MYLIST_DELETE_COUNT = 212;
+    /**
+     * fail to parse Json response about myList and tempMyList.
+     */
+    public static final int EXCEPTION_PARSE_MYLIST_JSON = 213;
+    /**
+     * fail to parse Json response about myList group.
+     */
+    public static final int EXCEPTION_PARSE_MYLIST_GROUP_JSON = 214;
+    /**
+     * fail to parse Json response about myList details
+     */
+    public static final int EXCEPTION_PARSE_MYLIST_DETAILS_JSON = 215;
+    /**
+     * fail to parse RSS (in XML) response meta about myList.
+     */
+    public static final int EXCEPTION_PARSE_MYLIST_RSS = 216;
 
     /**
      * APIからのレスポンスのパースに失敗すると投げられます<br>
@@ -299,6 +315,10 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_PARAM_TEMP_MYLIST_DELETE = 310;
     /**
+     * fail to get myList because not login or it is not public myList of others.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_ID = 311;
+    /**
      * 不正な引数を渡すと投げられます<br>
      * Thrown if invalid argument is passed.
      */
@@ -363,12 +383,12 @@ public class NicoAPIException extends Exception {
 
     /**
      * status code of response from getThumbnailInfo API is unexpected; not "ok" or "fail".
-     * at {@link VideoInfoManager#complete()}
+     * at {@link VideoInfo#complete()}
      */
     public static final int EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_STATUS_CODE = 500;
     /**
      * error code of response from getThumbnailInfo API is unexpected.
-     * at {@link VideoInfoManager#complete()}
+     * at {@link VideoInfo#complete()}
      */
     public static final int EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_ERROR_CODE = 501;
     /**
@@ -408,7 +428,7 @@ public class NicoAPIException extends Exception {
     public static final int EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST = 602;
     /**
      * tried to get comment while {@link VideoInfo#messageServerUrl} and {@link VideoInfo#threadID} are unknown.
-     * at {@link VideoInfoManager#getComment()}, {@link VideoInfoManager#getComment(int)}
+     * at {@link VideoInfo#getComment()}, {@link VideoInfo#getComment(int)}
      */
     public static final int EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY = 603;
     /**
@@ -440,6 +460,26 @@ public class NicoAPIException extends Exception {
      * http failure while trying to move a video from tempMyList to another myList.
      */
     public static final int EXCEPTION_HTTP_TEMP_MYLIST_MOVE = 704;
+    /**
+     * http failure while trying to get tempMyList.
+     */
+    public static final int EXCEPTION_HTTP_TEMP_MYLIST_GET = 705;
+    /**
+     * http failure while trying to get myList group.
+     */
+    public static final int EXCEPTION_HTTP_MYLIST_GROUP_GET = 706;
+    /**
+     * http failure while trying to get myList details.
+     */
+    public static final int EXCEPTION_HTTP_MYLIST_DETAILS_GET = 707;
+    /**
+     * http failure while trying to get myList videos.
+     */
+    public static final int EXCEPTION_HTTP_MYLIST_VIDEOS_GET = 708;
+    /**
+     * http failure while trying to get myList specified with myListID directly.
+     */
+    public static final int EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT = 709;
     /**
      * HTTP通信に失敗
      */

@@ -125,15 +125,12 @@ public class NicoClient extends LoginInfo{
      * Gets temp myList, be sure to login beforehand.<br>
      * ログインしていない、もしくはユーザの公開設定によっては取得に失敗して例外を投げます。<br>
      * If not login or setting of user does not allow the access, this fails to get myList and throws exception.
-     * @return Returns empty List if no hit, not {@code null}
+     * @return Returns {@link TempMyListVideoGroup instance with empty List, not {@code null}
      * @throws NicoAPIException if fail to get myList
      */
-    public synchronized List<VideoInfo> getTempMyList()throws NicoAPIException{
+    public synchronized TempMyListVideoGroup getTempMyList()throws NicoAPIException{
         if ( isLogin() ) {
-            String tempMyListUrl = "http://www.nicovideo.jp/api/deflist/list";
-            HttpResponseGetter getter = new HttpResponseGetter();
-            getter.tryGet(tempMyListUrl, getCookieStore());
-            return TempMyListVideoInfo.parse(getter.response);
+            return new TempMyListVideoGroup(this);
         }else{
             throw new NicoAPIException.NoLoginException("no login > temp myList",NicoAPIException.EXCEPTION_NOT_LOGIN_TEMP_MYLIST);
         }
@@ -151,40 +148,14 @@ public class NicoClient extends LoginInfo{
     /**
      * マイリスグループを取得します【ログイン必須】<br>
      *     get myList group , be sure to login beforehand.<br>
-     * @return Returns {@code Map<String,String>} of myList name and its ID
+     * @return Returns {@link MyListGroup} instance with {@code List} of {@link MyListGroup.MyListInfo}
      * @throws NicoAPIException if fail to get myList group
      */
-    public synchronized Map<String,String> getMyListGroup() throws NicoAPIException{
+    public synchronized MyListGroup getMyListGroup() throws NicoAPIException{
         if ( !isLogin() ){
             throw new NicoAPIException.NoLoginException("no login > myList group",NicoAPIException.EXCEPTION_NOT_LOGIN_MYLIST_GROUP);
         }
-        String myListGroupUrl = "http://www.nicovideo.jp/api/mylistgroup/list";
-        HttpResponseGetter getter = new HttpResponseGetter();
-        if ( getter.tryGet(myListGroupUrl, getCookieStore()) ){
-            try{
-                JSONObject json = new JSONObject(getter.response);
-                if ( !json.optString("status").equals("ok")){
-                    String message = "Unexpected API response status > myList group ";
-                    try{
-                        JSONObject error = json.getJSONObject("error");
-                        String code = error.getString("code");
-                        String description = error.getString("description");
-                        message += (code + ":" +description);
-                    }catch (JSONException e){}
-                    throw new NicoAPIException.APIUnexpectedException(message);
-                }
-                JSONArray array = json.optJSONArray("mylistgroup");
-                Map<String,String> myListGroup = new HashMap<String,String>();
-                for ( int i=0 ; i<array.length() ; i++){
-                    JSONObject item = array.optJSONObject(i);
-                    myListGroup.put(item.optString("name"),item.optString("id"));
-                }
-                return myListGroup;
-            }catch (JSONException e){
-                throw new NicoAPIException.ParseException(e.getMessage(),getter.response);
-            }
-        }
-        throw new NicoAPIException.ParseException("no parse target > myList group",null);
+        return new MyListGroup(this);
     }
 
     /**
@@ -195,22 +166,15 @@ public class NicoClient extends LoginInfo{
      * マイリスIDは{@link #getMyListGroup()}で取得できます。<br>
      *     This can get your own myList only, but may fails due to its accessibility by user.
      *     You can get myList ID from {@link #getMyListGroup()}.
-     * @param ID yhe target myList ID, cannot be {@code null}
+     * @param ID the target myList ID, cannot be {@code null}
      * @return Returns empty List if no hit, not {@code null}
      * @throws NicoAPIException if fail to get myList, which my be because of no target myList or invalid myList ID
      */
-    public synchronized List<VideoInfo> getMyList (String ID) throws NicoAPIException{
+    public synchronized MyListVideoGroup getMyList (int ID) throws NicoAPIException{
         if ( !isLogin() ){
             throw new NicoAPIException.NoLoginException("no login > myList",NicoAPIException.EXCEPTION_NOT_LOGIN_MYLIST);
         }
-        if ( ID == null ){
-            throw new NicoAPIException.InvalidParamsException("myList ID is null");
-        }
-        String myListUrl = "http://www.nicovideo.jp/mylist/%s?rss=2.0";
-        HttpResponseGetter getter = new HttpResponseGetter();
-        String path = String.format(myListUrl, ID);
-        getter.tryGet(path, getCookieStore());
-        return RankingVideoInfo.parse(getter.response,null,null,null);
+        return MyListVideoGroup.getMyListGroup(ID,this);
     }
 
     /**
@@ -232,9 +196,9 @@ public class NicoClient extends LoginInfo{
             videoInfo.getMessageServerUrl();
             videoInfo.getThreadID();
         }catch (NicoAPIException e){
-            ((VideoInfoManager)videoInfo).getFlv(getCookieStore());
+            videoInfo.getFlv(getCookieStore());
         }
-        return ((VideoInfoManager)videoInfo).getComment(true);
+        return videoInfo.getComment(true);
     }
 
     /**
@@ -256,10 +220,10 @@ public class NicoClient extends LoginInfo{
             videoInfo.getMessageServerUrl();
             videoInfo.getThreadID();
         }catch (NicoAPIException e){
-            ((VideoInfoManager)videoInfo).getFlv(getCookieStore());
+            videoInfo.getFlv(getCookieStore());
         }
-        return ((VideoInfoManager)videoInfo).getComment(max);
-        //return ((VideoInfoManager)videoInfo).getCommentByJson(max);
+        return videoInfo.getComment(max);
+        //return videoInfo.getCommentByJson(max);
     }
 
     /**

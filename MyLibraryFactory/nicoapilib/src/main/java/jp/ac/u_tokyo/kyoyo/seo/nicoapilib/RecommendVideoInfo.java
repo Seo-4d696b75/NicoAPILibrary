@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * 取得したニコ動のおすすめ動画情報をパースします<br>
  * This parses recommend response form Nico.    <br><br>
  *
- * This class extending VideoInfoManager provides methods to parse XML<br>
+ * This class extending VideoInfo provides methods to parse XML<br>
  * from http://flapi.nicovideo.jp/api/getrelation?page={0}&sort={1}&order={2}&video={3}<br>
  *      query params;<br>
  *      {0} : ? any integer<br>
@@ -52,7 +52,7 @@ import java.util.regex.Pattern;
  * @author Seo-4d696b75
  */
 
-public class RecommendVideoInfo extends VideoInfoManager {
+public class RecommendVideoInfo extends VideoInfo {
 
     private RecommendVideoInfo (String item) throws NicoAPIException.ParseException {
         initialize(item);

@@ -459,6 +459,21 @@ Method;		POST
    postするパラメータは　group_id={マイリスＩＤ}   だけ
 Response;
 マイリス要素の配列が目的のマイリス要素になっただけのJSON
+{
+"mylistgroup":{
+		"id":"{(int)マイリストＩＤ}",
+		"user_id":"{(int)ユーザＩＤ}",
+		"name":"{マイリストの名前}",
+		"description":"{マイリスト説明}",
+		"public":"{公開設定 1:true 0:false}",
+		"default_sort":"{ソートの種類}",
+		"create_time":{マイリス生成日時},
+		"update_time":{マイリスの最終編集日時},
+		"sort_order":"{unknown}",
+		"icon_id":"{マイリスのアイコン種類}"
+		}
+"status":"ok"
+} 
 
 確認　on 2017.02.26
 
@@ -512,6 +527,7 @@ Response;
       			]]>
       		</description>
     	</item>
+    	..............
 	</channel>
 </rss>
 ＊マイリス生成・登録日時の表示形式は"EEE, dd MMM yyyy HH:mm:ss Z"、曜日と月は英語略表記　

@@ -98,8 +98,8 @@ public class CommentInfo {
      */
     public String content;  //comment
     /**
-     * コメントの投稿日時、{@link VideoInfoManager#dateFormatBase 共通形式}に従う<br>
-     * date when the comment is contributed, based on {@link VideoInfoManager#dateFormatBase common format}
+     * コメントの投稿日時、{@link VideoInfo#dateFormatBase 共通形式}に従う<br>
+     * date when the comment is contributed, based on {@link VideoInfo#dateFormatBase common format}
      */
     public String date;
     /**
@@ -297,7 +297,7 @@ public class CommentInfo {
     }
 
     private String convertDate (long time){
-        return VideoInfoManager.dateFormatBase.format(new Date(time * 1000));
+        return VideoInfo.dateFormatBase.format(new Date(time * 1000));
     }
 
     /**

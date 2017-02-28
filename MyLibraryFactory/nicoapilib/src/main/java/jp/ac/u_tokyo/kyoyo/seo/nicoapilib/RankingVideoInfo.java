@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * ニコ動ランキングAPIから取得できるフィールドは{@link #parse(String, String, String, String) こちらを参照}<br>
  * You can get {@link #parse(String, String, String, String) these fields} from ranking and myList API.<br><br>
  *
- * This class extending VideoInfoManager provides methods to parse ranking response in XML<br>
+ * This class extending VideoInfo provides methods to parse ranking response in XML<br>
  * from http://www.nicovideo.jp/ranking/{0}/{1}/{2}?rss=2.0<br>
  *      params;<br>
  *      {0} : rank kind param  (view,mylist,fav,res)<br>
@@ -123,7 +123,7 @@ import java.util.regex.Pattern;
  * @author Seo-4d696b75
  */
 
-public class RankingVideoInfo extends VideoInfoManager {
+public class RankingVideoInfo extends VideoInfo {
 
     //pass XML to initialize fields
     //when ranking, also pass ranking params (can be null)
