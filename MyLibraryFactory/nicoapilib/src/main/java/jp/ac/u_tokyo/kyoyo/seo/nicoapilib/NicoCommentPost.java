@@ -337,7 +337,7 @@ public class NicoCommentPost {
             path = String.format(path, group.lastComment / 100, group.threadID);
             if (getter.tryGet(path, client.getCookieStore())) {
                 String postKey = getter.response.split("=")[1];
-                String bodyFormat = "<chat thread=\"%s\" ticket=\"%s\" user_id=\"%d\" vpos=\"%d\" mail=\"%s\" postkey=\"%s\" premium=\"%d\">%s</chat>";
+                String bodyFormat = "<chat thread=\"%d\" ticket=\"%s\" user_id=\"%d\" vpos=\"%d\" mail=\"%s\" postkey=\"%s\" premium=\"%d\">%s</chat>";
                 String body = String.format(bodyFormat, group.threadID, group.ticket, userID, startTime, command, postKey, premium, comment);
                 path = targetVideo.getMessageServerUrl();
                 if (getter.tryPost(path, body)) {

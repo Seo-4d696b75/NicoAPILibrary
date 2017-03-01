@@ -108,13 +108,13 @@ RequestURL; http://seiga.nicovideo.jp/api/user/info?id={5}
 	{5} : userID
 Method; GET
 Response;
-<?xml version="1.0" encoding="UTF-8" ?>
-<response>
-	<user>
-		<id>{userID}</id>
-		<nickname>{userName}</nickname>
- 	</user>
-</response>
+	<?xml version="1.0" encoding="UTF-8" ?>
+	<response>
+		<user>
+			<id>{userID}</id>
+			<nickname>{userName}</nickname>
+ 		</user>
+	</response>
 
 特別ログインなど必要ないが、条件不明で取得に失敗することもある
 
@@ -123,25 +123,25 @@ Response;
 RequestURL; http://www.nicovideo.jp/user/{5}/video?rss=2.0
 Method; GET
 Response;
-<?xml version="1.0" encoding="utf-8" ?>
-<rss version="2.0">
-	<channel>
-		<title>{userName}さんの投稿動画‐ニコニコ動画</title>
-		<link>......</link>
-		<atom:link rel="self" type="application/rss+xml" href="http://www.nicovideo.jp/user/{5}/video?rss=2.0" />
-		<description>{userName}さんが公開している投稿動画の一覧</description>
-		<pubDate>Sat, 23 Jul 2016 09:35:38 +0900</pubDate>
-		<lastBuildDate>Sat, 23 Jul 2016 09:35:38 +0900</lastBuildDate>
-		<generator>ニコニコ動画</generator>
-		<dc:creator>{userName}</dc:creator>
-		<language>ja-jp</language>
-		<copyright>(c) DWANGO Co., Ltd.</copyright>
-		<docs>http://blogs.law.harvard.edu/tech/rss</docs>
-		<item>
-			......
-		</item>
-	</channel>
-</rss>
+	<?xml version="1.0" encoding="utf-8" ?>
+	<rss version="2.0">
+		<channel>
+			<title>{userName}さんの投稿動画‐ニコニコ動画</title>
+			<link>......</link>
+			<atom:link rel="self" type="application/rss+xml" href="http://www.nicovideo.jp/user/{5}/video?rss=2.0" />
+			<description>{userName}さんが公開している投稿動画の一覧</description>
+			<pubDate>Sat, 23 Jul 2016 09:35:38 +0900</pubDate>
+			<lastBuildDate>Sat, 23 Jul 2016 09:35:38 +0900</lastBuildDate>
+			<generator>ニコニコ動画</generator>
+			<dc:creator>{userName}</dc:creator>
+			<language>ja-jp</language>
+			<copyright>(c) DWANGO Co., Ltd.</copyright>
+			<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+			<item>
+				......
+			</item>
+		</channel>
+	</rss>
 ただし、投稿動画の公開設定によっては取得できない。
 
 (3)プロフィールから取得
@@ -192,36 +192,36 @@ RequestURL;http://ext.nicovideo.jp/api/getthumbinfo/{0}
 	{0} : 動画ID
 Method; GET
 Response;
-<?xml version="1.0" encoding="UTF-8"?>
-<nicovideo_thumb_response status="ok">
-  <thumb>
-    <video_id>{動画ID}</video_id>
-    <title>{動画タイトル}</title>
-    <description>{動画の説明}</description>
-    <thumbnail_url>{サムネイル画像のURL}</thumbnail_url>
-    <first_retrieve>{動画投稿日時}</first_retrieve>
-    <length>{動画長さ}</length>
-    <movie_type>flv</movie_type>
-    <size_high>{動画サイズ(byte)}</size_high>
-    <size_low>{低画質時の動画サイズ}</size_low>
-    <view_counter>{再生数(int)}</view_counter>
-    <comment_num>{コメント数(int)}</comment_num>
-    <mylist_counter>{マイリス数(int)}</mylist_counter>
-    <last_res_body>{最新のコメント内容}</last_res_body>
-    <watch_url>http://www.nicovideo.jp/watch/{動画ID}</watch_url>
-    <thumb_type>{video または mymemory}</thumb_type>
-    <embeddable>{外部プレイヤーで再生可能か 0:false 1:true}</embeddable>
-    <no_live_play>{生放送プレイヤーで再生禁止か 0:false 1:true}</no_live_play>
-    <tags domain="jp">
-      <tag>{タグ}</tag>
-      ......
-      <tag>{タグ}</tag>
-    </tags>
-    <user_id>{投稿ユーザID}</user_id>
-    <user_nickname>{投稿ユーザ名}</user_nickname>
-    <user_icon_url>{投稿ユーザのアイコン画像URL}</user_icon_url>
-  </thumb>
-</nicovideo_thumb_response>
+	<?xml version="1.0" encoding="UTF-8"?>
+	<nicovideo_thumb_response status="ok">
+		<thumb>
+			<video_id>{動画ID}</video_id>
+	    	<title>{動画タイトル}</title>
+		    <description>{動画の説明}</description>
+			<thumbnail_url>{サムネイル画像のURL}</thumbnail_url>
+			<first_retrieve>{動画投稿日時}</first_retrieve>
+			<length>{動画長さ}</length>
+			<movie_type>flv</movie_type>
+			<size_high>{動画サイズ(byte)}</size_high>
+			<size_low>{低画質時の動画サイズ}</size_low>
+	  	 	<view_counter>{再生数(int)}</view_counter>
+			<comment_num>{コメント数(int)}</comment_num>
+	   		<mylist_counter>{マイリス数(int)}</mylist_counter>
+	   		<last_res_body>{最新のコメント内容}</last_res_body>
+	   		<watch_url>http://www.nicovideo.jp/watch/{動画ID}</watch_url>
+	   		<thumb_type>{video または mymemory}</thumb_type>
+	   		<embeddable>{外部プレイヤーで再生可能か 0:false 1:true}</embeddable>
+	    	<no_live_play>{生放送プレイヤーで再生禁止か 0:false 1:true}</no_live_play>
+	    	<tags domain="jp">
+	    		<tag>{タグ}</tag>
+	      		......
+	      		<tag>{タグ}</tag>
+	    	</tags>
+	    	<user_id>{投稿ユーザID}</user_id>
+	   	 	<user_nickname>{投稿ユーザ名}</user_nickname>
+	    	<user_icon_url>{投稿ユーザのアイコン画像URL}</user_icon_url>
+	  	</thumb>
+	</nicovideo_thumb_response>
 
 ＊日時の表示形式はISO 8601の拡張形"yyyy-MM-dd'T'HH:mm:ss'+90:00'"
 　タイムゾーンは固定の模様？　
@@ -234,23 +234,23 @@ Response;
 	投稿ユーザID→チャンネルID
 	投稿ユーザ名→チャンネル名
 	投稿ユーザのアイコン画像URL→チャンネルアイコンのURL
-	.....
-    </tags>
-    <ch_id>{チャンネルID}</ch_id>
-    <ch_name>{チャンネル名}</ch_name>
-    <ch_icon_url>{チャンネルアイコンのURL}</ch_icon_url>
-  </thumb>
-</nicovideo_thumb_response>
+			.....
+			</tags>
+			<ch_id>{チャンネルID}</ch_id>
+			<ch_name>{チャンネル名}</ch_name>
+			<ch_icon_url>{チャンネルアイコンのURL}</ch_icon_url>
+		</thumb>
+	</nicovideo_thumb_response>
 
 取得に失敗した場合
 Reeponse;
-<?xml version="1.0" encoding="UTF-8" ?>
-<nicovideo_thumb_response status="fail">
-	<error>
-		<code>{errorCode(String)}</code>
-		<description>{エラーの内容}</description>
-	</error>
-</nicovideo_thumb_response>
+	<?xml version="1.0" encoding="UTF-8" ?>
+	<nicovideo_thumb_response status="fail">
+		<error>
+			<code>{errorCode(String)}</code>
+			<description>{エラーの内容}</description>
+		</error>
+	</nicovideo_thumb_response>
 ①存在しない動画
 code		:	NOT_FOUND
 description	:	not found or invalid
@@ -322,55 +322,55 @@ http://www.nicovideo.jp/ranking/{0}/{1}/{2}?rss=2.0
      *{0}を省略する、または不正な値を渡すとRSSではなくランキングページのHTMLが返ってくる
 Method; GET
 Response;
-<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-	<channel>
-		<title>{指定したカテゴリ名}の{指定したランキング種類名}ランキング({指定した期間名})‐ニコニコ動画</title>
-		<link>http://www.nicovideo.jp/ranking/{0}/{期間パラメータ}/{カテゴリパラメータ}</link>
-		<description>{ランキングの更新時刻に関する説明}</description>
-		<pubDate>{ランキング発行日時＊}</pubDate>
-		<lastBuildDate>{？<pubDate>要素と同じ場合しか確認できなかった}</lastBuildDate>
-		<generator>ニコニコ動画</generator>
-		<language>ja-jp</language>
-		<copyright>(c) DWANGO Co., Ltd.</copyright>
-		<docs>http://blogs.law.harvard.edu/tech/rss</docs>
-		<atom:link rel="self" type="application/rss+xml" href="http://www.nicovideo.jp/ranking/{0}/{1}/{2}?rss=2.0"/>
-		<item>
-        	<title>第{順位1~100}位：{動画タイトル}</title>
-        	<link>http://www.nicovideo.jp/watch/{動画ＩＤ}</link>
-        	<guid isPermaLink="false">.....</guid>
-        	<pubDate>{ランキング発行日時＊}</pubDate>
-        	<description>
-        		<![CDATA[
-            	<p class="nico-thumbnail">
-                	<img
-                		alt="{動画タイトル}" 
-                      	src="{動画サムネイル画像URL}" 
-                      	width="{サムネイル横幅}" 
-                      	height="{サムネイル縦幅}" 
-                      	border="{0/1}"/>
-                </p>
-                <p class="nico-description">{動画説明}</p>
-                <p class="nico-info">
-                	<small>
-                		<strong class="nico-info-number">{ランキングソートに用いた値}</strong>pts.｜
-                		<strong class="nico-info-length">{動画長さ}</strong>｜
-                		<strong class="nico-info-date">{投稿日時}</strong> 投稿<br/>
-                		<strong>合計</strong>&nbsp;&#x20;再生：
-                		<strong class="nico-info-total-view">{合計再生数}</strong>&nbsp;&#x20;コメント：
-                		<strong class="nico-info-total-res">{合計コメント数}</strong>&nbsp;&#x20;マイリスト：
-                		<strong class="nico-info-total-mylist">{合計マイリス数}</strong><br/>
-                		<strong>{指定した期間名}</strong>&nbsp;&#x20;再生：
-                		<strong class="nico-info-{1}-view">{指定した期間での再生数}</strong>&nbsp;&#x20;コメント：
-                		<strong class="nico-info-{1}-res">{指定した期間でのコメント数}</strong>&nbsp;&#x20;マイリスト：
-                		<strong class="nico-info-{1}-mylist">{指定した期間でのマイリス数}</strong><br/>
-                	</small>
-                </p>
-                ]]>
-            </description>
-    	</item>
-	</channel>
-</rss>
+	<?xml version="1.0" encoding="utf-8"?>
+	<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+		<channel>
+			<title>{指定したカテゴリ名}の{指定したランキング種類名}ランキング({指定した期間名})‐ニコニコ動画</title>
+			<link>http://www.nicovideo.jp/ranking/{0}/{期間パラメータ}/{カテゴリパラメータ}</link>
+			<description>{ランキングの更新時刻に関する説明}</description>
+			<pubDate>{ランキング発行日時＊}</pubDate>
+			<lastBuildDate>{？<pubDate>要素と同じ場合しか確認できなかった}</lastBuildDate>
+			<generator>ニコニコ動画</generator>
+			<language>ja-jp</language>
+			<copyright>(c) DWANGO Co., Ltd.</copyright>
+			<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+			<atom:link rel="self" type="application/rss+xml" href="http://www.nicovideo.jp/ranking/{0}/{1}/{2}?rss=2.0"/>
+			<item>
+        		<title>第{順位1~100}位：{動画タイトル}</title>
+        		<link>http://www.nicovideo.jp/watch/{動画ＩＤ}</link>
+        		<guid isPermaLink="false">.....</guid>
+        		<pubDate>{ランキング発行日時＊}</pubDate>
+        		<description>
+        			<![CDATA[
+            		<p class="nico-thumbnail">
+                		<img
+                			alt="{動画タイトル}" 
+                      		src="{動画サムネイル画像URL}" 
+                      		width="{サムネイル横幅}" 
+                      		height="{サムネイル縦幅}" 
+                      		border="{0/1}"/>
+                	</p>
+                	<p class="nico-description">{動画説明}</p>
+               		<p class="nico-info">
+                		<small>
+                			<strong class="nico-info-number">{ランキングソートに用いた値}</strong>pts.｜
+                			<strong class="nico-info-length">{動画長さ}</strong>｜
+                			<strong class="nico-info-date">{投稿日時}</strong> 投稿<br/>
+                			<strong>合計</strong>&nbsp;&#x20;再生：
+                			<strong class="nico-info-total-view">{合計再生数}</strong>&nbsp;&#x20;コメント：
+                			<strong class="nico-info-total-res">{合計コメント数}</strong>&nbsp;&#x20;マイリスト：
+                			<strong class="nico-info-total-mylist">{合計マイリス数}</strong><br/>
+                			<strong>{指定した期間名}</strong>&nbsp;&#x20;再生：
+                			<strong class="nico-info-{1}-view">{指定した期間での再生数}</strong>&nbsp;&#x20;コメント：
+                			<strong class="nico-info-{1}-res">{指定した期間でのコメント数}</strong>&nbsp;&#x20;マイリスト：
+                			<strong class="nico-info-{1}-mylist">{指定した期間でのマイリス数}</strong><br/>
+                		</small>
+                	</p>
+                	]]>
+            	</description>
+    		</item>
+		</channel>
+	</rss>
 
 ＊ランキング発行日時の表示形式は"EEE, dd MMM yyyy HH:mm:ss Z"、曜日と月は英語略表記　
 		（例）"Thu, 02 Feb 2017 20:00:00 +0900"

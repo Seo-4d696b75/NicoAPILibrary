@@ -359,9 +359,9 @@ public class VideoInfo extends VideoInfoStorage {
         String target;
         try {
             synchronized (this) {
-                if (threadID == null) {
+                if (threadID < 0) {
                     target = extract(res, VideoInfo.THREAD_ID);
-                    threadID = URLDecoder.decode(target);
+                    threadID = Integer.parseInt(URLDecoder.decode(target));
                 }
                 if (messageServerUrl == null) {
                     target = extract(res, VideoInfo.MESSAGE_SERVER_URL);
@@ -565,10 +565,10 @@ public class VideoInfo extends VideoInfoStorage {
         synchronized (commentGetLock) {
             if ( isNew || commentGroup == null) {
                 try{
-                    String threadID = getThreadID();
+                    int threadID = getThreadID();
                     String messageServerUrl = getMessageServerUrl();
                     HttpResponseGetter getter = new HttpResponseGetter();
-                    String postEntityFormat = "<packet><thread thread=\"%1$s\" version=\"20090904\"  /><thread_leaves scores=\"1\" thread=\"%1$s\">0-%2$d:100,1000</thread_leaves></packet>";
+                    String postEntityFormat = "<packet><thread thread=\"%1$d\" version=\"20090904\"  /><thread_leaves scores=\"1\" thread=\"%1$d\">0-%2$d:100,1000</thread_leaves></packet>";
                     String postEntity = String.format(postEntityFormat, threadID, getLength() / 60 + 1);
                     getter.tryPost(messageServerUrl, postEntity);
                     commentGroup = CommentInfo.parse(getter.response);
@@ -599,10 +599,10 @@ public class VideoInfo extends VideoInfoStorage {
                 max = 1000;
             }
             try {
-                String threadID = getThreadID();
+                int threadID = getThreadID();
                 String messageServerUrl = getMessageServerUrl();
                 HttpResponseGetter getter = new HttpResponseGetter();
-                String postEntityFormat = "<thread res_from=\"-%d\" version=\"20061206\" scores=\"1\" thread=\"%s\" />";
+                String postEntityFormat = "<thread res_from=\"-%d\" version=\"20061206\" scores=\"1\" thread=\"%d\" />";
                 String postEntity = String.format(postEntityFormat, max, threadID);
                 getter.tryPost(messageServerUrl, postEntity);
                 commentGroup = CommentInfo.parse(getter.response);
@@ -616,9 +616,9 @@ public class VideoInfo extends VideoInfoStorage {
     public List<CommentInfo> getCommentByJson (int max) throws NicoAPIException{
         synchronized (commentGetLock) {
             try {
-                String threadID = getThreadID();
+                int threadID = getThreadID();
                 String messageServerUrl = getMessageServerUrl();
-                String paramFormat = ".json/thread?version=20090904&thread=%s&res_from=-%d";
+                String paramFormat = ".json/thread?version=20090904&thread=%d&res_from=-%d";
                 String param = String.format(paramFormat, threadID, max);
                 String path = messageServerUrl;
                 Matcher matcher = Pattern.compile("(.+/api)/?").matcher(path);

@@ -30,7 +30,7 @@ public class VideoInfoPackage implements Serializable {
     protected int commentCounter = -1;
     protected int myListCounter = -1;
     protected String[] tags;
-    protected String threadID;
+    protected int threadID;
     protected String messageServerURL;
     protected String flvURL;
     protected float point = 0f;

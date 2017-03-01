@@ -159,7 +159,7 @@ public class VideoInfoStorage {
      * 動画のスレッドID。<br>
      *     メッセージサーバとの通信やflvURLの取得に使用します。
      */
-    protected String threadID;
+    protected int threadID;
     /**
      * 動画のコメントの取得先<br>
      *     you can get comments from this.
@@ -259,8 +259,8 @@ public class VideoInfoStorage {
     public String getDescription() throws NicoAPIException{
         return getString(DESCRIPTION);
     }
-    public String getThreadID() throws NicoAPIException{
-        return getString(THREAD_ID);
+    public int getThreadID() throws NicoAPIException{
+        return getInt(THREAD_ID);
     }
     public String getMessageServerUrl() throws NicoAPIException{
         return getString(MESSAGE_SERVER_URL);
@@ -300,9 +300,6 @@ public class VideoInfoStorage {
                 break;
             case DESCRIPTION:
                 target = description;
-                break;
-            case THREAD_ID:
-                target = threadID;
                 break;
             case MESSAGE_SERVER_URL:
                 target = messageServerUrl;
@@ -361,6 +358,9 @@ public class VideoInfoStorage {
                 break;
             case CONTRIBUTOR_ID:
                 target = contributorID;
+                break;
+            case THREAD_ID:
+                target = threadID;
                 break;
             default:
                 throw new NicoAPIException.InvalidParamsException("invalid video filed key : " + key);

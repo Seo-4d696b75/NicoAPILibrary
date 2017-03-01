@@ -1,5 +1,6 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,8 @@ public class MyListEditor extends HttpResponseGetter {
     }
     private String tokenURL = "http://www.nicovideo.jp/mylist_add/video/";
     protected LoginInfo info;
+
+    protected final String defaultVideoID = "sm9";
 
     protected String getToken(String anyVideoID) throws NicoAPIException{
         String path = tokenURL + anyVideoID;
@@ -49,16 +52,255 @@ public class MyListEditor extends HttpResponseGetter {
         } catch (NicoAPIException e) {
             video.getFlv(info.getCookieStore());
         }
-        return video.getThreadID();
+        return String.valueOf(video.getThreadID());
     }
 
-    protected int getDeleteCount(JSONObject response) throws NicoAPIException{
+    protected void addVideo (VideoInfo target, String description, String myListID, String rootURL) throws NicoAPIException{
+        if ( target == null ){
+            throw new NicoAPIException.InvalidParamsException(
+                    "no target video > add - myList",
+                    NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_VIDEO
+            );
+        }
+        if ( description == null ){
+            throw new NicoAPIException.InvalidParamsException(
+                    "description is null > add - myList",
+                    NicoAPIException.EXCEPTION_PARAM_MYLIST_DESCRIPTION
+            );
+        }
+        String threadID = getThreadID(target);
+        String path = rootURL + "add";
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("item_id",threadID);
+        params.put("description",description);
+        params.put("token",getToken(target.getID()));
+        if ( myListID != null ) {
+            params.put("gruop_id", myListID);
+        }
+        if ( tryPost(path,params,info.getCookieStore()) ){
+            checkStatusCode(super.response);
+        }else{
+            throw new NicoAPIException.HttpException(
+                    "http failure",
+                    NicoAPIException.EXCEPTION_HTTP_MYLIST_ADD,
+                    statusCode,path,"POST");
+        }
+    }
+
+    protected void updateVideo (VideoInfo target, String description, String myListID, String rootURL) throws NicoAPIException{
+        if ( target == null ){
+            throw new NicoAPIException.InvalidParamsException(
+                    "no target video > update - myList",
+                    NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_VIDEO
+            );
+        }
+        if ( description == null ){
+            throw new NicoAPIException.InvalidParamsException(
+                    "description is null > update - myList",
+                    NicoAPIException.EXCEPTION_PARAM_MYLIST_DESCRIPTION
+            );
+        }
+        String path = rootURL + "update";
+        Map<String,String> params = new HashMap<String ,String>();
+        params.put("token", getToken(target.getID()));
+        params.put("description", description);
+        params.put("item_id", getThreadID(target) );
+        params.put("item_type", "0");
+        if ( myListID != null ){
+            params.put("gruop_id", myListID );
+        }
+        if ( tryPost(path,params,info.getCookieStore()) ){
+            checkStatusCode(super.response);
+        }else{
+            throw new NicoAPIException.HttpException(
+                    "http failure",
+                    NicoAPIException.EXCEPTION_HTTP_MYLIST_UPDATE,
+                    statusCode,path,"POST");
+        }
+    }
+
+    protected void deleteVideo (MyListVideoInfo[] videoList, String myListID, String rootURL) throws NicoAPIException{
+        if ( videoList == null || videoList.length == 0){
+            throw new NicoAPIException.InvalidParamsException(
+                    "no target video > delete - myList",
+                    NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_VIDEO
+            );
+        }
+        String path = rootURL + "delete";
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("token",getToken(videoList[0].getID()));
+        if ( myListID != null ) {
+            params.put("group_id", myListID);
+        }
+        for ( int i=0 ; i<videoList.length ; i++){
+            params.put(String.format("id_list[0][%d]",i), getThreadID(videoList[i]) );
+        }
+        if ( tryPost(path,params,info.getCookieStore()) ){
+            JSONObject root = checkStatusCode(super.response);
+            int delete = getDeleteCount(root);
+            if ( delete == videoList.length ){
+                return;
+            }else{
+                throw new NicoAPIException.InvalidParamsException(
+                        "fail to delete some of target videos from tempMyList",
+                        NicoAPIException.EXCEPTION_PARAM_MYLIST_DELETE);
+            }
+        }else{
+            throw new NicoAPIException.HttpException(
+                    "http failure",
+                    NicoAPIException.EXCEPTION_HTTP_MYLIST_DELETE,
+                    statusCode,path,"POST");
+        }
+
+    }
+
+    private int getDeleteCount(JSONObject response) throws NicoAPIException{
         try{
             return response.getInt("delete_count");
         }catch (JSONException e){
             throw new NicoAPIException.ParseException(
                     "fail to parse delete count",response.toString(),
-                    NicoAPIException.EXCEPTION_PARSE_TEMP_MYLIST_DELETE_COUNT);
+                    NicoAPIException.EXCEPTION_PARSE_MYLIST_DELETE_COUNT);
+        }
+    }
+
+    protected void moveVideo(MyListVideoInfo[] videoList, String myListID, MyListVideoGroup targetMyList, String rootURL) throws NicoAPIException{
+        if ( videoList == null || videoList.length == 0 ){
+            throw new NicoAPIException.InvalidParamsException(
+                    "no target video > move - myList",
+                    NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_VIDEO
+            );
+        }
+        if ( targetMyList == null ){
+            throw new NicoAPIException.InvalidParamsException(
+                    "no target myList > move - myList",
+                    NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_MYLIST
+            );
+        }
+        String path = rootURL + "move";
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("token",getToken(videoList[0].getID()));
+        params.put("target_group_id",String.valueOf(targetMyList.getMyListID()) );
+        if ( myListID != null ) {
+            params.put("group_id", myListID);
+        }
+        for ( int i=0 ; i<videoList.length ; i++){
+            params.put(String.format("id_list[0][%d]",i), getThreadID(videoList[i]) );
+        }
+        if ( tryPost(path,params,info.getCookieStore()) ){
+            JSONObject root = checkStatusCode(super.response);
+            MoveState state = getMoveState(root);
+            if ( state.isSuccess(videoList) ){
+                return;
+            }else{
+                throw new NicoAPIException.InvalidParamsException(
+                        "fail to move some of target videos from tempMyList",
+                        NicoAPIException.EXCEPTION_PARAM_MYLIST_MOVE);
+            }
+        }else{
+            throw new NicoAPIException.HttpException(
+                    "http failure",
+                    NicoAPIException.EXCEPTION_HTTP_MYLIST_MOVE,
+                    statusCode,path,"POST");
+        }
+    }
+
+    protected void copyVideo(MyListVideoInfo[] videoList, String myListID, MyListVideoGroup targetMyList, String rootURL) throws NicoAPIException{
+        if ( videoList == null || videoList.length == 0 ){
+            throw new NicoAPIException.InvalidParamsException(
+                    "no target video > copy - myList",
+                    NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_VIDEO
+            );
+        }
+        if ( targetMyList == null ){
+            throw new NicoAPIException.InvalidParamsException(
+                    "no target myList > move - myList",
+                    NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_MYLIST
+            );
+        }
+        String path = rootURL + "copy";
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("token",getToken(videoList[0].getID()));
+        params.put("target_group_id",String.valueOf(targetMyList.getMyListID()) );
+        if ( myListID != null ){
+            params.put("group_id", myListID);
+        }
+        for ( int i=0 ; i<videoList.length ; i++){
+            params.put(String.format("id_list[0][%d]",i), getThreadID(videoList[i]) );
+        }
+        if ( tryPost(path,params,info.getCookieStore()) ){
+            JSONObject root = checkStatusCode(super.response);
+            MoveState state = getMoveState(root);
+            if ( state.isSuccess(videoList) ){
+                return;
+            }else{
+                throw new NicoAPIException.InvalidParamsException(
+                        "fail to move some of target videos from tempMyList",
+                        NicoAPIException.EXCEPTION_PARAM_MYLIST_COPY);
+            }
+        }else{
+            throw new NicoAPIException.HttpException(
+                    "http failure",
+                    NicoAPIException.EXCEPTION_HTTP_MYLIST_COPY,
+                    statusCode,path,"POST");
+        }
+    }
+
+    private class MoveState{
+        protected int[] matches;
+        protected int[] duplicates;
+        protected int[] targets;
+        private MoveState(int[] matches, int[] duplicates, int[] targets){
+            this.matches = matches;
+            this.duplicates = duplicates;
+            this.targets = targets;
+        }
+        protected boolean isSuccess (MyListVideoInfo[] videoList){
+            try {
+                for (MyListVideoInfo item : videoList) {
+                    int id = item.getThreadID();
+                    if ( !isContain(id,targets)){
+                        return false;
+                    }
+                }
+                return true;
+            }catch (Exception e){
+                return false;
+            }
+        }
+        private boolean isContain (int target, int[] array){
+            for ( Integer item : array){
+                if ( item == target ){
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    protected MoveState getMoveState (JSONObject root) throws NicoAPIException{
+        return new MoveState(
+                getItem(root,"matches"),
+                getItem(root,"duplicates"),
+                getItem(root,"targets")
+        );
+    }
+
+    private int[] getItem (JSONObject root, String key) throws NicoAPIException{
+        try{
+            JSONArray array = root.getJSONObject(key).getJSONArray("item");
+            int[] detect = new int[array.length()];
+            for ( int i=0 ; i<array.length() ; i++){
+                JSONObject item = array.getJSONObject(i);
+                detect[i] = item.getInt("id");
+            }
+            return detect;
+        }catch (JSONException e){
+            throw new NicoAPIException.ParseException(
+                    "fail to parse move/copy state > myList",
+                    root.toString(),
+                    NicoAPIException.EXCEPTION_PARSE_MYLIST_MOVE_STATE
+            );
         }
     }
 

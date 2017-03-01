@@ -81,7 +81,7 @@ public class MyListVideoInfo extends VideoInfo {
 
     private synchronized void initialize(JSONObject item)  throws NicoAPIException.ParseException {
         try {
-            threadID = item.getString("item_id");
+            threadID = item.getInt("item_id");
             myListItemDescription = item.getString("description");
             addDate = convertDate(item.getLong("create_time"));
             updateDate = convertDate(item.getLong("update_time"));

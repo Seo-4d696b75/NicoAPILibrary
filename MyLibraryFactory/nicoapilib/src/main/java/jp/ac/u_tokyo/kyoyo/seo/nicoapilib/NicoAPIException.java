@@ -230,7 +230,7 @@ public class NicoAPIException extends Exception {
     /**
      * failed to parse delete counting
      */
-    public static final int EXCEPTION_PARSE_TEMP_MYLIST_DELETE_COUNT = 212;
+    public static final int EXCEPTION_PARSE_MYLIST_DELETE_COUNT = 212;
     /**
      * fail to parse Json response about myList and tempMyList.
      */
@@ -247,6 +247,10 @@ public class NicoAPIException extends Exception {
      * fail to parse RSS (in XML) response meta about myList.
      */
     public static final int EXCEPTION_PARSE_MYLIST_RSS = 216;
+    /**
+     * fail to parse JSON response when try moving or copying myList videos.
+     */
+    public static final int EXCEPTION_PARSE_MYLIST_MOVE_STATE = 217;
 
     /**
      * APIからのレスポンスのパースに失敗すると投げられます<br>
@@ -311,13 +315,42 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_PARAM_MYLIST_EDIT_PARAM = 309;
     /**
-     * fail to delete some of passed videos because they do not exist in tempMyList.
+     * fail to delete some of the passed videos because they do not exist in the (temp)MyList.
+     * When trying to delete video, you get videos from {@link MyListVideoGroup},{@link TempMyListVideoGroup}
+     * and make sure that myList contains the target video.
      */
-    public static final int EXCEPTION_PARAM_TEMP_MYLIST_DELETE = 310;
+    public static final int EXCEPTION_PARAM_MYLIST_DELETE = 310;
     /**
-     * fail to get myList because not login or it is not public myList of others.
+     * fail to get myList because not login or the target myList is not public myList of others.
+     * Getting public myList does not needs any login, but
+     * getting your non-public myList requires login.
+     * Not to say, you can not get others' non-public myList in any case.
      */
     public static final int EXCEPTION_PARAM_MYLIST_ID = 311;
+    /**
+     * fail to move some some of the passed videos because they don't exist in (temp)MyList,
+     * or because the same videos already exist in target myList yet.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_MOVE = 312;
+    /**
+     * fail to copy some some of the passed videos because they don't exist in (temp)MyList,
+     * or because the same videos already exist in target myList yet.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_COPY = 313;
+    /**
+     * fail to add/delete/update/move/copy target video because {@code null} or empty array is passed.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_TARGET_VIDEO = 314;
+    /**
+     * fail to add/update the video because description param is {@code null}.
+     * When want to set no description, empty String has to be passed.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_DESCRIPTION = 315;
+    /**
+     * fail to move/copy the video to target myList because that myList is {@code null}.
+     * Be sure to get {@link MyListGroup} and pass some of its {@link MyListVideoGroup}
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_TARGET_MYLIST = 316;
     /**
      * 不正な引数を渡すと投げられます<br>
      * Thrown if invalid argument is passed.
@@ -352,7 +385,7 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_NOT_LOGIN_MYLIST_GROUP = 404;
     /**
-     * tried to get myList without login. at {@link NicoClient#getMyList(String)}
+     * tried to get myList without login. at {@link NicoClient#getMyList(int)}
      */
     public static final int EXCEPTION_NOT_LOGIN_MYLIST = 405;
     /**
@@ -441,25 +474,25 @@ public class NicoAPIException extends Exception {
     }
 
     /**
-     * http failure while trying to add video in tempMyList.
+     * http failure while trying to add video in (temp)MyList.
      */
-    public static final int EXCEPTION_HTTP_TEMP_MYLIST_ADD = 700;
+    public static final int EXCEPTION_HTTP_MYLIST_ADD = 700;
     /**
      * http failure while trying to get NicoAPI.token in order to edit myList.
      */
     public static final int EXCEPTION_HTTP_MYLIST_TOKEN = 701;
     /**
-     * http failure while trying to update tempMyList.
+     * http failure while trying to update (temp)MyList.
      */
-    public static final int EXCEPTION_HTTP_TEMP_MYLIST_UPDATE = 702;
+    public static final int EXCEPTION_HTTP_MYLIST_UPDATE = 702;
     /**
-     * http failure while trying to delete a video of tempMyList.
+     * http failure while trying to delete a video of (temp)MyList.
      */
-    public static final int EXCEPTION_HTTP_TEMP_MYLIST_DELETE = 703;
+    public static final int EXCEPTION_HTTP_MYLIST_DELETE = 703;
     /**
-     * http failure while trying to move a video from tempMyList to another myList.
+     * http failure while trying to move a video from (temp)MyList to another myList.
      */
-    public static final int EXCEPTION_HTTP_TEMP_MYLIST_MOVE = 704;
+    public static final int EXCEPTION_HTTP_MYLIST_MOVE = 704;
     /**
      * http failure while trying to get tempMyList.
      */
@@ -480,6 +513,10 @@ public class NicoAPIException extends Exception {
      * http failure while trying to get myList specified with myListID directly.
      */
     public static final int EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT = 709;
+    /**
+     * http failure while trying to copy a video from (temp)MyList to another myList.
+     */
+    public static final int EXCEPTION_HTTP_MYLIST_COPY = 710;
     /**
      * HTTP通信に失敗
      */

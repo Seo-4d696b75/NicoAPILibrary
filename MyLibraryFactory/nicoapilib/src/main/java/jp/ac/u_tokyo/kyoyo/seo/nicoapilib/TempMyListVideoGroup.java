@@ -40,97 +40,32 @@ public class TempMyListVideoGroup extends MyListEditor {
 
     private String urlRoot = "http://www.nicovideo.jp/api/deflist/";
 
-    public void add(VideoInfo video, String description) throws NicoAPIException{
-        String threadID = getThreadID(video);
-        String path = urlRoot + "add";
-        Map<String,String> params = new HashMap<String, String>();
-        params.put("item_id",threadID);
-        params.put("description",description);
-        params.put("token",getToken(video.getID()));
-        if ( tryPost(path,params,info.getCookieStore()) ){
-            checkStatusCode(super.response);
-        }else{
-            throw new NicoAPIException.HttpException(
-                    "http failure",
-                    NicoAPIException.EXCEPTION_HTTP_TEMP_MYLIST_ADD,
-                    statusCode,path,"POST");
-        }
+    public void add(VideoInfo target, String description) throws NicoAPIException{
+        addVideo(target,description,null,urlRoot);
     }
 
-    public void update(VideoInfo video, String description) throws NicoAPIException{
-        String threadID = getThreadID(video);
-        String path = urlRoot + "update";
-        Map<String,String> params = new HashMap<String, String>();
-        params.put("item_id",threadID);
-        params.put("description",description);
-        params.put("token",getToken(video.getID()));
-        if ( tryPost(path,params,info.getCookieStore()) ){
-            checkStatusCode(super.response);
-        }else{
-            throw new NicoAPIException.HttpException(
-                    "http failure",
-                    NicoAPIException.EXCEPTION_HTTP_TEMP_MYLIST_UPDATE,
-                    statusCode,path,"POST");
-        }
+    public void update(MyListVideoInfo target, String description) throws NicoAPIException{
+        updateVideo(target,description,null,urlRoot);
     }
 
-    public void delete(VideoInfo video) throws NicoAPIException {
-        delete(new VideoInfo[]{video});
+    public void delete(MyListVideoInfo video) throws NicoAPIException {
+        delete(new MyListVideoInfo[]{video});
     }
     /**
      * @deprecated API response is ambiguous if try to delete plural videos at once.
      * @param videoList
      * @throws NicoAPIException
      */
-    public void delete(VideoInfo[] videoList) throws NicoAPIException{
-        String path = urlRoot + "delete";
-        Map<String,String> params = new HashMap<String, String>();
-        params.put("token",getToken(videoList[0].getID()));
-        for ( int i=0 ; i<videoList.length ; i++){
-            params.put(String.format("id_list[0][%d]",i),getThreadID(videoList[i]) );
-        }
-        if ( tryPost(path,params,info.getCookieStore()) ){
-            JSONObject root = checkStatusCode(super.response);
-            int delete = getDeleteCount(root);
-            if ( delete == videoList.length ){
-                return;
-            }else{
-                throw new NicoAPIException.InvalidParamsException(
-                        "fail to delete some of target videos from tempMyList",
-                        NicoAPIException.EXCEPTION_PARAM_TEMP_MYLIST_DELETE);
-            }
-        }else{
-            throw new NicoAPIException.HttpException(
-                    "http failure",
-                    NicoAPIException.EXCEPTION_HTTP_TEMP_MYLIST_DELETE,
-                    statusCode,path,"POST");
-        }
-
+    public void delete(MyListVideoInfo[] videoList) throws NicoAPIException{
+        deleteVideo(videoList,null,urlRoot);
     }
 
-    public void move(VideoInfo[] videoList, String targetMyListID) throws NicoAPIException{
-        String path = urlRoot + "move";
-        Map<String,String> params = new HashMap<String, String>();
-        params.put("token",getToken(videoList[0].getID()));
-        params.put("target_group_id",targetMyListID);
-        for ( int i=0 ; i<videoList.length ; i++){
-            params.put(String.format("id_list[0][%d]",i),getThreadID(videoList[i]) );
-        }
-        if ( tryPost(path,params,info.getCookieStore()) ){
-            JSONObject root = checkStatusCode(super.response);
-            int delete = getDeleteCount(root);
-            if ( delete == videoList.length ){
-                return;
-            }else{
-                throw new NicoAPIException.InvalidParamsException(
-                        "fail to delete some of target videos from tempMyList",
-                        NicoAPIException.EXCEPTION_PARAM_TEMP_MYLIST_DELETE);
-            }
-        }else{
-            throw new NicoAPIException.HttpException(
-                    "http failure",
-                    NicoAPIException.EXCEPTION_HTTP_TEMP_MYLIST_MOVE,
-                    statusCode,path,"POST");
-        }
+    public void move(MyListVideoInfo[] videoList, MyListVideoGroup target) throws NicoAPIException{
+        moveVideo(videoList,null,target,urlRoot);
     }
+
+    public void copy(MyListVideoInfo[] videoList, MyListVideoGroup target) throws NicoAPIException{
+        copyVideo(videoList,null,target,urlRoot);
+    }
+
 }

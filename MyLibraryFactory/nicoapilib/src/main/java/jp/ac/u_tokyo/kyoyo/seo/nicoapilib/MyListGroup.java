@@ -21,10 +21,10 @@ public class MyListGroup extends MyListEditor {
     protected MyListGroup(LoginInfo info) throws NicoAPIException{
         super(info);
         this.info = info;
-        String myListGroupUrl = "http://www.nicovideo.jp/api/mylistgroup/list";
+        String myListGroupUrl = rootURL + "list";
         if ( tryGet(myListGroupUrl,info.getCookieStore()) ){
             JSONObject root = checkStatusCode(super.response);
-            this.myListInfoList = parse(root);
+            this.groupList = parse(root);
         }else{
             throw new NicoAPIException.HttpException(
                     "HTTP failure > myList group",
@@ -34,10 +34,12 @@ public class MyListGroup extends MyListEditor {
         }
     }
 
+    private String rootURL = "http://www.nicovideo.jp/api/mylistgroup/";
     private LoginInfo info;
-    private List<MyListVideoGroup> myListInfoList;
+    private List<MyListVideoGroup> groupList;
+
     public List<MyListVideoGroup> getMyListVideoGroup(){
-        return myListInfoList;
+        return groupList;
     }
 
     private List<MyListVideoGroup> parse(JSONObject root)throws NicoAPIException{
@@ -57,6 +59,97 @@ public class MyListGroup extends MyListEditor {
         }
     }
 
+    public void add (String name, boolean isPublic, int sort, String description) throws NicoAPIException{
+        String path = rootURL + "add";
+        String publicValue = "0";
+        if ( isPublic ){
+            publicValue = "1";
+        }
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("token", getToken(getVideoID()));
+        params.put("name", name);
+        params.put("public", publicValue);
+        params.put("default_sort", String.valueOf(sort));
+        params.put("icon_id","0");
+        params.put("description", description);
+        if ( tryPost(path,params,info.getCookieStore()) ){
+            checkStatusCode(super.response);
+            //TODO
+        }else{
+            //TODO
+        }
+    }
 
+    public void update (MyListVideoGroup group,
+                        String name,
+                        boolean isPublic,
+                        int sort,
+                        String description) throws NicoAPIException{
+        String path = rootURL + "update";
+        String publicValue = "0";
+        if ( isPublic ){
+            publicValue = "1";
+        }
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("group_id",String.valueOf(group.getMyListID()) );
+        params.put("token", getToken(getVideoID()));
+        params.put("name", name);
+        params.put("public", publicValue);
+        params.put("default_sort", String.valueOf(sort));
+        params.put("icon_id","0");
+        params.put("description", description);
+        if ( tryPost(path,params,info.getCookieStore()) ){
+            checkStatusCode(super.response);
+            //TODO
+        }else{
+            //TODO
+        }
+    }
+
+    public void delete (MyListVideoGroup group) throws NicoAPIException{
+        String path = rootURL + "delete";
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("group_id",String.valueOf(group.getMyListID()) );
+        params.put("token", getToken(getVideoID()));
+        if ( tryPost(path,params,info.getCookieStore()) ){
+            checkStatusCode(super.response);
+            //TODO
+        }else{
+            //TODO
+        }
+    }
+
+    public void sort (MyListVideoGroup[] groups) throws NicoAPIException{
+        String path = rootURL + "sort";
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("token", getToken(getVideoID()));
+        for ( int i=0 ; i<groups.length ; i++){
+            params.put(String.format("group_id_list[%d]",i), String.valueOf( groups[i].getMyListID()) );
+        }
+        if ( tryPost(path,params,info.getCookieStore()) ){
+            checkStatusCode(super.response);
+            //TODO
+        }else{
+            //TODO
+        }
+
+    }
+
+    private String getVideoID(){
+        for ( MyListVideoGroup group : groupList ){
+            if ( group.videoInfoList != null && !group.videoInfoList.isEmpty()){
+                return group.videoInfoList.get(0).getID();
+            }
+        }
+        try {
+            for (MyListVideoGroup group : groupList) {
+                group.getVideos();
+                if ( !group.videoInfoList.isEmpty() ){
+                    return group.videoInfoList.get(0).getID();
+                }
+            }
+        }catch (NicoAPIException e){}
+        return super.defaultVideoID;
+    }
 
 }

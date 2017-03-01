@@ -345,7 +345,7 @@ public class CommentInfo {
                 meta = meta.getJSONObject("thread");
                 if ( meta.has("resultcode") && meta.has("thread") && meta.has("last_res") && meta.has("ticket") ) {
                     int resultCode = meta.getInt("resultcode");
-                    String threadID = meta.getString("thread");
+                    int threadID = meta.getInt("thread");
                     int lastComment = meta.getInt("last_res");
                     String ticket = meta.getString("ticket");
                     if ( resultCode == 0 ) {
@@ -380,7 +380,7 @@ public class CommentInfo {
         Matcher matcher = metaPattern.matcher(xml);
         if ( matcher.find() ){
             String resultCode = matcher.group(1);
-            String threadID = matcher.group(2);
+            int threadID = Integer.parseInt(matcher.group(2));
             int lastComment = Integer.parseInt( matcher.group(3) );
             String ticket = matcher.group(4);
             if ( resultCode.equals("0") ){
@@ -401,10 +401,10 @@ public class CommentInfo {
 
     protected static class CommentGroup {
         protected List<CommentInfo> commentList;
-        protected String threadID;
+        protected int threadID;
         protected String ticket;
         protected int lastComment;
-        private CommentGroup (List<CommentInfo> list, String threadID, int lastComment, String ticket){
+        private CommentGroup (List<CommentInfo> list, int threadID, int lastComment, String ticket){
             this.commentList = list;
             this.threadID = threadID;
             this.ticket = ticket;

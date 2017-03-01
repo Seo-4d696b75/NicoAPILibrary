@@ -148,7 +148,7 @@ public class NicoClient extends LoginInfo{
     /**
      * マイリスグループを取得します【ログイン必須】<br>
      *     get myList group , be sure to login beforehand.<br>
-     * @return Returns {@link MyListGroup} instance with {@code List} of {@link MyListGroup.MyListInfo}
+     * @return Returns {@link MyListGroup} instance with {@code List} of {@link MyListVideoGroup}
      * @throws NicoAPIException if fail to get myList group
      */
     public synchronized MyListGroup getMyListGroup() throws NicoAPIException{

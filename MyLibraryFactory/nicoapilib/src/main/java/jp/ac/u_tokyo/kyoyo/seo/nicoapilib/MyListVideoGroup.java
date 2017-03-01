@@ -61,7 +61,7 @@ public class MyListVideoGroup extends MyListEditor {
     private String createDate;
     private String updateDate;
     private int iconID;
-    private List<MyListVideoInfo> videoInfoList;
+    protected List<MyListVideoInfo> videoInfoList;
     private LoginInfo info;
 
     public synchronized int getMyListID(){
@@ -93,7 +93,8 @@ public class MyListVideoGroup extends MyListEditor {
     }
 
     private String detailsGetURL = "http://www.nicovideo.jp/api/mylistgroup/get";
-    private String videoGetURL = "http://www.nicovideo.jp/api/mylist/list";
+    private String sortURL = "http://www.nicovideo.jp/api/mylistgroup/sort";
+    private String rootURL = "http://www.nicovideo.jp/api/mylist/";
 
     public void getDetails() throws NicoAPIException{
         Map<String,String> param = new HashMap<String ,String>();
@@ -116,22 +117,27 @@ public class MyListVideoGroup extends MyListEditor {
             );
         }
     }
+
+    private Object listGetLock = new Object();
     public List<MyListVideoInfo> getVideos() throws NicoAPIException{
-        if ( videoInfoList != null ){
-            return videoInfoList;
-        }
-        Map<String,String> param = new HashMap<String ,String>();
-        param.put("group_id", String.valueOf(myListID));
-        if ( tryPost( videoGetURL,param,info.getCookieStore() ) ){
-            JSONObject root = checkStatusCode(super.response);
-            this.videoInfoList = MyListVideoInfo.parse(root);
-            return videoInfoList;
-        }else{
-            throw new NicoAPIException.HttpException(
-                    "HTTP failure > myList details",
-                    NicoAPIException.EXCEPTION_HTTP_MYLIST_VIDEOS_GET,
-                    super.statusCode, videoGetURL ,"POST"
-            );
+        synchronized (listGetLock) {
+            if (videoInfoList != null) {
+                return videoInfoList;
+            }
+            String path = rootURL + "list";
+            Map<String, String> param = new HashMap<String, String>();
+            param.put("group_id", String.valueOf(myListID));
+            if (tryPost(path, param, info.getCookieStore())) {
+                JSONObject root = checkStatusCode(super.response);
+                this.videoInfoList = MyListVideoInfo.parse(root);
+                return videoInfoList;
+            } else {
+                throw new NicoAPIException.HttpException(
+                        "HTTP failure > myList details",
+                        NicoAPIException.EXCEPTION_HTTP_MYLIST_VIDEOS_GET,
+                        super.statusCode, path, "POST"
+                );
+            }
         }
     }
 
@@ -170,6 +176,52 @@ public class MyListVideoGroup extends MyListEditor {
                     NicoAPIException.EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT,
                     getter.statusCode,myListUrl,"GET"
             );
+        }
+    }
+
+    public void add (VideoInfo target, String description) throws NicoAPIException{
+        addVideo(target,description,String.valueOf(getMyListID()),rootURL);
+    }
+
+    public void update (MyListVideoInfo target, String description) throws NicoAPIException{
+        updateVideo(target,description,String.valueOf(getMyListID()),rootURL);
+    }
+
+    public void delete(MyListVideoInfo video) throws NicoAPIException {
+        delete(new MyListVideoInfo[]{video});
+    }
+    /**
+     * @deprecated API response is ambiguous if try to delete plural videos at once.
+     * @param videoList
+     * @throws NicoAPIException
+     */
+    public void delete(MyListVideoInfo[] videoList) throws NicoAPIException{
+        deleteVideo(videoList,String.valueOf(getMyListID()),rootURL);
+    }
+
+    public void move(MyListVideoInfo[] videoList, MyListVideoGroup target) throws NicoAPIException{
+        moveVideo(videoList,String.valueOf(getMyListID()),target,rootURL);
+    }
+
+    public void copy(MyListVideoInfo[] videoList, MyListVideoGroup target) throws NicoAPIException{
+        copyVideo(videoList,String.valueOf(getMyListID()),target,rootURL);
+    }
+
+    public void sort () throws NicoAPIException{
+        if ( videoInfoList == null ){
+            getVideos();
+        }
+        if ( videoInfoList.size() < 2 ){
+            return;
+        }
+        Map<String,String> params = new HashMap<String, String>();
+        params.put("token", getToken(videoInfoList.get(0).getID()) );
+        params.put("group_id_list[0]", String.valueOf(getMyListID()) );
+        if ( tryPost(sortURL,params,info.getCookieStore()) ){
+            checkStatusCode(super.response);
+            //TODO
+        }else{
+            //TODO
         }
     }
 }
