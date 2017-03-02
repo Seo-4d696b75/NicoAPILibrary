@@ -11,9 +11,9 @@ import java.util.List;
  * ニコ動から取得したすべての動画情報はこのクラスを継承した子クランスのインスタンスで管理されます。
  * 各種フィールドは継承先から設定される構造を想定しています。
  * 取得元のAPI毎に対応した子供クラスが存在し、APIからの情報の処理を定義します。<br>
- * ランキング/マイリスト：{@link RankingVideoInfo}<br>
+ * ランキング/マイリスト：{@link RSSVideoInfo}<br>
  * 検索：{@link SearchVideoInfo}<br>
- * とりあえずマイリス：{@link MyListVideoInfo}<br>
+ * (とりあえず)マイリス：{@link MyListVideoInfo}<br>
  * おすすめ動画：{@link RecommendVideoInfo}<br>
  * ただし、各APIによって取得できるフィールドは異なりますので注意してください。
  * 欠損したフィールド値は{@link VideoInfo#complete()}、
@@ -21,9 +21,9 @@ import java.util.List;
  * All the videos from Nico are managed by child classes extending this.
  * All the fields are supposed to be set by these child classes.
  * There are corresponding child class to each API, which defines how to parse response from it.<br>
- * ranking/myList：{@link RankingVideoInfo}<br>
+ * ranking/myList：{@link RSSVideoInfo}<br>
  * search：{@link SearchVideoInfo}<br>
- * temp myList：{@link MyListVideoInfo}<br>
+ * (temp) myList：{@link MyListVideoInfo}<br>
  * recommended video：{@link RecommendVideoInfo}<br>
  * Be careful that some fields may not be initialized depending on each API.
  * You can get these lacking field by calling {@link VideoInfo#complete()}, {@link VideoInfo#getFlv(CookieStore)}

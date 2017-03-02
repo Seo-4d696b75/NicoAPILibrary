@@ -36,40 +36,48 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="MyListVideoInfo.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoInfo.java">
+      <file leaf-file-name="MyListActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="90" column="63" selection-start-line="90" selection-start-column="63" selection-end-line="90" selection-end-column="63" />
+            <state relative-caret-position="286">
+              <caret line="63" column="21" selection-start-line="63" selection-start-column="21" selection-end-line="63" selection-end-column="21" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TempMyListVideoGroup.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TempMyListVideoGroup.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListVideoGroup.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="870">
-              <caret line="67" column="39" selection-start-line="67" selection-start-column="39" selection-end-line="67" selection-end-column="39" />
+            <state relative-caret-position="1421">
+              <caret line="93" column="27" selection-start-line="93" selection-start-column="27" selection-end-line="93" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1156#1173#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MyListEditor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListEditor.java">
+      <file leaf-file-name="TempMyListActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TempMyListActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="218" column="14" selection-start-line="218" selection-start-column="14" selection-end-line="218" selection-end-column="14" />
+            <state relative-caret-position="198">
+              <caret line="51" column="21" selection-start-line="51" selection-start-column="21" selection-end-line="51" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MyListGroup.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListGroup.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4743">
+              <caret line="236" column="13" selection-start-line="236" selection-start-column="13" selection-end-line="236" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2590#2606#0" expanded="true" />
-                <element signature="e#3899#3915#0" expanded="true" />
-                <element signature="e#5025#5041#0" expanded="true" />
-                <element signature="e#7228#7244#0" expanded="true" />
-                <element signature="e#9117#9133#0" expanded="true" />
+                <element signature="e#1884#1902#0" expanded="true" />
+                <element signature="e#2443#2461#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -78,8 +86,8 @@
       <file leaf-file-name="NicoAPIException.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoAPIException.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="368" column="7" selection-start-line="368" selection-start-column="7" selection-end-line="368" selection-end-column="7" />
+            <state relative-caret-position="403">
+              <caret line="519" column="4" selection-start-line="519" selection-start-column="4" selection-end-line="519" selection-end-column="4" />
               <folding>
                 <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_GENRE#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_RANK_KIND#0;class#NicoAPIException#0" expanded="false" />
@@ -107,7 +115,7 @@
                 <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NO_PATTERN#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_DATE#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARSE_RANKING_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
-                <element signature="docComment;field#EXCEPTION_PARSE_NOT_RANKING_OR_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARSE_RECOMMEND_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARSE_RANKING_TITLE#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_COUNTER#0;class#NicoAPIException#0" expanded="false" />
@@ -119,6 +127,15 @@
                 <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_JSON#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_GROUP_JSON#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_DETAILS_JSON#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_RSS#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_MOVE_STATE#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON_META#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML_META#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;class#ParseException#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_DELETED#0;class#NicoAPIException#0" expanded="false" />
@@ -130,11 +147,27 @@
                 <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_INVALID_TOKEN#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_OLD_TOKEN#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_PARAM#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_ID#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_VIDEO#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DESCRIPTION#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_NAME#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_TARGET#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TARGET#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TIME#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_CONTENT#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_PARAM_LOGIN#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;class#InvalidParamsException#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_PREMIUM#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COOKIE#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST_GROUP#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_NOT_LOGIN_TEMP_MYLIST#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
@@ -144,26 +177,32 @@
                 <element signature="docComment;field#EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_UNEXPECTED_RECOMMEND_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_UNEXPECTED_RANKING#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;class#APIUnexpectedException#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_RANKING_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;class#IllegalStateException#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_ADD#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_TOKEN#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_UPDATE#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_TEMP_MYLIST_GET#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_GROUP_GET#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DETAILS_GET#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_SORT#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST_KEY#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_SEARCH#0;class#NicoAPIException#0" expanded="false" />
+                <element signature="docComment;field#EXCEPTION_HTTP_RANKING#0;class#NicoAPIException#0" expanded="false" />
                 <element signature="docComment;class#HttpException#0;class#NicoAPIException#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MyListVideoGroup.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoGroup.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="616">
-              <caret line="206" column="64" selection-start-line="206" selection-start-column="64" selection-end-line="206" selection-end-column="64" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="docComment;method#delete#1;class#MyListVideoGroup#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -2714,28 +2753,34 @@
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoManager.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoListEditor.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RankingVideoInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RecommendVideoInfo.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/SearchVideoInfo.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListVideoInfo.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListEditor.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RSSVideoInfo.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomListActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TempMyListActivity.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/HttpResponseGetter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoStorage.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoClient.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/CommentInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoCommentPost.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoPackage.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListEditor.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListGroup.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoGroup.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListVideoGroup.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListGroup.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/CommentInfo.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/LoginInfo.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoClient.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoCommentPost.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoLogin.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoStorage.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RecommendVideoInfo.java" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoAPIException.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListEditor.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RSSVideoInfo.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RankingVideoGroup.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomListActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RankingActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TempMyListActivity.java" />
       </list>
     </option>
   </component>
@@ -2743,8 +2788,8 @@
     <scope name="library" pattern="src[nicoapilib]:jp.ac.u_tokyo.kyoyo.seo.nicoapilib.*" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="464" />
-    <option name="width" value="1451" />
+    <option name="x" value="398" />
+    <option name="width" value="1532" />
     <option name="height" value="1030" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -2772,19 +2817,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -2835,8 +2867,63 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MyLibraryFactory" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MyLibraryFactory" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MyLibraryFactory" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mylibraryfactory" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -3154,32 +3241,33 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="464" y="0" width="1451" height="1030" extended-state="0" />
+    <frame x="398" y="0" width="1532" height="1030" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998747" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40025094" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32998747" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32880098" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2531273" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23888889" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.9322459" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="-6" y="75" width="702" height="799" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40025094" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -3187,7 +3275,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="1.0" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="-41" y="25" width="880" height="913" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -3206,13 +3293,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java</url>
-          <line>143</line>
+          <line>144</line>
           <properties />
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoGroup.java</url>
-          <line>163</line>
+          <line>181</line>
           <properties />
           <option name="timeStamp" value="6" />
         </line-breakpoint>
@@ -3222,22 +3309,13 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoGroup.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3058">
           <caret line="157" column="0" selection-start-line="157" selection-start-column="0" selection-end-line="157" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#4540#4557#0" expanded="true" />
             <element signature="docComment;method#delete#1;class#MyListVideoGroup#0" expanded="false" />
           </folding>
         </state>
@@ -3292,7 +3370,7 @@
             <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NO_PATTERN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_DATE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_NOT_RANKING_OR_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_RECOMMEND_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_TITLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_COUNTER#0;class#NicoAPIException#0" expanded="false" />
@@ -3304,6 +3382,15 @@
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_JSON#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_GROUP_JSON#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_DETAILS_JSON#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_RSS#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_MOVE_STATE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON_META#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML_META#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#ParseException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_DELETED#0;class#NicoAPIException#0" expanded="false" />
@@ -3315,11 +3402,27 @@
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_INVALID_TOKEN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_OLD_TOKEN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_PARAM#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_ID#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_VIDEO#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DESCRIPTION#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_NAME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_TARGET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TARGET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TIME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_CONTENT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_LOGIN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#InvalidParamsException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_PREMIUM#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COOKIE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST_GROUP#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_TEMP_MYLIST#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
@@ -3329,12 +3432,31 @@
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RECOMMEND_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RANKING#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#APIUnexpectedException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_RANKING_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#IllegalStateException#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_ADD#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_TOKEN#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_UPDATE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_TEMP_MYLIST_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_GROUP_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DETAILS_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_SORT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST_KEY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_SEARCH#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_RANKING#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#HttpException#0;class#NicoAPIException#0" expanded="false" />
           </folding>
         </state>
@@ -3344,12 +3466,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3058">
           <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
-          <folding>
-            <element signature="e#1235#1236#0" expanded="false" />
-            <element signature="e#1281#1282#0" expanded="false" />
-            <element signature="e#1545#1546#0" expanded="false" />
-            <element signature="e#1618#1619#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3399,7 +3516,7 @@
             <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NO_PATTERN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_DATE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_NOT_RANKING_OR_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_RECOMMEND_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_TITLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_COUNTER#0;class#NicoAPIException#0" expanded="false" />
@@ -3411,6 +3528,15 @@
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_JSON#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_GROUP_JSON#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_DETAILS_JSON#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_RSS#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_MOVE_STATE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON_META#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML_META#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#ParseException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_DELETED#0;class#NicoAPIException#0" expanded="false" />
@@ -3422,11 +3548,27 @@
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_INVALID_TOKEN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_OLD_TOKEN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_PARAM#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_ID#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_VIDEO#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DESCRIPTION#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_NAME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_TARGET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TARGET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TIME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_CONTENT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_LOGIN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#InvalidParamsException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_PREMIUM#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COOKIE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST_GROUP#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_TEMP_MYLIST#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
@@ -3436,12 +3578,31 @@
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RECOMMEND_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RANKING#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#APIUnexpectedException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_RANKING_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#IllegalStateException#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_ADD#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_TOKEN#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_UPDATE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_TEMP_MYLIST_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_GROUP_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DETAILS_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_SORT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST_KEY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_SEARCH#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_RANKING#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#HttpException#0;class#NicoAPIException#0" expanded="false" />
           </folding>
         </state>
@@ -3462,7 +3623,25 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7018">
           <caret line="322" column="14" selection-start-line="322" selection-start-column="8" selection-end-line="322" selection-end-column="14" />
-          <folding />
+          <folding>
+            <element signature="initializer##0;class#3458:4682" expanded="false" />
+            <element signature="initializer##0;class#4737:5990" expanded="false" />
+            <element signature="initializer##0;class#6045:6290" expanded="false" />
+            <element signature="initializer##0;class#6346:6608" expanded="false" />
+            <element signature="initializer##0;class#6661:6857" expanded="false" />
+            <element signature="initializer##0;class#6911:7110" expanded="false" />
+            <element signature="docComment;method#getGenreMap#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#getKindMap#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#getPeriodMap#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setGenre#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setGenre#1;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setKind#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setKind#1;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setPeriod#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setPeriod#1;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#get#0;class#NicoRanking#0" expanded="false" />
+            <element signature="e#13558#13569#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -3497,7 +3676,7 @@
             <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NO_PATTERN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_DATE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_NOT_RANKING_OR_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_RECOMMEND_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_TITLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_COUNTER#0;class#NicoAPIException#0" expanded="false" />
@@ -3509,6 +3688,15 @@
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_JSON#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_GROUP_JSON#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_DETAILS_JSON#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_RSS#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_MOVE_STATE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON_META#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML_META#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#ParseException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_DELETED#0;class#NicoAPIException#0" expanded="false" />
@@ -3520,11 +3708,27 @@
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_INVALID_TOKEN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_OLD_TOKEN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_PARAM#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_ID#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_VIDEO#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DESCRIPTION#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_NAME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_TARGET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TARGET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TIME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_CONTENT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_LOGIN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#InvalidParamsException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_PREMIUM#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COOKIE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST_GROUP#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_TEMP_MYLIST#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
@@ -3534,12 +3738,31 @@
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RECOMMEND_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RANKING#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#APIUnexpectedException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_RANKING_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#IllegalStateException#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_ADD#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_TOKEN#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_UPDATE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_TEMP_MYLIST_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_GROUP_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DETAILS_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_SORT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST_KEY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_SEARCH#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_RANKING#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#HttpException#0;class#NicoAPIException#0" expanded="false" />
           </folding>
         </state>
@@ -3577,7 +3800,7 @@
             <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NO_PATTERN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_DATE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_NOT_RANKING_OR_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_RECOMMEND_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_TITLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_COUNTER#0;class#NicoAPIException#0" expanded="false" />
@@ -3589,6 +3812,15 @@
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_JSON#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_GROUP_JSON#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_DETAILS_JSON#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_RSS#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_MOVE_STATE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON_META#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML_META#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#ParseException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_DELETED#0;class#NicoAPIException#0" expanded="false" />
@@ -3600,11 +3832,27 @@
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_INVALID_TOKEN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_OLD_TOKEN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_PARAM#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_ID#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_VIDEO#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DESCRIPTION#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_NAME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_TARGET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TARGET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TIME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_CONTENT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_LOGIN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#InvalidParamsException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_PREMIUM#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COOKIE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST_GROUP#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_TEMP_MYLIST#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
@@ -3614,12 +3862,31 @@
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RECOMMEND_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RANKING#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#APIUnexpectedException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_RANKING_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#IllegalStateException#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_ADD#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_TOKEN#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_UPDATE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_TEMP_MYLIST_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_GROUP_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DETAILS_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_SORT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST_KEY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_SEARCH#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_RANKING#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#HttpException#0;class#NicoAPIException#0" expanded="false" />
           </folding>
         </state>
@@ -3637,24 +3904,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoManager.java" />
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RecommendVideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="14" column="33" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListVideoInfo.java" />
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListEditor.java" />
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoListEditor.java" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RankingActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RecommendActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
@@ -3670,16 +3922,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListInfo.java" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TempMyListActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="572">
-          <caret line="50" column="46" selection-start-line="50" selection-start-column="46" selection-end-line="50" selection-end-column="46" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TestActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2816">
@@ -3688,33 +3930,180 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java">
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/HttpResponseGetter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3058">
-          <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
+        <state relative-caret-position="22">
+          <caret line="56" column="26" selection-start-line="56" selection-start-column="26" selection-end-line="56" selection-end-column="26" />
           <folding>
-            <element signature="e#1235#1236#0" expanded="false" />
-            <element signature="e#1281#1282#0" expanded="false" />
-            <element signature="e#1545#1546#0" expanded="false" />
-            <element signature="e#1618#1619#0" expanded="false" />
+            <element signature="docComment;field#cookieStore#0;class#HttpResponseGetter#0" expanded="false" />
+            <element signature="docComment;field#response#0;class#HttpResponseGetter#0" expanded="false" />
+            <element signature="docComment;method#tryPost#0;class#HttpResponseGetter#0" expanded="false" />
+            <element signature="docComment;method#tryGet#0;class#HttpResponseGetter#0" expanded="false" />
+            <element signature="docComment;method#tryGet#1;class#HttpResponseGetter#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomListActivity.java">
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/SearchVideoInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1254">
-          <caret line="95" column="43" selection-start-line="95" selection-start-column="43" selection-end-line="95" selection-end-column="43" />
+        <state relative-caret-position="176">
+          <caret line="18" column="33" selection-start-line="18" selection-start-column="33" selection-end-line="18" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoPackage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-110">
+          <caret line="25" column="33" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="352" column="31" selection-start-line="352" selection-start-column="31" selection-end-line="352" selection-end-column="31" />
           <folding>
-            <element signature="imports" expanded="false" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListEditor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1308">
+          <caret line="203" column="44" selection-start-line="200" selection-start-column="12" selection-end-line="203" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-154">
+          <caret line="204" column="14" selection-start-line="204" selection-start-column="14" selection-end-line="204" selection-end-column="14" />
+          <folding>
+            <element signature="docComment;field#appName#0;class#NicoClient#0" expanded="false" />
+            <element signature="docComment;field#deviceName#0;class#NicoClient#0" expanded="false" />
+            <element signature="docComment;method#NicoClient#0;class#NicoClient#0" expanded="false" />
+            <element signature="docComment;method#login#0;class#NicoClient#0" expanded="false" />
+            <element signature="docComment;method#getUserIcon#0;class#NicoClient#0" expanded="false" />
+            <element signature="docComment;method#getNicoRanking#0;class#NicoClient#0" expanded="false" />
+            <element signature="docComment;method#getRecommend#0;class#NicoClient#0" expanded="false" />
+            <element signature="docComment;method#getComment#1;class#NicoClient#0" expanded="false" />
+            <element signature="docComment;method#getNicoCommentPost#0;class#NicoClient#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoCommentPost.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-471">
+          <caret line="359" column="28" selection-start-line="359" selection-start-column="28" selection-end-line="359" selection-end-column="28" />
+          <folding>
+            <element signature="docComment;method#NicoCommentPost#0;class#NicoCommentPost#0" expanded="false" />
+            <element signature="docComment;method#setComment#0;class#NicoCommentPost#0" expanded="false" />
+            <element signature="docComment;method#setTime#0;class#NicoCommentPost#0" expanded="false" />
+            <element signature="docComment;method#setAnonymous#0;class#NicoCommentPost#0" expanded="false" />
+            <element signature="docComment;method#setColor#0;class#NicoCommentPost#0" expanded="false" />
+            <element signature="docComment;method#getColorMap#0;class#NicoCommentPost#0" expanded="false" />
+            <element signature="docComment;method#setPosition#0;class#NicoCommentPost#0" expanded="false" />
+            <element signature="docComment;method#setSize#0;class#NicoCommentPost#0" expanded="false" />
+            <element signature="docComment;method#post#0;class#NicoCommentPost#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/LoginInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="726">
+          <caret line="109" column="12" selection-start-line="109" selection-start-column="12" selection-end-line="109" selection-end-column="12" />
+          <folding>
+            <element signature="docComment;method#isLogin#0;class#LoginInfo#0" expanded="false" />
+            <element signature="docComment;method#getUserName#0;class#LoginInfo#0" expanded="false" />
+            <element signature="docComment;method#getUserID#0;class#LoginInfo#0" expanded="false" />
+            <element signature="docComment;method#getCookieStore#0;class#LoginInfo#0" expanded="false" />
+            <element signature="docComment;method#setCookieStore#0;class#LoginInfo#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoLogin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="163" column="56" selection-start-line="163" selection-start-column="56" selection-end-line="163" selection-end-column="56" />
+          <folding>
+            <element signature="docComment;method#NicoLogin#0;class#NicoLogin#0" expanded="false" />
+            <element signature="docComment;method#login#0;class#NicoLogin#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoGroup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4787">
+          <caret line="257" column="30" selection-start-line="257" selection-start-column="30" selection-end-line="257" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4540#4557#0" expanded="true" />
+            <element signature="docComment;method#delete#1;class#MyListVideoGroup#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="70" column="23" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
+          <folding>
+            <element signature="method#setDescription#0;class#MyListVideoInfo#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RankingVideoInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="290" column="35" selection-start-line="290" selection-start-column="35" selection-end-line="290" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="189" column="73" selection-start-line="189" selection-start-column="73" selection-end-line="189" selection-end-column="73" />
+          <folding>
+            <element signature="initializer##0;class#1298:1477" expanded="false" />
+            <element signature="initializer##0;class#1795:2101" expanded="false" />
+            <element signature="docComment;method#NicoSearch#1;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setQuery#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#addQuery#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#addQuery#1;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setTagsSearch#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setSortParam#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setSortDown#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setResultMax#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setFilterID#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setFilterTags#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setFilterView#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setFilterComment#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setFilterLength#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setFilterMyList#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setFilterDate#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#setFilterDate#1;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;field#dateFormat#0;class#NicoSearch#0" expanded="false" />
+            <element signature="docComment;method#search#0;class#NicoSearch#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoStorage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-185">
-          <caret line="331" column="31" selection-start-line="331" selection-start-column="31" selection-end-line="331" selection-end-column="31" />
+        <state relative-caret-position="187">
+          <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="docComment;field#UNKNOWN#0;class#VideoInfoStorage#0" expanded="false" />
@@ -3778,179 +4167,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoClient.java">
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RecommendVideoInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="150" column="96" selection-start-line="150" selection-start-column="96" selection-end-line="150" selection-end-column="96" />
+        <state relative-caret-position="2186">
+          <caret line="154" column="49" selection-start-line="154" selection-start-column="49" selection-end-line="154" selection-end-column="49" />
           <folding>
-            <element signature="docComment;field#appName#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;field#deviceName#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#NicoClient#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#login#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getUserIcon#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getNicoRanking#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getRecommend#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getComment#1;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getNicoCommentPost#0;class#NicoClient#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/HttpResponseGetter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="56" column="26" selection-start-line="56" selection-start-column="26" selection-end-line="56" selection-end-column="26" />
-          <folding>
-            <element signature="docComment;field#cookieStore#0;class#HttpResponseGetter#0" expanded="false" />
-            <element signature="docComment;field#response#0;class#HttpResponseGetter#0" expanded="false" />
-            <element signature="docComment;method#tryPost#0;class#HttpResponseGetter#0" expanded="false" />
-            <element signature="docComment;method#tryGet#0;class#HttpResponseGetter#0" expanded="false" />
-            <element signature="docComment;method#tryGet#1;class#HttpResponseGetter#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/LoginInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoLogin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/CommentInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="344" column="37" selection-start-line="344" selection-start-column="37" selection-end-line="344" selection-end-column="37" />
-          <folding>
-            <element signature="docComment;field#start#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#content#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#date#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#anonymity#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#ngLevel#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#commentNo#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#x#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#length#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#speed#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#color#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#size#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;field#position#0;class#CommentInfo#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoCommentPost.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="671">
-          <caret line="339" column="54" selection-start-line="339" selection-start-column="54" selection-end-line="339" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="322" column="14" selection-start-line="322" selection-start-column="8" selection-end-line="322" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RankingVideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="290" column="35" selection-start-line="290" selection-start-column="35" selection-end-line="290" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RSSVideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="716">
-          <caret line="274" column="41" selection-start-line="274" selection-start-column="41" selection-end-line="274" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/SearchVideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="18" column="33" selection-start-line="18" selection-start-column="33" selection-end-line="18" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoPackage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-110">
-          <caret line="25" column="33" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5314">
-          <caret line="363" column="73" selection-start-line="363" selection-start-column="73" selection-end-line="363" selection-end-column="73" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="90" column="63" selection-start-line="90" selection-start-column="63" selection-end-line="90" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1618">
-          <caret line="115" column="18" selection-start-line="115" selection-start-column="18" selection-end-line="115" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1503#1521#0" expanded="true" />
-            <element signature="e#2284#2300#0" expanded="true" />
-            <element signature="e#3168#3184#0" expanded="true" />
-            <element signature="e#3864#3880#0" expanded="true" />
-            <element signature="e#4341#4357#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="206" column="64" selection-start-line="206" selection-start-column="64" selection-end-line="206" selection-end-column="64" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="docComment;method#delete#1;class#MyListVideoGroup#0" expanded="false" />
+            <element signature="docComment;method#parse#0;class#RecommendVideoInfo#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoAPIException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="368" column="7" selection-start-line="368" selection-start-column="7" selection-end-line="368" selection-end-column="7" />
+        <state relative-caret-position="403">
+          <caret line="519" column="4" selection-start-line="519" selection-start-column="4" selection-end-line="519" selection-end-column="4" />
           <folding>
             <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_GENRE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_RANK_KIND#0;class#NicoAPIException#0" expanded="false" />
@@ -3978,7 +4208,7 @@
             <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NO_PATTERN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_DATE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_NOT_RANKING_OR_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_RECOMMEND_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_TITLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_COUNTER#0;class#NicoAPIException#0" expanded="false" />
@@ -3990,6 +4220,15 @@
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_JSON#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_GROUP_JSON#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_DETAILS_JSON#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_RSS#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_MOVE_STATE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON_META#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML_META#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#ParseException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_DELETED#0;class#NicoAPIException#0" expanded="false" />
@@ -4001,11 +4240,27 @@
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_INVALID_TOKEN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_OLD_TOKEN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_PARAM#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_ID#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_VIDEO#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DESCRIPTION#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_MYLIST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_NAME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_TARGET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TARGET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TIME#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_CONTENT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_PARAM_LOGIN#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#InvalidParamsException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_PREMIUM#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COOKIE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST_GROUP#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_TEMP_MYLIST#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
@@ -4015,39 +4270,148 @@
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RECOMMEND_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RANKING#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#APIUnexpectedException#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_RANKING_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#IllegalStateException#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_ADD#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_TOKEN#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_UPDATE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_TEMP_MYLIST_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_GROUP_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DETAILS_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_SORT#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST_KEY#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_SEARCH#0;class#NicoAPIException#0" expanded="false" />
+            <element signature="docComment;field#EXCEPTION_HTTP_RANKING#0;class#NicoAPIException#0" expanded="false" />
             <element signature="docComment;class#HttpException#0;class#NicoAPIException#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListEditor.java">
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RSSVideoInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="218" column="14" selection-start-line="218" selection-start-column="14" selection-end-line="218" selection-end-column="14" />
+        <state relative-caret-position="519">
+          <caret line="309" column="14" selection-start-line="309" selection-start-column="14" selection-end-line="309" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/CommentInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="428" column="18" selection-start-line="428" selection-start-column="18" selection-end-line="428" selection-end-column="18" />
+          <folding>
+            <element signature="docComment;method#getStart#0;class#CommentInfo#0" expanded="false" />
+            <element signature="docComment;method#getContent#0;class#CommentInfo#0" expanded="false" />
+            <element signature="docComment;method#getDate#0;class#CommentInfo#0" expanded="false" />
+            <element signature="docComment;method#isAnonymous#0;class#CommentInfo#0" expanded="false" />
+            <element signature="docComment;method#getNgLevel#0;class#CommentInfo#0" expanded="false" />
+            <element signature="docComment;method#getCommentNo#0;class#CommentInfo#0" expanded="false" />
+            <element signature="docComment;method#getColor#0;class#CommentInfo#0" expanded="false" />
+            <element signature="docComment;method#getPosition#0;class#CommentInfo#0" expanded="false" />
+            <element signature="docComment;method#getSize#0;class#CommentInfo#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomListActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="462" column="142" selection-start-line="462" selection-start-column="142" selection-end-line="462" selection-end-column="142" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="313" column="4" selection-start-line="313" selection-start-column="4" selection-end-line="313" selection-end-column="4" />
+          <folding>
+            <element signature="initializer##0;class#3458:4682" expanded="false" />
+            <element signature="initializer##0;class#4737:5990" expanded="false" />
+            <element signature="initializer##0;class#6045:6290" expanded="false" />
+            <element signature="initializer##0;class#6346:6608" expanded="false" />
+            <element signature="initializer##0;class#6661:6857" expanded="false" />
+            <element signature="initializer##0;class#6911:7110" expanded="false" />
+            <element signature="docComment;method#getGenreMap#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#getKindMap#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#getPeriodMap#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setGenre#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setGenre#1;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setKind#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setKind#1;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setPeriod#0;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#setPeriod#1;class#NicoRanking#0" expanded="false" />
+            <element signature="docComment;method#get#0;class#NicoRanking#0" expanded="false" />
+            <element signature="e#13558#13569#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RankingVideoGroup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RankingActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="147" column="45" selection-start-line="147" selection-start-column="45" selection-end-line="147" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListGroup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4743">
+          <caret line="236" column="13" selection-start-line="236" selection-start-column="13" selection-end-line="236" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2590#2606#0" expanded="true" />
-            <element signature="e#3899#3915#0" expanded="true" />
-            <element signature="e#5025#5041#0" expanded="true" />
-            <element signature="e#7228#7244#0" expanded="true" />
-            <element signature="e#9117#9133#0" expanded="true" />
+            <element signature="e#1884#1902#0" expanded="true" />
+            <element signature="e#2443#2461#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="63" column="21" selection-start-line="63" selection-start-column="21" selection-end-line="63" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListVideoGroup.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="870">
-          <caret line="67" column="39" selection-start-line="67" selection-start-column="39" selection-end-line="67" selection-end-column="39" />
+        <state relative-caret-position="1421">
+          <caret line="93" column="27" selection-start-line="93" selection-start-column="27" selection-end-line="93" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1156#1173#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TempMyListActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="51" column="21" selection-start-line="51" selection-start-column="21" selection-end-line="51" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -146,7 +146,7 @@ public class VideoInfo extends VideoInfoStorage {
 
     //url from which details of video you can get
     private String thumbUrl = "http://ext.nicovideo.jp/api/getthumbinfo/";
-    private String flvUrl = "http://flapi.nicovideo.jp/api/getflv/";
+    private String getFlvUrl = "http://flapi.nicovideo.jp/api/getflv/";
     //Pattern to extract value from plain text
     private final int STATUS = 100;
     private final Map<Integer,Pattern> patternMap = new HashMap<Integer,Pattern>(){
@@ -350,7 +350,7 @@ public class VideoInfo extends VideoInfoStorage {
         if ( isOfficial()){
             return false;
         }
-        String path = flvUrl + id;
+        String path = getFlvUrl + id;
         HttpResponseGetter getter = new HttpResponseGetter();
         if ( !getter.tryGet(path,cookieStore)){
             return false;

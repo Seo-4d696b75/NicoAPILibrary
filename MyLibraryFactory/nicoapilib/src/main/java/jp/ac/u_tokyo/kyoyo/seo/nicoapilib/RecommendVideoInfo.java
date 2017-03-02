@@ -107,7 +107,8 @@ public class RecommendVideoInfo extends VideoInfo {
             }else{
                 throw new NicoAPIException.ParseException(
                         "target partial sequence matched with \"" + valueMatcher.pattern().pattern() + "\" not found",
-                        item
+                        item,
+                        NicoAPIException.EXCEPTION_PARSE_RECOMMEND
                 );
             }
         }
@@ -120,7 +121,6 @@ public class RecommendVideoInfo extends VideoInfo {
     /**
      * ニコ動APIから取得したxml形式のレスポンスをパースします<br>
      * Parses recommend response in XML.<br>
-     * APIの詳細やレスポンスの形式は{@link RecommendVideoInfo ここから参照}できます。<br>
      * 取得できる動画のフィールドは以下の通りです。<br>
      *     {@link VideoInfo#title 動画タイトル}<br>
      *     {@link VideoInfo#id 動画ID}<br>
@@ -130,7 +130,6 @@ public class RecommendVideoInfo extends VideoInfo {
      *     {@link VideoInfo#viewCounter 再生数}<br>
      *     {@link VideoInfo#commentCounter コメント数}<br>
      *     {@link VideoInfo#myListCounter マイリス数}<br>
-     * More details about API and response format is {@link RankingVideoInfo available here}.<br>
      *     you can get following fields of videos;<br>
      *     {@link VideoInfo#title title of video}<br>
      *     {@link VideoInfo#id video ID}<br>
@@ -146,26 +145,40 @@ public class RecommendVideoInfo extends VideoInfo {
      */
     protected static List<VideoInfo> parse (String xml) throws NicoAPIException{
         if ( xml == null ){
-            throw new NicoAPIException.ParseException("parse target is null",null);
+            throw new NicoAPIException.ParseException(
+                    "parse target is null > recommend",null,
+                    NicoAPIException.EXCEPTION_PARSE_RECOMMEND_NO_TARGET
+            );
         }
         Matcher matcher = Pattern.compile("<related_video status=\"(.+?)\">").matcher(xml);
-        if ( !matcher.find() || !matcher.group(1).equals("ok")  ){
-            matcher = Pattern.compile("<error>.+<code>(.+?)</code>.+<description>(.+?)</description>.+</error>",Pattern.DOTALL).matcher(xml);
-            String message = "unexpected API response status > recommend ";
-            if ( matcher.find() ){
-                message += matcher.group(1);
-                message += ":";
-                message += matcher.group(2);
+        if ( matcher.find() ) {
+            if ( matcher.group(1).equals("ok")) {
+                Pattern patternItem = Pattern.compile("<video>.+?</video>",Pattern.DOTALL);
+                List<VideoInfo> list = new ArrayList<VideoInfo>();
+                matcher = patternItem.matcher(xml);
+                while( matcher.find() ){
+                    String item = matcher.group();
+                    list.add( new RecommendVideoInfo(item) );
+                }
+                return list;
+            }else{
+                matcher = Pattern.compile("<error>.+<code>(.+?)</code>.+<description>(.+?)</description>.+</error>", Pattern.DOTALL).matcher(xml);
+                String message = "unexpected API response status > recommend ";
+                if (matcher.find()) {
+                    message += matcher.group(1);
+                    message += ":";
+                    message += matcher.group(2);
+                }
+                throw new NicoAPIException.APIUnexpectedException(
+                        message,
+                        NicoAPIException.EXCEPTION_UNEXPECTED_RECOMMEND_STATUS_CODE
+                );
             }
-            throw new NicoAPIException.APIUnexpectedException(message);
+        }else{
+            throw new NicoAPIException.APIUnexpectedException(
+                    "fail to parse response meta > recommend",
+                    NicoAPIException.EXCEPTION_PARSE_RECOMMEND_STATUS
+            );
         }
-        Pattern patternItem = Pattern.compile("<video>.+?</video>",Pattern.DOTALL);
-        List<VideoInfo> list = new ArrayList<VideoInfo>();
-        matcher = patternItem.matcher(xml);
-        while( matcher.find() ){
-            String item = matcher.group();
-            list.add( new RecommendVideoInfo(item) );
-        }
-        return list;
     }
 }

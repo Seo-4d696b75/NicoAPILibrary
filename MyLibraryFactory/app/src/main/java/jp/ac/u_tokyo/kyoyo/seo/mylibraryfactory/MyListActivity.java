@@ -54,6 +54,7 @@ public class MyListActivity extends CustomListActivity {
             dialog = null;
         }
         new AsyncTask<String, Void, String>() {
+            List<MyListVideoGroup> videoGroup = null;
             @Override
             protected void onPreExecute() {
                 textViewMes.setText("Your My List Group");
@@ -63,6 +64,7 @@ public class MyListActivity extends CustomListActivity {
                 try {
                     myListGroup = null;
                     myListGroup = nicoClient.getMyListGroup();
+                    videoGroup = myListGroup.getMyListVideoGroup();
                     return null;
                 } catch (NicoAPIException e) {
                     return e.getMessage();
@@ -72,7 +74,6 @@ public class MyListActivity extends CustomListActivity {
             protected void onPostExecute(String response) {
                 showMessage(response);
                 if ( myListGroup != null ){
-                    List<MyListVideoGroup> videoGroup = myListGroup.getMyListVideoGroup();
                     AlertDialog.Builder builder = new AlertDialog.Builder(MyListActivity.this);
                     builder.setTitle("My List Selecting");
                     Context context = MyListActivity.this;

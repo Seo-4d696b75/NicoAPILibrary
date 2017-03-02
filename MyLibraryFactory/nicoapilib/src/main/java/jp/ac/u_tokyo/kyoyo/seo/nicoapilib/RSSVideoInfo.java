@@ -257,7 +257,7 @@ public class RSSVideoInfo extends VideoInfo {
     /**
      * ニコ動APIから取得したXML形式のランキングおよびマイリス情報をパースします<br>
      * Parses xml text from Nico API about ranking or myList.<br>
-     * APIの詳細や有効なパラメータ、レスポンスの形式は{@link RankingVideoInfo ここから参照}できます。<br>
+     * APIの詳細や有効なパラメータ、レスポンスの形式は{@link RSSVideoInfo ここから参照}できます。<br>
      * 取得できる動画のフィールドは以下の通りです。<br>
      *     {@link VideoInfo#title 動画タイトル}<br>
      *     {@link VideoInfo#id 動画ID}<br>
@@ -268,7 +268,7 @@ public class RSSVideoInfo extends VideoInfo {
      *     {@link VideoInfo#viewCounter 再生数}<br>
      *     {@link VideoInfo#commentCounter コメント数}<br>
      *     {@link VideoInfo#myListCounter マイリス数}<br>
-     *     More details about valid params and response format are {@link RankingVideoInfo available here}.<br>
+     *     More details about valid params and response format are {@link RSSVideoInfo available here}.<br>
      *     You can get following fields of videos;<br>
      *     {@link VideoInfo#title title of video}<br>
      *     {@link VideoInfo#id video ID}<br>
@@ -285,9 +285,11 @@ public class RSSVideoInfo extends VideoInfo {
      */
     protected static List<VideoInfo> parse (String xml) throws NicoAPIException{
         if ( xml == null ){
-            throw new NicoAPIException.ParseException("parse target is null",null,NicoAPIException.EXCEPTION_PARSE_RANKING_NO_TARGET);
+            throw new NicoAPIException.ParseException(
+                    "parse target is null",null,
+                    NicoAPIException.EXCEPTION_PARSE_RANKING_NO_TARGET);
         }
-        //checkResponse(xml,isRanking);
+        checkResponse(xml);
         List<VideoInfo> list = new ArrayList<VideoInfo>();
         Matcher matcher = Pattern.compile("<item>.+?</item>",Pattern.DOTALL).matcher(xml);
         while ( matcher.find() ){
@@ -297,23 +299,15 @@ public class RSSVideoInfo extends VideoInfo {
         return list;
     }
 
-    private static void checkResponse(String xml, boolean isRanking) throws NicoAPIException{
+    private static void checkResponse(String xml) throws NicoAPIException{
         Matcher matcher = Pattern.compile("<channel>.+<title>.+?ランキング.+?‐ニコニコ動画</title>.+</channel>",Pattern.DOTALL).matcher(xml);
         if ( matcher.find() ){
-            if ( !isRanking){
-                throw new NicoAPIException.InvalidParamsException("ranking params required > ranking",NicoAPIException.EXCEPTION_PARAM_RANKING_NO_PARAM);
-            }
-            //ranking ok
+            return;
         }else{
-            matcher = Pattern.compile("<channel>.+<title>マイリスト.+‐ニコニコ動画</title>.+</channel>", Pattern.DOTALL).matcher(xml);
-            if (matcher.find()) {
-                if ( isRanking ) {
-                    throw new NicoAPIException.InvalidParamsException("ranking params not acceptable in case of myList > myList",NicoAPIException.EXCEPTION_PARAM_MYLIST_NOT_RANKING);
-                }
-                //myList ok
-            }else {
-                throw new NicoAPIException.ParseException("Unexpected response, not ranking or myList > ranking",xml,NicoAPIException.EXCEPTION_PARSE_NOT_RANKING_OR_MYLIST);
-            }
+            throw new NicoAPIException.APIUnexpectedException(
+                    "not ranking RSS > ranking",
+                    NicoAPIException.EXCEPTION_UNEXPECTED_RANKING
+            );
         }
     }
 }

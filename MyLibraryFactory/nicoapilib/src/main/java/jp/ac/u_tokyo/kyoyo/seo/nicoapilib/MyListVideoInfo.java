@@ -66,10 +66,31 @@ public class MyListVideoInfo extends VideoInfo {
     protected MyListVideoInfo (String xml) throws NicoAPIException{
         RSSVideoInfo.initialize(this,xml,false);
     }
+    protected MyListVideoInfo (VideoInfo info, String description){
+        this.title = info.title;
+        setID(info.id);
+        this.date = info.date;
+        this.description = info.description;
+        this.thumbnailUrl = info.thumbnailUrl;
+        this.thumbnail = info.thumbnail;
+        this.length = info.length;
+        this.viewCounter = info.viewCounter;
+        this.myListCounter = info.myListCounter;
+        this.commentCounter = info.commentCounter;
+        this.tags = info.tags;
+        this.threadID = info.threadID;
+        this.messageServerUrl = info.messageServerUrl;
+        this.flvUrl = info.flvUrl;
+        this.contributorIcon = info.contributorIcon;
+        this.contributorIconUrl = info.contributorIconUrl;
+        this.contributorID = info.contributorID;
+        this.contributorName = info.contributorName;
+        this.myListItemDescription = description;
+    }
 
     private String myListItemDescription;
     private String addDate,updateDate;
-    public synchronized String getMyListDescription(){
+    public synchronized String getDescription(){
         return myListItemDescription;
     }
     public synchronized String getAddDate(){
@@ -77,6 +98,12 @@ public class MyListVideoInfo extends VideoInfo {
     }
     public synchronized String getUpdateDate(){
         return pubDate;
+    }
+    protected synchronized void setDescription(String description){
+        this.myListItemDescription = description;
+    }
+    protected synchronized void setUpdateDate (String updateDate){
+        this.updateDate = updateDate;
     }
 
     private synchronized void initialize(JSONObject item)  throws NicoAPIException.ParseException {

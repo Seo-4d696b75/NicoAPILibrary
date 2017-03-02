@@ -79,7 +79,10 @@ public class NicoLogin extends HttpResponseGetter {
      */
     protected void login( final String mail, final String pass) throws NicoAPIException{
         if ( mail == null || pass == null ){
-            throw new NicoAPIException.InvalidParamsException("mail and pass cannot be null > login");
+            throw new NicoAPIException.InvalidParamsException(
+                    "mail and pass cannot be null > login",
+                    NicoAPIException.EXCEPTION_PARAM_LOGIN
+            );
         }
         String path = loginUrl + myPageUrl;
         Map<String,String> params = new HashMap<String,String>(){
@@ -96,12 +99,18 @@ public class NicoLogin extends HttpResponseGetter {
                 return;
             }
         }
-        throw new NicoAPIException.InvalidParamsException("mail and pass are invalid > login");
+        throw new NicoAPIException.InvalidParamsException(
+                "mail and pass are invalid > login",
+                NicoAPIException.EXCEPTION_PARAM_LOGIN
+        );
     }
 
-    private void getUserName() throws NicoAPIException.ParseException{
+    private void getUserName() throws NicoAPIException{
         if ( super.response == null || userID <= 0 ){
-            throw new NicoAPIException.ParseException("parse target is null",null);
+            throw new NicoAPIException.IllegalStateException(
+                    "userID in unknown > userName",
+                    NicoAPIException.EXCEPTION_ILLEGAL_STATE_LOGIN_NAME
+            );
         }
         Matcher matcher = Pattern.compile("<span id=\"siteHeaderUserNickNameContainer\">(.+?)</span>").matcher(super.response);
         if ( matcher.find() ){
@@ -117,14 +126,20 @@ public class NicoLogin extends HttpResponseGetter {
                 loginInfo.setUserName(userName);
                 return;
             }else{
-                throw new NicoAPIException.ParseException("cannot find user name ",super.response);
+                throw new NicoAPIException.ParseException(
+                        "cannot find user name ",super.response,
+                        NicoAPIException.EXCEPTION_PARSE_LOGIN_USER_NAME
+                );
             }
         }
     }
 
-    private void getUserID() throws NicoAPIException.ParseException{
+    private void getUserID() throws NicoAPIException{
         if ( super.response == null ){
-            throw new NicoAPIException.ParseException("parse target is null",null);
+            throw new NicoAPIException.IllegalStateException(
+                    "not login yet",
+                    NicoAPIException.EXCEPTION_ILLEGAL_STATE_LOGIN_USER_ID
+            );
         }
         Matcher matcher = Pattern.compile("var User = \\{ id: ([0-9]+), age: ([0-9]+), isPremium: (false|true), isOver18: (false|true), isMan: (false|true) \\};").matcher(super.response);
         if ( matcher.find() ){
@@ -137,8 +152,10 @@ public class NicoLogin extends HttpResponseGetter {
             loginInfo.setUserID(userID);
             loginInfo.setPremium(isPremium);
         }else{
-            userID = 0;
-            throw new NicoAPIException.ParseException("cannot find userID ",super.response);
+            throw new NicoAPIException.ParseException(
+                    "cannot find userID ",super.response,
+                    NicoAPIException.EXCEPTION_PARSE_LOGIN_USER_ID
+            );
         }
     }
 
@@ -160,7 +177,10 @@ public class NicoLogin extends HttpResponseGetter {
         }catch (NicoAPIException.NoLoginException e){
             throw e;
         }catch (Exception e){
-            throw new NicoAPIException.DrawableFailureException("fail to get user icon > "+e.getMessage(),NicoAPIException.EXCEPTION_DRAWABLE_USER_ICON);
+            throw new NicoAPIException.DrawableFailureException(
+                    "fail to get user icon > "+e.getMessage(),
+                    NicoAPIException.EXCEPTION_DRAWABLE_USER_ICON
+            );
         }
     }
 

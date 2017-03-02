@@ -4,6 +4,10 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import java.util.List;
+
+import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.MyListVideoGroup;
+import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.MyListVideoInfo;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoAPIException;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.TempMyListVideoGroup;
 
@@ -27,6 +31,7 @@ public class TempMyListActivity extends CustomListActivity {
 
         new AsyncTask<String, Void, String>() {
             private ProgressDialog progress;
+            private List<MyListVideoInfo> list;
             @Override
             protected void onPreExecute() {
                 progress = new ProgressDialog(TempMyListActivity.this);
@@ -38,6 +43,7 @@ public class TempMyListActivity extends CustomListActivity {
             protected String doInBackground(String... params) {
                 try {
                     group = nicoClient.getTempMyList();
+                    list = group.getVideoList();
                     return null;
                 } catch (NicoAPIException e) {
                     return e.getMessage();
@@ -48,7 +54,7 @@ public class TempMyListActivity extends CustomListActivity {
                 progress.cancel();
                 progress = null;
                 showMessage(response);
-                setVideos(group.getVideoList());
+                setVideos(list);
             }
         }.execute();
 

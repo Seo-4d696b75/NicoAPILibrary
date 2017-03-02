@@ -99,7 +99,7 @@ public class NicoSearch extends HttpResponseGetter {
      * Sets all the search keyword following {@link SearchVideoInfo required format}.
      * @param query should not be {@code null}, or throw exception in {@link #search()}
      */
-    public void setQuery (String query){
+    public synchronized void setQuery (String query){
         this.query = query;
     }
     /**
@@ -107,7 +107,7 @@ public class NicoSearch extends HttpResponseGetter {
      * Adds search keyword with AND operator.
      * @param query should not be {@code null} or empty, or no change is applied
      */
-    public void addQuery (String query){
+    public synchronized void addQuery (String query){
         addQuery(query, QUERY_OPERATOR_AND);
     }
     /**
@@ -116,7 +116,7 @@ public class NicoSearch extends HttpResponseGetter {
      * @param query should not be {@code null} or empty, or no change is applied
      * @param operatorKey chosen from these constants; {@link #QUERY_OPERATOR_AND AND}/{@link #QUERY_OPERATOR_NOT NOT}/{@link #QUERY_OPERATOR_OR OR}, or no change is applied
      */
-    public void addQuery (String query, int operatorKey) {
+    public synchronized void addQuery (String query, int operatorKey) {
         if ( query == null || query.isEmpty() ){
             return;
         }
@@ -129,16 +129,14 @@ public class NicoSearch extends HttpResponseGetter {
             }
         }
     }
-
     /**
      * タグ検索を行うか否か設定します<br>
      *  Sets whether or not search videos with tags.
      * @param tagsSearch search about tags or not
      */
-    public void setTagsSearch (boolean tagsSearch){
+    public synchronized void setTagsSearch (boolean tagsSearch){
         this.tagsSearch = tagsSearch;
     }
-
     /**
      * 検索結果をソートするパラメータを定数SORT_PARAM_****で指定します<br>
      * Sets sort param by constant; SORT_PARAM_****.<br>
@@ -146,34 +144,31 @@ public class NicoSearch extends HttpResponseGetter {
      * Default value is {@link #SORT_PARAM_VIEW number of view}.
      * @param paramKey chosen from SORT_PARAM_****, or no change is applied
      */
-    public void setSortParam (int paramKey){
+    public synchronized void setSortParam (int paramKey){
         if ( sortParamMap.containsKey(paramKey) ){
             this.sortParam = sortParamMap.get(paramKey);
         }
     }
-
     /**
      * {@link #setSortParam(int) ソートパラメータ}に関して降順にソートするか否か(つまり昇順)を設定します<br>
      * Sets whether results is sorted in descending order or not.<br>
      * デフォルトは降順です。is {@code true}.
      * @param sortDown descending order or not
      */
-    public void setSortDown (boolean sortDown){
+    public synchronized void setSortDown (boolean sortDown){
         this.sortDown = sortDown;
     }
-
     /**
      * 最大検索結果数を設定します、上限は100です<br>
      * Sets max results number, under 100.
      * @param resultMax the max number, must be in range 1-100 or no change is applied
      */
-    public void setResultMax (int resultMax){
+    public synchronized void setResultMax (int resultMax){
         if ( resultMax < 1 || resultMax > 100 ){
             return;
         }
         this.resultMax = resultMax;
     }
-
     /**
      * 検索フィルターを動画IDに関して設定します<br>
      * Sets search filter about video ID.
@@ -191,14 +186,14 @@ public class NicoSearch extends HttpResponseGetter {
         setFilter(FILTER_TAGS,tag);
     }
     /**
-     * 検索フィルターをジャンル(カテゴリタグ)に関して設定します, 参照：{@link RankingVideoInfo 指定可能な値}<br>
-     *  Sets search filter about genre, what is called {@link RankingVideoInfo category tag}.
+     * 検索フィルターをジャンル(カテゴリタグ)に関して設定します, 参照：{@link NicoRanking 指定可能な値}<br>
+     *  Sets search filter about genre, what is called {@link NicoRanking category tag}.
      * @param genre the target genre, should not be {@code null}, or no change applied
      */
     public void setFilterGenre( String genre){
         setFilter(FILTER_GENRE,genre);
     }
-    private void setFilter (int filterKey, String target){
+    private synchronized void setFilter (int filterKey, String target){
         String param = "";
         switch ( filterKey ){
             case FILTER_ID:
@@ -271,7 +266,7 @@ public class NicoSearch extends HttpResponseGetter {
     public void setFilterMyList (int from, int to){
         setFilter(FILTER_MY_LIST,from,to);
     }
-    private void setFilter (int filterKey, int from, int to){
+    private synchronized void setFilter (int filterKey, int from, int to){
         if ( from >= 0 && to >= 0 && to < from ){
             return;
         }
@@ -317,7 +312,7 @@ public class NicoSearch extends HttpResponseGetter {
     public void setFilterDate(Date from, Date to){
         setFilter(from,to);
     }
-    private void setFilter (Date from, Date to){
+    private synchronized void setFilter (Date from, Date to){
         if ( from == null && to == null ){
             return;
         }
@@ -335,7 +330,6 @@ public class NicoSearch extends HttpResponseGetter {
             filterList.add(filter);
         }
     }
-
     /**
      * {@link #setFilterDate(Date, Date)}と同様ですが日時形式に注意してください<br>
      *     Basically same as {@link #setFilterDate(Date, Date)}, but be careful about date format.<br>
@@ -344,7 +338,7 @@ public class NicoSearch extends HttpResponseGetter {
      * @param from the earliest date, ignored if {@code null}
      * @param to the latest date, ignored if {@code null}
      */
-    public void setFilterDate (String from, String to){
+    public synchronized void setFilterDate (String from, String to){
         try{
             Date dateFrom = null;
             if ( from != null ){
@@ -360,7 +354,6 @@ public class NicoSearch extends HttpResponseGetter {
             return;
         }
     }
-
     /**
      * ニコ動検索ＡＰＩでの日時形式です"yyyy-MM-dd'T'HH:mm:ss'+09:00'"<br>
      *  date format in Nico search API; "yyyy-MM-dd'T'HH:mm:ss'+09:00'".<br>
@@ -372,7 +365,6 @@ public class NicoSearch extends HttpResponseGetter {
             setTimeZone(TimeZone.getTimeZone("Japan"));
         }
     };
-
     /**
      * 検索を実行して結果を取得します<br>
      * Searches videos and gets results.<br>
@@ -382,38 +374,47 @@ public class NicoSearch extends HttpResponseGetter {
      * @throws NicoAPIException if no query set or fail to parse response
      */
     public List<VideoInfo> search () throws NicoAPIException{
-        if ( appName == null || appName.isEmpty() ){
-            throw new NicoAPIException.InvalidParamsException("appName is required in Search");
-        }
-        if ( query.isEmpty() ){
-            throw new NicoAPIException.InvalidParamsException("no query is set > search");
-        }
         StringBuilder builder = new StringBuilder();
-        builder.append(searchUrl);
-        builder.append(query);
-        if ( tagsSearch ){
-            builder.append("&targets=tagsExact");
-        }else{
-            builder.append("&targets=title,description,tags");
+        synchronized (this) {
+            if (appName == null || appName.isEmpty()) {
+                throw new NicoAPIException.InvalidParamsException("appName is required in Search");
+            }
+            if (query.isEmpty()) {
+                throw new NicoAPIException.InvalidParamsException("no query is set > search");
+            }
+            builder.append(searchUrl);
+            builder.append(query);
+            if (tagsSearch) {
+                builder.append("&targets=tagsExact");
+            } else {
+                builder.append("&targets=title,description,tags");
+            }
+            builder.append("&fields=contentId,title,description,tags,viewCounter,mylistCounter,commentCounter,startTime,lengthSeconds");
+            for (String filter : filterList) {
+                builder.append(filter);
+            }
+            builder.append("&_sort=");
+            if (sortDown) {
+                builder.append("-");
+            } else {
+                builder.append("+");
+            }
+            builder.append(sortParam);
+            builder.append("&_limit=");
+            builder.append(resultMax);
+            builder.append("&_context=");
+            builder.append(appName);
         }
-        builder.append("&fields=contentId,title,description,tags,viewCounter,mylistCounter,commentCounter,startTime,lengthSeconds");
-        for ( String filter : filterList) {
-            builder.append(filter);
-        }
-        builder.append("&_sort=");
-        if ( sortDown ){
-            builder.append("-");
-        }else{
-            builder.append("+");
-        }
-        builder.append(sortParam);
-        builder.append("&_limit=");
-        builder.append(resultMax);
-        builder.append("&_context=");
-        builder.append(appName);
         String path = builder.toString();
-        tryGet(path);
-        return SearchVideoInfo.parse(super.response);
+        if ( tryGet(path) ){
+            return SearchVideoInfo.parse(super.response);
+        }else{
+            throw new NicoAPIException.HttpException(
+                    "fail to get search response",
+                    NicoAPIException.EXCEPTION_HTTP_SEARCH,
+                    super.statusCode, path, "GET"
+            );
+        }
     }
 
 

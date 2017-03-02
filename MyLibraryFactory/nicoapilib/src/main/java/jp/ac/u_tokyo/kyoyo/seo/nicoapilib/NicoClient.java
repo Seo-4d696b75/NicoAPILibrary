@@ -132,7 +132,10 @@ public class NicoClient extends LoginInfo{
         if ( isLogin() ) {
             return new TempMyListVideoGroup(this);
         }else{
-            throw new NicoAPIException.NoLoginException("no login > temp myList",NicoAPIException.EXCEPTION_NOT_LOGIN_TEMP_MYLIST);
+            throw new NicoAPIException.NoLoginException(
+                    "no login > temp myList",
+                    NicoAPIException.EXCEPTION_NOT_LOGIN_TEMP_MYLIST
+            );
         }
     }
 
@@ -153,7 +156,10 @@ public class NicoClient extends LoginInfo{
      */
     public synchronized MyListGroup getMyListGroup() throws NicoAPIException{
         if ( !isLogin() ){
-            throw new NicoAPIException.NoLoginException("no login > myList group",NicoAPIException.EXCEPTION_NOT_LOGIN_MYLIST_GROUP);
+            throw new NicoAPIException.NoLoginException(
+                    "no login > myList group",
+                    NicoAPIException.EXCEPTION_NOT_LOGIN_MYLIST_GROUP
+            );
         }
         return new MyListGroup(this);
     }
@@ -172,7 +178,10 @@ public class NicoClient extends LoginInfo{
      */
     public synchronized MyListVideoGroup getMyList (int ID) throws NicoAPIException{
         if ( !isLogin() ){
-            throw new NicoAPIException.NoLoginException("no login > myList",NicoAPIException.EXCEPTION_NOT_LOGIN_MYLIST);
+            throw new NicoAPIException.NoLoginException(
+                    "no login > myList",
+                    NicoAPIException.EXCEPTION_NOT_LOGIN_MYLIST
+            );
         }
         return MyListVideoGroup.getMyListGroup(ID,this);
     }
@@ -190,7 +199,10 @@ public class NicoClient extends LoginInfo{
      */
     public synchronized List<CommentInfo> getComment (VideoInfo videoInfo) throws NicoAPIException{
         if ( videoInfo == null ){
-            throw new NicoAPIException.InvalidParamsException("target video is null > comment");
+            throw new NicoAPIException.InvalidParamsException(
+                    "target video is null > comment",
+                    NicoAPIException.EXCEPTION_PARAM_COMMENT_TARGET
+            );
         }
         try{
             videoInfo.getMessageServerUrl();
@@ -211,10 +223,16 @@ public class NicoClient extends LoginInfo{
      */
     public synchronized List<CommentInfo> getComment (VideoInfo videoInfo, int max) throws NicoAPIException{
         if ( videoInfo == null ){
-            throw new NicoAPIException.InvalidParamsException("target video is null > comment");
+            throw new NicoAPIException.InvalidParamsException(
+                    "target video is null > comment",
+                    NicoAPIException.EXCEPTION_PARAM_COMMENT_TARGET
+            );
         }
         if ( !isLogin() ){
-            throw new NicoAPIException.NoLoginException("no login > comment",NicoAPIException.EXCEPTION_NOT_LOGIN_COMMENT);
+            throw new NicoAPIException.NoLoginException(
+                    "no login > comment",
+                    NicoAPIException.EXCEPTION_NOT_LOGIN_COMMENT
+            );
         }
         try{
             videoInfo.getMessageServerUrl();
@@ -237,7 +255,10 @@ public class NicoClient extends LoginInfo{
         if ( isLogin() ){
             return new NicoCommentPost(info,this);
         }else{
-            throw new NicoAPIException.NoLoginException("no login > posting comment",NicoAPIException.EXCEPTION_NOT_LOGIN_COMMENT_POST);
+            throw new NicoAPIException.NoLoginException(
+                    "no login > posting comment",
+                    NicoAPIException.EXCEPTION_NOT_LOGIN_COMMENT_POST
+            );
         }
     }
 

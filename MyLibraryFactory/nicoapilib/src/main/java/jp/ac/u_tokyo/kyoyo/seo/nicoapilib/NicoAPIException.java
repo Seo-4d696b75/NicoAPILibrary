@@ -122,14 +122,14 @@ public class NicoAPIException extends Exception {
      * Thrown if target video field is not initialized.<br><br>
      *
      * 各ＡＰＩから取得できるフィールドは以下から参照してください。<br>
-     *     {@link RankingVideoInfo ランキング・マイリスト}<br>
+     *     {@link RSSVideoInfo ランキング・マイリスト}<br>
      *     {@link RecommendVideoInfo おすすめ動画}<br>
      *     {@link SearchVideoInfo 動画検索}<br>
      *     {@link MyListVideoInfo とりあえずマイリスト}<br>
      * {@link VideoInfo#complete()},{@link VideoInfo#getFlv(CookieStore)}を呼ぶことで
      * 欠損したフィールド値を取得できます。<br>
      * You can get following fields from each API;<br>
-     *     {@link RankingVideoInfo ranking and myList}<br>
+     *     {@link RSSVideoInfo ranking and myList}<br>
      *     {@link RecommendVideoInfo reccomend}<br>
      *     {@link SearchVideoInfo search}<br>
      *     {@link MyListVideoInfo temp myList}<br>
@@ -196,9 +196,9 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_PARSE_RANKING_NO_TARGET = 203;
     /**
-     * tried to parse response about myList or ranking, but the response format is neither of them.
+     * tried to parse response about recommended videos, because the target is {@code null}.
      */
-    public static final int EXCEPTION_PARSE_NOT_RANKING_OR_MYLIST = 204;
+    public static final int EXCEPTION_PARSE_RECOMMEND_NO_TARGET = 204;
     /**
      * tried to parse response about myList or ranking, but target sequence matched with expected format not found.
      */
@@ -251,6 +251,51 @@ public class NicoAPIException extends Exception {
      * fail to parse JSON response when try moving or copying myList videos.
      */
     public static final int EXCEPTION_PARSE_MYLIST_MOVE_STATE = 217;
+    /**
+     * fail to parse response about comment, because essential fields are missing;
+     * comment text, posted-date and comment time.
+     */
+    public static final int EXCEPTION_PARSE_COMMENT_XML = 218;
+    /**
+     * fail to parse response about comment, because of JsonException or
+     * because essential fields are missing;
+     * comment text, posted-date and comment time.
+     */
+    public static final int EXCEPTION_PARSE_COMMENT_JSON = 219;
+    /**
+     * fail to parse meta of Json response about comment,
+     * because expected value not found, or unexpected format.
+     */
+    public static final int EXCEPTION_PARSE_COMMENT_JSON_META = 220;
+    /**
+     * fail to parse meta of XML response about comment,
+     * because expected value not found, or unexpected format.
+     */
+    public static final int EXCEPTION_PARSE_COMMENT_XML_META = 221;
+    /**
+     * fail to parse response of posting comment.
+     * The format of the XML response is unexpected.
+     */
+    public static final int EXCEPTION_PARSE_COMMENT_POST = 222;
+    /**
+     * fail to parse userName from myPage HTML and from "seiga" API response, either.
+     */
+    public static final int EXCEPTION_PARSE_LOGIN_USER_NAME = 223;
+    /**
+     * fail to parse userID from myPage HTML.
+     * But uerID also can be gotten from value of cookie; "user_session".
+     */
+    public static final int EXCEPTION_PARSE_LOGIN_USER_ID = 224;
+    /**
+     * fail to parse response status about recommended videos.
+     */
+    public static final int EXCEPTION_PARSE_RECOMMEND_STATUS = 224;
+    /**
+     * fail to parse response about recommended videos
+     * because target fields not found or unexpected format.
+     */
+    public static final int EXCEPTION_PARSE_RECOMMEND = 225;
+
 
     /**
      * APIからのレスポンスのパースに失敗すると投げられます<br>
@@ -342,7 +387,7 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_PARAM_MYLIST_TARGET_VIDEO = 314;
     /**
-     * fail to add/update the video because description param is {@code null}.
+     * fail to add/update the video/myList because description param is {@code null}.
      * When want to set no description, empty String has to be passed.
      */
     public static final int EXCEPTION_PARAM_MYLIST_DESCRIPTION = 315;
@@ -351,6 +396,38 @@ public class NicoAPIException extends Exception {
      * Be sure to get {@link MyListGroup} and pass some of its {@link MyListVideoGroup}
      */
     public static final int EXCEPTION_PARAM_MYLIST_TARGET_MYLIST = 316;
+    /**
+     * fail to add/update the myList because name param is {@code null}.
+     * When want to set "", empty String has to be passed.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_NAME = 317;
+    /**
+     * fail to get comments because target video is {@code null}.
+     */
+    public static final int EXCEPTION_PARAM_COMMENT_TARGET = 318;
+    /**
+     * fail to get {@link NicoCommentPost} instance because target video is {@code null}.
+     */
+    public static final int EXCEPTION_PARAM_COMMENT_POST_TARGET = 319;
+    /**
+     * fail to post a comment because posting-time is out of bound.
+     */
+    public static final int EXCEPTION_PARAM_COMMENT_POST_TIME = 320;
+    /**
+     * fail to post a comment because comment content is {@code null} or empty String.
+     */
+    public static final int EXCEPTION_PARAM_COMMENT_POST_CONTENT = 321;
+    /**
+     * fail to post new comment because of various possible reasons;
+     * Passed threadID, userID, post key or ticket is invalid.
+     * Posting new comment to the target video is not allowed due to its setting.
+     * The comment text is too long.
+     */
+    public static final int EXCEPTION_PARAM_COMMENT_POST = 322;
+    /**
+     * fail to login because passed mail address and password are {@code null}, or invalid values.
+     */
+    public static final int EXCEPTION_PARAM_LOGIN = 323;
     /**
      * 不正な引数を渡すと投げられます<br>
      * Thrown if invalid argument is passed.
@@ -433,6 +510,18 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_UNEXPECTED_MYLIST_EDIT_ERROR_CODE = 503;
     /**
+     * status code is unexpected when trying to parse comment response.
+     */
+    public static final int EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE = 504;
+    /**
+     * status code of response about recommended videos is unexpected.
+     */
+    public static final int EXCEPTION_UNEXPECTED_RECOMMEND_STATUS_CODE = 505;
+    /**
+     * the format of ranking RSS in XML is unexpected.
+     */
+    public static final int EXCEPTION_UNEXPECTED_RANKING = 506;
+    /**
      * APIからのレスポンスの各値が想定外の場合に投げます<br>
      * Thrown if status of API response is not expected.<br>
      * 各種不正なパラメータやユーザアカウントの設定、APIのアクセス制限などが考えられます。<br>
@@ -465,6 +554,16 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY = 603;
     /**
+     * fail to get userName because userID is still unknown.
+     * UserID must be gotten beforehand.
+     */
+    public static final int EXCEPTION_ILLEGAL_STATE_LOGIN_NAME = 604;
+    /**
+     * fail to get userID because not access myPage yet.
+     * In advance, login and get myPage HTML.
+     */
+    public static final int EXCEPTION_ILLEGAL_STATE_LOGIN_USER_ID = 605;
+    /**
      * 想定してない状態を意味します
      */
     static class IllegalStateException extends NicoAPIException{
@@ -474,7 +573,7 @@ public class NicoAPIException extends Exception {
     }
 
     /**
-     * http failure while trying to add video in (temp)MyList.
+     * http failure while trying to add video in (temp)MyList or to add new myList in myList group.
      */
     public static final int EXCEPTION_HTTP_MYLIST_ADD = 700;
     /**
@@ -517,6 +616,26 @@ public class NicoAPIException extends Exception {
      * http failure while trying to copy a video from (temp)MyList to another myList.
      */
     public static final int EXCEPTION_HTTP_MYLIST_COPY = 710;
+    /**
+     * http failure while trying to sort videos in target myList.
+     */
+    public static final int EXCEPTION_HTTP_MYLIST_SORT = 711;
+    /**
+     * HTTP failure while getting post key.
+     */
+    public static final int EXCEPTION_HTTP_COMMENT_POST_KEY = 712;
+    /**
+     * HTTP failure while posting new comment.
+     */
+    public static final int EXCEPTION_HTTP_COMMENT_POST = 713;
+    /**
+     * HTTP failure while getting search response.
+     */
+    public static final int EXCEPTION_HTTP_SEARCH = 714;
+    /**
+     * HTTP failure while getting ranking.
+     */
+    public static final int EXCEPTION_HTTP_RANKING = 715;
     /**
      * HTTP通信に失敗
      */

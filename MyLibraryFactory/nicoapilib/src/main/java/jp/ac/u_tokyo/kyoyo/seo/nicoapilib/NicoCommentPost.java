@@ -60,13 +60,10 @@ public class NicoCommentPost {
      */
     protected NicoCommentPost(VideoInfo targetVideo,NicoClient client)throws NicoAPIException{
         if ( targetVideo == null ){
-            throw new NicoAPIException.InvalidParamsException("target video not found > comment");
-        }
-        if ( client == null ){
-            throw new NicoAPIException.InvalidParamsException("login info not found > comment");
-        }
-        if ( !client.isLogin() ){
-            throw new NicoAPIException.NoLoginException("not login > comment",NicoAPIException.EXCEPTION_NOT_LOGIN_COMMENT_POST);
+            throw new NicoAPIException.InvalidParamsException(
+                    "target video not found > comment",
+                    NicoAPIException.EXCEPTION_PARAM_COMMENT_POST_TARGET
+            );
         }
         this.targetVideo = targetVideo;
         this.client = client;
@@ -279,13 +276,22 @@ public class NicoCommentPost {
      */
     public void post() throws NicoAPIException{
         if ( isPost ){
-            throw new NicoAPIException.IllegalStateException("cannot post the comment again",NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NON_REUSABLE);
+            throw new NicoAPIException.IllegalStateException(
+                    "cannot post the comment again",
+                    NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NON_REUSABLE
+            );
         }
         if ( startTime < 0 || startTime >= targetVideo.getLength()*100 ){
-            throw new NicoAPIException.InvalidParamsException("comment time is out of range");
+            throw new NicoAPIException.InvalidParamsException(
+                    "comment time is out of range",
+                    NicoAPIException.EXCEPTION_PARAM_COMMENT_POST_TIME
+            );
         }
         if ( comment == null || comment.isEmpty() ){
-            throw new NicoAPIException.InvalidParamsException("comment is not set");
+            throw new NicoAPIException.InvalidParamsException(
+                    "comment is not set",
+                    NicoAPIException.EXCEPTION_PARAM_COMMENT_POST_CONTENT
+            );
         }
         int userID = 0;
         int premium = 0;
@@ -348,16 +354,30 @@ public class NicoCommentPost {
                         if (statusCode == STATUS_SUCCESS) {
                             isPost = true;
                         } else {
-                            throw new NicoAPIException.APIUnexpectedException(statusMap.get(statusCode));
+                            throw new NicoAPIException.InvalidParamsException(
+                                    statusMap.get(statusCode),
+                                    NicoAPIException.EXCEPTION_PARAM_COMMENT_POST
+                            );
                         }
                     } else {
-                        throw new NicoAPIException.APIUnexpectedException("response is unexpected");
+                        throw new NicoAPIException.ParseException(
+                                "fail to parse post response",getter.response,
+                                NicoAPIException.EXCEPTION_PARSE_COMMENT_POST
+                        );
                     }
                 } else {
-                    throw new NicoAPIException.APIUnexpectedException("fail to post comment");
+                    throw new NicoAPIException.HttpException(
+                            "fail to post comment",
+                            NicoAPIException.EXCEPTION_HTTP_COMMENT_POST,
+                            getter.statusCode, path, "GET"
+                    );
                 }
             } else {
-                throw new NicoAPIException.APIUnexpectedException("fail to get postKey");
+                throw new NicoAPIException.HttpException(
+                        "fail to get postKey",
+                        NicoAPIException.EXCEPTION_HTTP_COMMENT_POST_KEY,
+                        getter.statusCode, path, "GET"
+                );
             }
         }
     }
@@ -376,7 +396,10 @@ public class NicoCommentPost {
             if (isPost) {
                 return commentNo;
             } else {
-                throw new NicoAPIException.IllegalStateException("not post a comment yet",NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST);
+                throw new NicoAPIException.IllegalStateException(
+                        "not post a comment yet",
+                        NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST
+                );
             }
         }
     }

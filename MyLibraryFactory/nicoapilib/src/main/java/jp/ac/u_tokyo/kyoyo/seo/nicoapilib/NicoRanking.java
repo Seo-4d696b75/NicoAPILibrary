@@ -1,5 +1,6 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -319,30 +320,68 @@ public class NicoRanking extends HttpResponseGetter {
      * This gets ranking from Nico after you set params; genre, kind and period.
      * If you not set them, this interprets as all category, entire period, overall ranking.
      * You cannot reuse this instance. If called twice again, an exception is thrown.
-     * @return Returns empty List if no hit, not {@code null}
+     * @return Returns {@link RankingVideoGroup} instance with empty List if no hit, not {@code null}
      * @throws NicoAPIException if fail to get or call this twice again
      */
-    public synchronized List<VideoInfo> get () throws NicoAPIException {
-        if ( isDone ){
-            throw new NicoAPIException.IllegalStateException("NicoRanking is not reusable > ranking", NicoAPIException.EXCEPTION_ILLEGAL_STATE_RANKING_NON_REUSABLE);
-        }else{
-            isDone = true;
-        }
-        if (  kind.isEmpty() ){
-            kind = kindValueMap.get(KIND_FAV);
+    public RankingVideoGroup get () throws NicoAPIException {
+        String kind,period,genre;
+        synchronized (this) {
+            if (isDone) {
+                throw new NicoAPIException.IllegalStateException(
+                        "NicoRanking is not reusable > ranking",
+                        NicoAPIException.EXCEPTION_ILLEGAL_STATE_RANKING_NON_REUSABLE
+                );
+            } else {
+                isDone = true;
+            }
+            kind = this.kind;
+            period = this.period;
+            genre = this.genre;
+            if (kind.isEmpty()) {
+                kind = kindValueMap.get(KIND_FAV);
+            }
         }
         String path = String.format(rankingUrl, kind, period, genre);
-        tryGet(path);
-        return RankingVideoInfo.parse(super.response, genre, period, kind);
+        if ( tryGet(path) ) {
+            return new RankingVideoGroup(RSSVideoInfo.parse(super.response),genre,period,kind);
+        }else{
+            throw new NicoAPIException.HttpException(
+                    "fail to get ranking",
+                    NicoAPIException.EXCEPTION_HTTP_RANKING,
+                    super.statusCode, path, "GET"
+            );
+        }
     }
 
-    public synchronized String getGenre(){
-        return genre;
-    }
-    public synchronized String getKind(){
-        return kind;
-    }
-    public synchronized String getPeriod(){
-        return period;
+    public class RankingVideoGroup {
+
+        private String genre;
+        private String period;
+        private String kind;
+        private List<VideoInfo> videoList;
+
+        protected RankingVideoGroup (List<VideoInfo> videoList, String genre, String period, String kind){
+            this.genre = genre;
+            this.kind = kind;
+            this.period = period;
+            this.videoList = videoList;
+        }
+
+        public String getGenre(){
+            return genre;
+        }
+        public String getPeriod(){
+            return period;
+        }
+        public String getKind(){
+            return kind;
+        }
+        public List<VideoInfo> getVideoList(){
+            List<VideoInfo> list = new ArrayList<VideoInfo>();
+            for ( VideoInfo info : videoList ){
+                list.add(info);
+            }
+            return list;
+        }
     }
 }

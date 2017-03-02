@@ -3,25 +3,20 @@ package jp.ac.u_tokyo.kyoyo.seo.mylibraryfactory;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.util.List;
 import java.util.Map;
 
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoAPIException;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoRanking;
-import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
 
 /**
  * Created by Seo-4d696b75 on 2017/02/04.
@@ -126,7 +121,7 @@ public class RankingActivity extends CustomListActivity {
             public void onClick(DialogInterface dialog, int which) {
                 new AsyncTask<String, Void, String> (){
                     private ProgressDialog progress = null;
-                    private List<VideoInfo> list;
+                    private NicoRanking.RankingVideoGroup group;
                     @Override
                     protected void onPreExecute() {
                         progress = new ProgressDialog(RankingActivity.this);
@@ -137,7 +132,7 @@ public class RankingActivity extends CustomListActivity {
                     @Override
                     protected String doInBackground(String... params) {
                         try {
-                            list = nicoRanking.get();
+                            group = nicoRanking.get();
                             return null;
                         }catch (NicoAPIException e){
                             return e.getMessage();
@@ -145,12 +140,12 @@ public class RankingActivity extends CustomListActivity {
                     }
                     @Override
                     protected void onPostExecute(String response) {
-                        setVideos(list);
+                        setVideos(group.getVideoList());
                         showMessage(response);
                         progress.cancel();
-                        String genre = nicoRanking.getGenre();
-                        String kind = nicoRanking.getKind();
-                        String period = nicoRanking.getPeriod();
+                        String genre = group.getGenre();
+                        String kind = group.getKind();
+                        String period = group.getPeriod();
                         textViewMes.setText(String.format("genre:%s kind:%s \n period:%s",genre,kind,period));
                     }
                 }.execute();

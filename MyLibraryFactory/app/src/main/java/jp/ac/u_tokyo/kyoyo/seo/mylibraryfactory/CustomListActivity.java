@@ -460,11 +460,11 @@ public abstract class CustomListActivity extends AppCompatActivity {
             if ( item != null ){
                 TextView textTime = (TextView)view.findViewById(R.id.textViewCommentTime);
                 TextView textComment = (TextView)view.findViewById(R.id.textViewComment);
-                String startTime = String.format("%02d:%02d %d",(int)item.start/60000,((int)item.start%60000)/1000,item.ngLevel);
+                String startTime = String.format("%02d:%02d %d",(int)item.getStart()/60000,((int)item.getStart()%60000)/1000,item.getNgLevel());
                 textTime.setText(startTime);
                 textComment.setShadowLayer(5f,5f,5f,Color.BLACK);
-                textComment.setTextColor(item.color);
-                textComment.setText(item.content);
+                textComment.setTextColor(item.getColor());
+                textComment.setText(item.getContent());
             }
             return view;
         }

@@ -86,74 +86,97 @@ import java.util.regex.Pattern;
 
 public class CommentInfo {
 
-    /**
-     * コメントが右から流れ始める時間　単位はミリ秒<br>
-     * time when the comment begins to flow from one side to the other, measured in milli seconds.
-     */
-    public long start;
+    private long start;
     private String[] mail;   //list of comment commands, not mail address
-    /**
-     * コメントの内容<br>
-     * content of the comment
-     */
-    public String content;  //comment
-    /**
-     * コメントの投稿日時、{@link VideoInfo#dateFormatBase 共通形式}に従う<br>
-     * date when the comment is contributed, based on {@link VideoInfo#dateFormatBase common format}
-     */
-    public String date;
-    /**
-     * コメントの匿名性<br>
-     * whether or not the comment is anonymous<br>
-     * yes:0, no:1(default)
-     */
-    public int anonymity = 1;   //1:normal
-    /**
-     * コメントのNGレベルの指標です<br>
-     * NG level of this comment.<br>
-     * この値が大きいほどＮＧされた数が多いコメントであることを意味します。範囲[0-3]
-     * 0から順にＮＧ共有レベル強・中・弱・無の閾値に対応します.<br>
-     * The larger this value, the more NG this comment receives, in range 0-3.
-     */
-    public int ngLevel;
-    /**
-     * ひとつの動画において各コメントに一意的な値です<br>
-     *  Numbering of this comment.
-     */
-    public int commentNo;
+    private String content;  //comment
+    private String date;
+    private boolean isAnonymous = true;   //1:normal
+    private int ngLevel;
+    private int commentNo;
 
     private boolean initialized = false;
 
-    /**
-     * 画面上のコメントの座標（ピクセル単位）<br>
-     * x,y-coordinate on screen, measured in pixels
-     */
     public float x,y;
-    /**
-     * コメントの画面上での長さ(ピクセル単位)<br>
-     * length on screen, measured in pixels
-     */
     public float length = -1f;
-    /**
-     * コメントの流れる速さ（ピクセル/s）<br>
-     *     speed with which the comment flows, measured in pixels per second
-     */
     public float speed;
+    private int color = 0;
+    private float size = -1f;
+    private int position = -1;
+
     /**
-     * コメントの色<br>
-     * color of the comment
+     * コメントが右から流れ始める時間を取得する
+     * Gets time when the comment begins to flow from one side to the other.<br>
+     *     単位はミリ秒 measured in milli seconds.
+     * @return comment time in milli seconds
      */
-    public int color = 0;
+    public long getStart(){
+        return start;
+    }
     /**
-     * 表示行の高さに対するコメントサイズの比率<br>
-     *    ratio of comment size to max height, can be between 0.0 to 1.0
+     * コメント内容を取得する Gets comment text.
+     * @return the comment, not {@code null}
      */
-    public float size = -1f;
+    public String getContent(){
+        return content;
+    }
     /**
-     * コメントの位置 POSITION定数<br>
-     *     position of the comment, can be the following constants; POSITION_****
+     * コメントの投稿日時を取得する Gets posted-date of the comment.<br>
+     * 日時の形式は{@link VideoInfo#dateFormatBase}に従います。<br>
+     * The Date format follows {@link VideoInfo#dateFormatBase}.
+     * @return
      */
-    public int position = -1;
+    public String getDate(){
+        return date;
+    }
+    /**
+     * コメントの匿名性を取得する　Gets whether or not the comment is anonymous.
+     * @return the value
+     */
+    public boolean isAnonymous (){
+        return isAnonymous;
+    }
+    /**
+     * コメントのＮＧレベルを取得する Gets the NG level.<br>
+     * コメントのNGレベルの指標で、この値が大きいほどＮＧされた数が多いコメントであることを意味します。範囲[0-3]
+     * 0から順にＮＧ共有レベル強・中・弱・無の閾値に対応します.<br>
+     * The larger this value, the more NG this comment receives, in range 0-3.
+     * @return the NG level
+     */
+    public int getNgLevel(){
+        return ngLevel;
+    }
+    /**
+     * コメントＩＤを取得する Gets the comment ID.<br>
+     * ひとつの動画において各コメントに一意的な値です<br>
+     *  Numbering of this comment.
+     * @return the comment ID
+     */
+    public int getCommentNo(){
+        return commentNo;
+    }
+    /**
+     * コメントの色を取得する Gets the comment color.<br>
+     * 値は実際の色のαRGB値を表します。<br>
+     *  This value stands for actual αRGB.
+     * @return the comment color in αRGB
+     */
+    public int getColor(){
+        return color;
+    }
+    /**
+     * コメントの位置を取得する　Gets the comment position.
+     * @return the constant, one of POSITION_****
+     */
+    public int getPosition(){
+        return position;
+    }
+    /**
+     * コメントの大きさを取得する　Gets the comment size.
+     * @return
+     */
+    public float getSize(){
+        return size;
+    }
 
     public static final int POSITION_UP = 0;
     public static final int POSITION_MIDDLE = 1;
@@ -243,6 +266,7 @@ public class CommentInfo {
     private Pattern contentPattern = Pattern.compile(">(.+?)</chat>");
     private Pattern scorePattern = Pattern.compile("score=\"(-[0-9]+?)\"");
     private Pattern noPattern = Pattern.compile("no=\"([0-9]+?)\"");
+
     private void initialize (String xml) throws NicoAPIException{
         Matcher startMatcher,dateMatcher,contentMatcher,noMatcher;
         startMatcher = startPattern.matcher(xml);
@@ -256,9 +280,9 @@ public class CommentInfo {
             commentNo = Integer.parseInt( noMatcher.group(1) );
             Matcher matcher = anonymityPattern.matcher(xml);
             if ( matcher.find() ){
-                anonymity = Integer.parseInt(matcher.group(1));
-            }else{
-                anonymity = 1;
+                if ( Integer.parseInt(matcher.group(1)) == 0 ){
+                    isAnonymous = false;
+                }
             }
             matcher = scorePattern.matcher(xml);
             if (matcher.find()) {
@@ -272,9 +296,13 @@ public class CommentInfo {
             }
             setCommands();
         }else{
-            throw new NicoAPIException.ParseException("target attribute not found; 'vpos' 'date' 'content' > comment",xml);
+            throw new NicoAPIException.ParseException(
+                    "target attribute not found; 'vpos' 'date' 'content' > comment",
+                    xml,NicoAPIException.EXCEPTION_PARSE_COMMENT_XML
+            );
         }
     }
+
     private void initialize (JSONObject item) throws NicoAPIException{
         try {
             //value of "vpos" seems to be time when comment appear,
@@ -282,7 +310,9 @@ public class CommentInfo {
             int vpos = item.getInt("vpos");
             start = (long) vpos * 10;
             if (item.has("anonymity")) {
-                anonymity = item.getInt("anonymity");
+                if ( item.getInt("anonymity") == 1 ){
+                    isAnonymous = false;
+                }
             }
             date = convertDate(item.getLong("date"));
             if (item.has("mail")) {
@@ -292,7 +322,10 @@ public class CommentInfo {
             commentNo = item.getInt("no");
             setCommands();
         }catch (JSONException e){
-            throw new NicoAPIException.ParseException(e.getMessage(),item.toString());
+            throw new NicoAPIException.ParseException(
+                    e.getMessage(),item.toString(),
+                    NicoAPIException.EXCEPTION_PARSE_COMMENT_JSON
+            );
         }
     }
 
@@ -341,36 +374,34 @@ public class CommentInfo {
         List<CommentInfo>commentList = new ArrayList<CommentInfo>();
         try{
             JSONObject meta = root.getJSONObject(0);
-            if ( meta.has("thread") ) {
-                meta = meta.getJSONObject("thread");
-                if ( meta.has("resultcode") && meta.has("thread") && meta.has("last_res") && meta.has("ticket") ) {
-                    int resultCode = meta.getInt("resultcode");
-                    int threadID = meta.getInt("thread");
-                    int lastComment = meta.getInt("last_res");
-                    String ticket = meta.getString("ticket");
-                    if ( resultCode == 0 ) {
-                        for (int i = 1; i < root.length(); i++) {
-                            JSONObject item = root.getJSONObject(i);
-                            if (item.has("chat")) {
-                                item = item.getJSONObject("chat");
-                                if (!item.has("vpos") || !item.has("content")) {
-                                    continue;
-                                }
-                                commentList.add(new CommentInfo(item));
-                            }
+            meta = meta.getJSONObject("thread");
+            int resultCode = meta.getInt("resultcode");
+            int threadID = meta.getInt("thread");
+            int lastComment = meta.getInt("last_res");
+            String ticket = meta.getString("ticket");
+            if (resultCode == 0) {
+                for (int i = 1; i < root.length(); i++) {
+                    JSONObject item = root.getJSONObject(i);
+                    if (item.has("chat")) {
+                        item = item.getJSONObject("chat");
+                        if (!item.has("vpos") || !item.has("content")) {
+                            continue;
                         }
-                        return new CommentGroup(sortComment(commentList),threadID,lastComment,ticket);
-                    }else{
-                        throw  new NicoAPIException.APIUnexpectedException("Unexpected API response status > comment");
+                        commentList.add(new CommentInfo(item));
                     }
-                }else{
-                    throw  new NicoAPIException.APIUnexpectedException("Unexpected API response meta > comment");
                 }
-            }else{
-                throw  new NicoAPIException.APIUnexpectedException("Unexpected API response, meta not found > comment");
+                return new CommentGroup(sortComment(commentList), threadID, lastComment, ticket);
+            } else {
+                throw new NicoAPIException.APIUnexpectedException(
+                        "Unexpected API response status > comment",
+                        NicoAPIException.EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE
+                );
             }
         } catch( JSONException e){
-            throw new NicoAPIException.ParseException(e.getMessage(),root.toString());
+            throw new NicoAPIException.ParseException(
+                    e.getMessage(),root.toString(),
+                    NicoAPIException.EXCEPTION_PARSE_COMMENT_JSON_META
+            );
         }
     }
 
@@ -392,10 +423,16 @@ public class CommentInfo {
                 }
                 return new CommentGroup(sortComment(commentList),threadID,lastComment,ticket);
             }else{
-                throw  new NicoAPIException.APIUnexpectedException("Unexpected API response status > comment");
+                throw new NicoAPIException.APIUnexpectedException(
+                        "Unexpected API response status > comment",
+                        NicoAPIException.EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE
+                );
             }
         }else{
-            throw  new NicoAPIException.APIUnexpectedException("Unexpected API response meta > comment");
+            throw  new NicoAPIException.ParseException(
+                    "meta not found in XML > comment",xml,
+                    NicoAPIException.EXCEPTION_PARSE_COMMENT_XML_META
+            );
         }
     }
 
