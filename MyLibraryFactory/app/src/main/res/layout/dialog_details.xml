@@ -262,6 +262,13 @@
                         android:layout_weight="3" />
                 </TableRow>
             </TableLayout>
+            <LinearLayout
+                android:id="@+id/linearLayoutMyListDetailsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

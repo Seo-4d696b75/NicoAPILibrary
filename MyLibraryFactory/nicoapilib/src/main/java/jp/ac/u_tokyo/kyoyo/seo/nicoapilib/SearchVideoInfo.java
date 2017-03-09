@@ -106,25 +106,8 @@ public class SearchVideoInfo extends VideoInfo {
      * @throws NicoAPIException if invalid argument not following required format
      */
     protected static List<VideoInfo> parse (JSONObject root) throws NicoAPIException{
-        if ( root == null ){
-            throw new NicoAPIException.ParseException("parse target is null",null);
-        }
         try {
-            JSONObject meta = root.getJSONObject("meta");
-            if ( meta.getInt("status") != 200 ){
-                String message = "Unexpected API response status > search ";
-                try {
-                    String errorCode = meta.getString("errorCode");
-                    String errorMessage = meta.getString("errorMessage");
-                    message += (errorCode + ":" + errorMessage);
-                }catch (JSONException e){}
-                throw new NicoAPIException.APIUnexpectedException( message);
-            }
             List<VideoInfo> list = new ArrayList<VideoInfo>();
-            if ( meta.getInt("totalCount") == 0 ) {
-                Log.d("search", "no hit");
-                return list;
-            }
             JSONArray array = root.getJSONArray("data");
             for ( int i=0 ; i<array.length() ; i++){
                 JSONObject item = array.getJSONObject(i);

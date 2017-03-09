@@ -1,5 +1,8 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ import static jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo.dateFormatBase;
  * @version  0.0 on 2017/02/03.
  */
 
-public class NicoRanking extends HttpResponseGetter {
+public class NicoRanking extends HttpResponseGetter implements Parcelable {
 
     private String rankingUrl = "http://www.nicovideo.jp/ranking/%s/%s/%s?rss=2.0";
 
@@ -44,6 +47,39 @@ public class NicoRanking extends HttpResponseGetter {
     private String period;
 
     private boolean isDone;
+
+    /* <implementation of parcelable> */
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(genre);
+        out.writeString(kind);
+        out.writeString(period);
+        out.writeBooleanArray(new boolean[]{isDone});
+    }
+
+    public static final Parcelable.Creator<NicoRanking> CREATOR = new Parcelable.Creator<NicoRanking>() {
+        public NicoRanking createFromParcel(Parcel in) {
+            return new NicoRanking(in);
+        }
+        public NicoRanking[] newArray(int size) {
+            return new NicoRanking[size];
+        }
+    };
+
+    private NicoRanking(Parcel in) {
+        genre = in.readString();
+        kind = in.readString();
+        period = in.readString();
+        boolean[] val = new boolean[1];
+        in.readBooleanArray(val);
+        this.isDone = val[0];
+    }
+
+    /* </implementation of parcelable> */
 
     public static final int GENRE_ALL = 400;
     public static final int GENRE_VOCALOID = 401;

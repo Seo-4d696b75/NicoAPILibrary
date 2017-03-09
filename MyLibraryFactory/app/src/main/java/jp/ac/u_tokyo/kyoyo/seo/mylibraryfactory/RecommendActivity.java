@@ -35,23 +35,26 @@ public class RecommendActivity extends CustomListActivity {
             finish();
         }
 
-        new AsyncTask<String, Void, String>() {
+        new AsyncTask<Void, Void, NicoAPIException>() {
             @Override
             protected void onPreExecute() {}
             @Override
-            protected String doInBackground(String... params) {
+            protected NicoAPIException doInBackground(Void... params) {
                 try {
                     list = nicoClient.getRecommend(target);
                     return null;
                 } catch (NicoAPIException e) {
-                    return e.getMessage();
+                    return e;
                 }
             }
             @Override
-            protected void onPostExecute(String response) {
-                showMessage(response);
-                setVideos(list);
-                textViewMes.setText("recommended videos from;\n" + target.getTitle());
+            protected void onPostExecute(NicoAPIException e) {
+                if ( e == null ) {
+                    setVideos(list);
+                    textViewMes.setText("recommended videos from;\n" + target.getTitle());
+                }else{
+                    showMessage(e);
+                }
             }
         }.execute();
     }

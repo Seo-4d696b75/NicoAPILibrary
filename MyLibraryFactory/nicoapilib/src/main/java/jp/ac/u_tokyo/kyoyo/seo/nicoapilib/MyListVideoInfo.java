@@ -70,27 +70,6 @@ public class MyListVideoInfo extends VideoInfo implements Parcelable{
     protected MyListVideoInfo (String xml) throws NicoAPIException{
         RSSVideoInfo.initialize(this,xml,false);
     }
-    protected MyListVideoInfo (VideoInfo info, String description){
-        this.title = info.title;
-        setID(info.id);
-        this.date = info.date;
-        this.description = info.description;
-        this.thumbnailUrl = info.thumbnailUrl;
-        this.thumbnail = info.thumbnail;
-        this.length = info.length;
-        this.viewCounter = info.viewCounter;
-        this.myListCounter = info.myListCounter;
-        this.commentCounter = info.commentCounter;
-        this.tags = info.tags;
-        this.threadID = info.threadID;
-        this.messageServerUrl = info.messageServerUrl;
-        this.flvUrl = info.flvUrl;
-        this.contributorIcon = info.contributorIcon;
-        this.contributorIconUrl = info.contributorIconUrl;
-        this.contributorID = info.contributorID;
-        this.contributorName = info.contributorName;
-        this.myListItemDescription = description;
-    }
 
     protected String myListItemDescription;
     protected String addDate,updateDate;

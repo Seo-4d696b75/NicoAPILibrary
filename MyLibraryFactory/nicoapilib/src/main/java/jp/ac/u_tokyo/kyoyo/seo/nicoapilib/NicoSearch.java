@@ -1,5 +1,11 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,16 +29,54 @@ import java.util.TimeZone;
  * @version 0.0 on 2017/01/22.
  */
 
-public class NicoSearch extends HttpResponseGetter {
+public class NicoSearch extends HttpResponseGetter implements Parcelable{
 
-    private String appName;
-    private String searchUrl = "http://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search?q=";
-    private String query = null;
-    private boolean tagsSearch = false;
-    private String sortParam = null;
-    private boolean sortDown = true;
-    private int resultMax = 50;
-    private List<String> filterList;
+    protected String appName;
+    protected final String searchUrl = "http://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search?q=";
+    protected String query = "";
+    protected boolean tagsSearch = false;
+    protected String sortParam = null;
+    protected boolean sortDown = true;
+    protected int resultMax = 50;
+    protected List<String> filterList;
+
+    /* <implementation of parcelable> */
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(appName);
+        out.writeString(query);
+        out.writeString(sortParam);
+        out.writeInt(resultMax);
+        out.writeBooleanArray(new boolean[]{tagsSearch,sortDown});
+        out.writeStringList(filterList);
+    }
+
+    public static final Parcelable.Creator<NicoSearch> CREATOR = new Parcelable.Creator<NicoSearch>() {
+        public NicoSearch createFromParcel(Parcel in) {
+            return new NicoSearch(in);
+        }
+        public NicoSearch[] newArray(int size) {
+            return new NicoSearch[size];
+        }
+    };
+
+    private NicoSearch(Parcel in) {
+        appName = in.readString();
+        query = in.readString();
+        sortParam = in.readString();
+        resultMax = in.readInt();
+        boolean[] val = new boolean[2];
+        in.readBooleanArray(val);
+        tagsSearch = val[0];
+        sortDown = val[1];
+        in.readStringList(filterList);
+    }
+
+    /* </implementation of parcelable> */
 
     public static final int QUERY_OPERATOR_AND = 0;
     public static final int QUERY_OPERATOR_OR = 1;
@@ -373,8 +417,9 @@ public class NicoSearch extends HttpResponseGetter {
      * @return Returns empty List, not {@code null}
      * @throws NicoAPIException if no query set or fail to parse response
      */
-    public List<VideoInfo> search () throws NicoAPIException{
+    public SearchGroup search () throws NicoAPIException{
         StringBuilder builder = new StringBuilder();
+        SearchGroup group;
         synchronized (this) {
             if (appName == null || appName.isEmpty()) {
                 throw new NicoAPIException.InvalidParamsException("appName is required in Search");
@@ -404,10 +449,12 @@ public class NicoSearch extends HttpResponseGetter {
             builder.append(resultMax);
             builder.append("&_context=");
             builder.append(appName);
+            group = new SearchGroup(this);
         }
         String path = builder.toString();
         if ( tryGet(path) ){
-            return SearchVideoInfo.parse(super.response);
+            group.setVideoList(super.response);
+            return group;
         }else{
             throw new NicoAPIException.HttpException(
                     "fail to get search response",
@@ -415,6 +462,72 @@ public class NicoSearch extends HttpResponseGetter {
                     super.statusCode, path, "GET"
             );
         }
+    }
+    
+    public class SearchGroup {
+        private SearchGroup(NicoSearch nicoSearch){
+            this.appName = nicoSearch.appName;
+            this.query = nicoSearch.query;
+            this.sortParam = nicoSearch.sortParam;
+            this.tagSearch = nicoSearch.tagsSearch;
+            this.sortDown = nicoSearch.sortDown;
+            this.resultMax = nicoSearch.resultMax;
+            this.filterList = new ArrayList<String>();
+            this.filterList.addAll(nicoSearch.filterList);
+        }
+        protected void setVideoList(String response) throws NicoAPIException{
+            try {
+                JSONObject root = new JSONObject(response);
+                JSONObject meta = root.getJSONObject("meta");
+                if ( meta.getInt("status") != 200 ){
+                    String message = "Unexpected API response status > search ";
+                    try {
+                        String errorCode = meta.getString("errorCode");
+                        String errorMessage = meta.getString("errorMessage");
+                        message += (errorCode + ":" + errorMessage);
+                    }catch (JSONException e){}
+                    throw new NicoAPIException.APIUnexpectedException(
+                            message
+                    );
+                }
+                this.id = meta.getInt("id");
+                this.totalCount = meta.getInt("totalCount");
+                this.videoList = SearchVideoInfo.parse(root);
+            }catch (JSONException e){
+                throw new NicoAPIException.ParseException(
+                        e.getMessage(),response
+                );
+            }
+        }
+        private String appName;
+        private String query;
+        private boolean tagSearch;
+        private String sortParam;
+        private boolean sortDown;
+        private int resultMax;
+        private List<String> filterList;
+        private List<VideoInfo> videoList;
+        private int id;
+        private int totalCount;
+
+        public String getAppName(){return appName;}
+        public String getQuery(){return query;}
+        public String getSortParam(){return sortParam;}
+        public boolean isTagSearch(){return tagSearch;}
+        public boolean isSortDown(){return sortDown;}
+        public int getResultMax(){return resultMax;}
+        public List<String> getFilterList(){
+            List<String> list = new ArrayList<String>();
+            list.addAll(this.filterList);
+            return list;
+        }
+        public List<VideoInfo> getVideoList(){
+            List<VideoInfo> list = new ArrayList<VideoInfo>();
+            list.addAll(this.videoList);
+            return list;
+        }
+        public int getId(){return id;}
+        public int getTotalCount(){return totalCount;}
     }
 
 

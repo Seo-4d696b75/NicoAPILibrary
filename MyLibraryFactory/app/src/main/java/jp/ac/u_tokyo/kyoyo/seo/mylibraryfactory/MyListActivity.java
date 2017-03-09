@@ -29,8 +29,6 @@ import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
 
 public class MyListActivity extends CustomListActivity implements CustomDialog.OnItemClickListener {
 
-    private MyListGroup myListGroup;
-
     private final String DIALOG_TAG_MYLIST = "dialogMyList";
 
     @Override
@@ -43,47 +41,14 @@ public class MyListActivity extends CustomListActivity implements CustomDialog.O
         buttonGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myListDialog();
+                showMyListPikerDialog(DIALOG_TAG_MYLIST,null);
             }
         });
+        textViewMes.setText("Your My List Group");
 
-        new AsyncTask<String, Void, String>() {
-            @Override
-            protected void onPreExecute() {
-                textViewMes.setText("Your My List Group");
-            }
-            @Override
-            protected String doInBackground(String... params) {
-                try {
-                    myListGroup = null;
-                    myListGroup = nicoClient.getMyListGroup();
-                    return null;
-                } catch (NicoAPIException e) {
-                    return e.getMessage();
-                }
-            }
-            @Override
-            protected void onPostExecute(String response) {
-                showMessage(response);
-                myListDialog();
-            }
-        }.execute();
-
+        showMyListPikerDialog(DIALOG_TAG_MYLIST,null);
     }
 
-
-    private void myListDialog(){
-        if  ( myListGroup != null ){
-            Bundle args = new Bundle();
-            args.putInt(CustomDialog.LAYOUT, R.layout.dialog_my_list);
-            args.putString(CustomDialog.TITLE,"My List Selecting");
-            args.putString(CustomDialog.BUTTON_NEUTRAL,"Cancel");
-            args.putParcelable(MyListPickerDialog.GROUP_LIST, myListGroup);
-            CustomDialog dialog = MyListPickerDialog.getInstance();
-            dialog.setArguments(args);
-            dialog.show(getSupportFragmentManager(),DIALOG_TAG_MYLIST);
-        }
-    }
 
     public static class MyListPickerDialog extends CustomDialog {
 
@@ -107,7 +72,7 @@ public class MyListActivity extends CustomListActivity implements CustomDialog.O
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             ArrayAdapter adapter = (ArrayAdapter) parent.getAdapter();
                             Object item = adapter.getItem(position);
-                            listener.onItemClick(getTag(),item,null);
+                            listener.onItemClick(getTag(),item,param);
                             dialog.dismiss();
                             dialog = null;
                         }
@@ -147,23 +112,6 @@ public class MyListActivity extends CustomListActivity implements CustomDialog.O
 
     }
 
-    public static class MyListInfo {
-        public MyListInfo (String name, int id){
-            this.name = name;
-            this.id = id;
-        }
-        public String name;
-        public int id;
-        public static ArrayList<MyListInfo> getList(List<MyListVideoGroup> target){
-            ArrayList<MyListInfo> list = new ArrayList<MyListInfo>();
-            for ( MyListVideoGroup group : target){
-                list.add( new MyListInfo(group.getName(),group.getMyListID()));
-            }
-            return list;
-        }
-    }
-
-
     @Override
     public void onItemClick(String tag, Object item, Object param){
         super.onItemClick(tag,item,param);
@@ -175,13 +123,22 @@ public class MyListActivity extends CustomListActivity implements CustomDialog.O
 
     private void showMyList(final MyListVideoGroup target) {
             final int myListID = target.getMyListID();
-            new AsyncTask<String, Void, String>() {
+            new AsyncTask<Void, Void, NicoAPIException>() {
                 private List<MyListVideoInfo> list;
                 private ProgressDialog progress;
-
                 @Override
                 protected void onPreExecute() {
-                    textViewMes.setText("Your My List : " + myListID);
+                    textViewMes.setText(
+                            String.format(
+                                    "MyList \"%s\" (ID:%d)\ndescription:%s\npublic:%b\ncreateDate:%s\nupdateDate:%s",
+                                    target.getName(),
+                                    target.getMyListID(),
+                                    target.getDescription(),
+                                    target.isPublic(),
+                                    target.getCreateDate(),
+                                    target.getUpdateDate()
+                            )
+                    );
                     progress = new ProgressDialog(MyListActivity.this);
                     progress.setMessage("Getting my list...");
                     progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -189,7 +146,7 @@ public class MyListActivity extends CustomListActivity implements CustomDialog.O
                 }
 
                 @Override
-                protected String doInBackground(String... params) {
+                protected NicoAPIException doInBackground(Void... params) {
                     try {
                         list = null;
                         //list = nicoClient.getMyList(myListID).getVideos();
@@ -197,16 +154,19 @@ public class MyListActivity extends CustomListActivity implements CustomDialog.O
                         list = target.getVideos();
                         return null;
                     } catch (NicoAPIException e) {
-                        return e.getMessage();
+                        return e;
                     }
                 }
 
                 @Override
-                protected void onPostExecute(String response) {
+                protected void onPostExecute(NicoAPIException e) {
                     progress.cancel();
                     progress = null;
-                    showMessage(response);
-                    setVideos(list);
+                    if ( e == null ){
+                        setVideos(list);
+                    }else {
+                        showMessage(e);
+                    }
                 }
             }.execute();
 

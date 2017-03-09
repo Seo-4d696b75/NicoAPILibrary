@@ -6,13 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -37,9 +34,13 @@ import java.util.List;
 import java.util.Map;
 
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.CommentInfo;
+import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.MyListGroup;
+import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.MyListVideoGroup;
+import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.MyListVideoInfo;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoAPIException;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoClient;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoCommentPost;
+import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.TempMyListVideoGroup;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
 
 /**
@@ -49,18 +50,20 @@ import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
 public abstract class CustomListActivity extends AppCompatActivity implements CustomDialog.onClickListener, CustomDialog.OnItemClickListener {
 
     protected NicoClient nicoClient;
+    protected MyListGroup myListGroup;
+    protected TempMyListVideoGroup tempMyListVideoGroup;
 
     protected TextView textViewMes;
     protected Button buttonGet;
     protected ListView listViewVideos;
     protected Resources resources;
 
-    private AlertDialog dialog;
 
     private final String DIALOG_TAG_DETAILS = "dialogDetails";
     private final String DIALOG_TAG_MENU = "dialogMenu";
     private final String DIALOG_TAG_COMMENT = "dialogComment";
     private final String DIALOG_TAG_COMMENT_POST = "dialogCommentPost";
+    private final String DIALOG_TAG_MYLIST_PICK = "dialogMyListPick";
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -80,6 +83,12 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
         if ( nicoClient == null || resources == null ){
             showMessage("fail to get intent and resource");
             finish();
+        }
+    }
+
+    protected void showMessage(NicoAPIException e){
+        if ( e != null ){
+            showMessage(String.format("%s\ncode : %d",e.getMessage(),e.getCode()));
         }
     }
 
@@ -170,9 +179,8 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
         if ( info == null ){
             return;
         }
-        new AsyncTask<Void, Void, String>() {
+        new AsyncTask<Void, Void, NicoAPIException>() {
             private ProgressDialog progress;
-            private final String SUCCESS = "success";
             @Override
             protected void onPreExecute() {
                 progress = new ProgressDialog(CustomListActivity.this);
@@ -181,30 +189,25 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
                 progress.show();
             }
             @Override
-            protected String doInBackground(Void... params) {
+            protected NicoAPIException doInBackground(Void... params) {
                 try {
                     if ( nicoClient.isLogin() ) {
                         if ( !info.isOfficial() ) {
-                            if (info.complete() && info.getFlv(nicoClient.getCookieStore())) {
-                                return SUCCESS;
-                            }else{
-                                return "fail to get details";
-                            }
+                            info.complete();
+                            info.getFlv(nicoClient.getCookieStore());
                         }
                     }
-                    if (info.complete() ) {
-                        return SUCCESS;
-                    }
+                    info.complete();
                 }catch(NicoAPIException e){
-                    return e.getMessage();
+                    return e;
                 }
-                return "fail to get details";
+                return null;
             }
             @Override
-            protected void onPostExecute(String response) {
+            protected void onPostExecute(NicoAPIException e) {
                 progress.cancel();
                 progress = null;
-                if ( response.equals(SUCCESS) ){
+                if ( e == null ){
                     Bundle args = new Bundle();
                     args.putInt(CustomDialog.LAYOUT, R.layout.dialog_details);
                     args.putString(CustomDialog.TITLE,"Video Details");
@@ -217,7 +220,7 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
                     dialog.setArguments(args);
                     dialog.show(getSupportFragmentManager(),DIALOG_TAG_DETAILS);
                 }else{
-                    showMessage(response);
+                    showMessage(e);
                 }
             }
         }.execute();
@@ -261,7 +264,17 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
                     ((TextView) view.findViewById(R.id.textViewDetailsMesServer)).setText(info.getMessageServerUrl());
                     ((TextView) view.findViewById(R.id.textViewDetailsFlvURL)).setText(info.getFlvUrl());
                 }
-            }catch (NicoAPIException e){
+                if ( info instanceof MyListVideoInfo ){
+                    MyListVideoInfo myListVideoInfo = (MyListVideoInfo)info;
+                    ViewGroup container = (LinearLayout)view.findViewById(R.id.linearLayoutMyListDetailsContainer);
+                    LayoutInflater inflater = context.getLayoutInflater();
+                    View myListDetails = inflater.inflate(R.layout.video_mylist_cell,null,false);
+                    ((TextView)myListDetails.findViewById(R.id.textViewDetailsMyListAdd)).setText(myListVideoInfo.getAddDate());
+                    ((TextView)myListDetails.findViewById(R.id.textViewDetailsMyListUpdate)).setText(myListVideoInfo.getUpdateDate());
+                    ((TextView)myListDetails.findViewById(R.id.textViewDetailsMyListDescription)).setText(myListVideoInfo.getMyListItemDescription());
+                    container.addView(myListDetails);
+                }
+            }catch (Exception e){
 
             }
         }
@@ -328,20 +341,26 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
                             startActivity(intent);
                             break;
                         case VideoMenuDialog.MENU_MYLIST_ADD:
+                            showMyListPikerDialog(DIALOG_TAG_MYLIST_PICK,info);
                             break;
                         case VideoMenuDialog.MENU_TEMP_MYLIST_ADD:
+                            addVideoToTemp(info);
                             break;
                     }
                 }
+                break;
+            case DIALOG_TAG_MYLIST_PICK:
+                info = (VideoInfo)param;
+                MyListVideoGroup group = (MyListVideoGroup)item;
+                addVideoToMyList(info,group);
                 break;
             default:
         }
     }
 
     private void showComments(final VideoInfo info, final int max){
-        new AsyncTask<Void, Void, String>() {
+        new AsyncTask<Void, Void, NicoAPIException>() {
             private ProgressDialog progress;
-            private final String SUCCESS = "success";
 
             @Override
             protected void onPreExecute() {
@@ -352,24 +371,24 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
             }
 
             @Override
-            protected String doInBackground(Void... params) {
+            protected NicoAPIException doInBackground(Void... params) {
                 try {
                     if ( max > 0 ) {
                         nicoClient.getComment(info, max);
                     }else{
                         nicoClient.getComment(info);
                     }
-                    return SUCCESS;
+                    return null;
                 } catch (NicoAPIException e) {
-                    return e.getMessage();
+                    return e;
                 }
             }
 
             @Override
-            protected void onPostExecute(String response) {
+            protected void onPostExecute(NicoAPIException e) {
                 progress.cancel();
                 progress = null;
-                if (response.equals(SUCCESS)) {
+                if (e == null) {
                     Bundle args = new Bundle();
                     args.putInt(CustomDialog.LAYOUT, R.layout.dialog_comment);
                     args.putString(CustomDialog.TITLE,"Video Comments");
@@ -379,6 +398,8 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
                     CustomDialog dialog = CommentDialog.getInstance();
                     dialog.setArguments(args);
                     dialog.show(getSupportFragmentManager(),DIALOG_TAG_COMMENT);
+                }else{
+                    showMessage(e);
                 }
             }
         }.execute();
@@ -532,11 +553,8 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
     }
 
     private void postComment(final NicoCommentPost commentPost){
-        new AsyncTask<Void, Void, String>() {
+        new AsyncTask<Void, Void, NicoAPIException>() {
             private ProgressDialog progress;
-            private final String SUCCESS = "success";
-            private CommentInfo.CommentGroup group;
-
             @Override
             protected void onPreExecute() {
                 progress = new ProgressDialog(CustomListActivity.this);
@@ -550,41 +568,23 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
             }
 
             @Override
-            protected String doInBackground(Void... params) {
+            protected NicoAPIException doInBackground(Void... params) {
                 try {
                     commentPost.post();
-                    return SUCCESS;
+                    return null;
                 } catch (NicoAPIException e) {
-                    return e.getMessage();
+                    return e;
                 }
             }
 
             @Override
-            protected void onPostExecute(String response) {
+            protected void onPostExecute(NicoAPIException e) {
                 progress.cancel();
                 progress = null;
-                if (response.equals(SUCCESS)) {
+                if ( e == null ) {
                     showComments(commentPost.getTargetVideo(),100);
-                    /*
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CustomListActivity.this);
-                    builder.setTitle("Video Comments");
-                    Context context = CustomListActivity.this;
-                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    ViewGroup root = (ViewGroup) findViewById(R.id.dialogCommentRoot);
-                    View view = inflater.inflate(R.layout.dialog_comment, root, true);
-                    ((ListView)view.findViewById(R.id.listViewComment)).setAdapter(new CommentAdapter(CustomListActivity.this,list));
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            if ( dialog != null ){
-                                dialog.show();
-                            }
-                        }
-                    });
-                    builder.setView(view);
-                    AlertDialog commentDialog = builder.create();
-                    commentDialog.setCanceledOnTouchOutside(false);
-                    commentDialog.show();*/
+                }else{
+                    showMessage(e);
                 }
             }
         }.execute();
@@ -656,6 +656,112 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
             }
             return view;
         }
+    }
+
+    private void addVideoToTemp (final VideoInfo info){
+        new AsyncTask<Void, Void, NicoAPIException>() {
+            private ProgressDialog progress;
+            @Override
+            protected void onPreExecute() {
+                progress = new ProgressDialog(CustomListActivity.this);
+                progress.setMessage("Adding video...");
+                progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progress.show();
+            }
+
+            @Override
+            protected NicoAPIException doInBackground(Void... params) {
+                try {
+                    if ( tempMyListVideoGroup == null ) {
+                        tempMyListVideoGroup = nicoClient.getTempMyList();
+                    }
+                    tempMyListVideoGroup.add(info,"DemoApp");
+                    return null;
+                } catch (NicoAPIException e) {
+                    return e;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(NicoAPIException e) {
+                progress.cancel();
+                progress = null;
+                if ( e == null ) {
+                    showMessage(String.format("Succeed in adding video\nVideoID : %s\nVideoTitle : %s",info.getID(),info.getTitle()));
+                }else{
+                    showMessage(e);
+                }
+            }
+        }.execute();
+    }
+
+    private void addVideoToMyList (final VideoInfo info, final MyListVideoGroup group){
+        new AsyncTask<Void, Void, NicoAPIException>() {
+            private ProgressDialog progress;
+            @Override
+            protected void onPreExecute() {
+                progress = new ProgressDialog(CustomListActivity.this);
+                progress.setMessage("Adding video...");
+                progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progress.show();
+            }
+
+            @Override
+            protected NicoAPIException doInBackground(Void... params) {
+                try {
+                    group.add(info,"DemoApp");
+                    return null;
+                } catch (NicoAPIException e) {
+                    return e;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(NicoAPIException e) {
+                progress.cancel();
+                progress = null;
+                if ( e == null ) {
+                    showMessage(String.format("Succeed in adding video\nMyListName : %s\nVideoID : %s\nVideoTitle : %s",group.getName(),info.getID(),info.getTitle()));
+                }else{
+                    showMessage(e);
+                }
+            }
+        }.execute();
+    }
+
+    protected void showMyListPikerDialog(final String tag, final VideoInfo info){
+        new AsyncTask<Void, Void, NicoAPIException>() {
+            @Override
+            protected void onPreExecute() {
+            }
+            @Override
+            protected NicoAPIException doInBackground(Void... params) {
+                try {
+                    if ( myListGroup == null ) {
+                        myListGroup = nicoClient.getMyListGroup();
+                    }
+                    return null;
+                } catch (NicoAPIException e) {
+                    return e;
+                }
+            }
+            @Override
+            protected void onPostExecute(NicoAPIException e) {
+                if ( e == null ){
+                    Bundle args = new Bundle();
+                    args.putInt(CustomDialog.LAYOUT, R.layout.dialog_my_list);
+                    args.putString(CustomDialog.TITLE,"My List Selecting");
+                    args.putString(CustomDialog.BUTTON_NEUTRAL,"Cancel");
+                    args.putParcelable(CustomDialog.PARAM,info);
+                    args.putParcelable(MyListActivity.MyListPickerDialog.GROUP_LIST, myListGroup);
+                    CustomDialog dialog = MyListActivity.MyListPickerDialog.getInstance();
+                    dialog.setArguments(args);
+                    dialog.show(getSupportFragmentManager(),tag);
+                }else{
+                    showMessage(e);
+                }
+            }
+        }.execute();
     }
 
 }

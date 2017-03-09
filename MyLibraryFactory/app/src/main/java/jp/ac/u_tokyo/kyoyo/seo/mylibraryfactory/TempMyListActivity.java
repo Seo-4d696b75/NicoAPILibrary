@@ -17,8 +17,6 @@ import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.TempMyListVideoGroup;
 
 public class TempMyListActivity extends CustomListActivity {
 
-    private TempMyListVideoGroup group;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -29,9 +27,8 @@ public class TempMyListActivity extends CustomListActivity {
         buttonGet.setEnabled(false);
         textViewMes.setText("Your temp my list");
 
-        new AsyncTask<String, Void, String>() {
+        new AsyncTask<Void, Void, NicoAPIException>() {
             private ProgressDialog progress;
-            private List<MyListVideoInfo> list;
             @Override
             protected void onPreExecute() {
                 progress = new ProgressDialog(TempMyListActivity.this);
@@ -40,24 +37,24 @@ public class TempMyListActivity extends CustomListActivity {
                 progress.show();
             }
             @Override
-            protected String doInBackground(String... params) {
+            protected NicoAPIException doInBackground(Void... params) {
                 try {
-                    group = nicoClient.getTempMyList();
-                    list = group.getVideos();
+                    if ( tempMyListVideoGroup == null ) {
+                        tempMyListVideoGroup = nicoClient.getTempMyList();
+                    }
                     return null;
                 } catch (NicoAPIException e) {
-                    return e.getMessage();
+                    return e;
                 }
             }
             @Override
-            protected void onPostExecute(String response) {
-                if ( response == null ) {
+            protected void onPostExecute(NicoAPIException e) {
+                if ( e == null ) {
                     progress.cancel();
                     progress = null;
-                    showMessage(response);
-                    setVideos(list);
+                    setVideos(tempMyListVideoGroup.getVideos());
                 }else{
-                    showMessage(response);
+                    showMessage(e);
                 }
             }
         }.execute();

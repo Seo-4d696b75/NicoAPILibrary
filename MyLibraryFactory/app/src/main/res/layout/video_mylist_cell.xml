@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:layout_margin="5dp"
+        android:text="MyList Item Details" />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow>
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="description" />
+            <TextView
+                android:id="@+id/textViewDetailsMyListDescription"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="3"
+                android:text="description is shown here" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="Add-date" />
+            <TextView
+                android:id="@+id/textViewDetailsMyListAdd"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="3"
+                android:text="date is shown here" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="update-date" />
+            <TextView
+                android:id="@+id/textViewDetailsMyListUpdate"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="3"
+                android:text="date is shown here" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

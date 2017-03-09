@@ -135,7 +135,7 @@ public class VideoInfoStorage {
      * 動画のスレッドID。<br>
      *     メッセージサーバとの通信やflvURLの取得に使用します。
      */
-    protected int threadID;
+    protected int threadID = -1;
     /**
      * 動画のコメントの取得先<br>
      *     you can get comments from this.

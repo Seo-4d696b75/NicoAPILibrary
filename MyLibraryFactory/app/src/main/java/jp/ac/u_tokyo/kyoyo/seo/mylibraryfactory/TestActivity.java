@@ -129,31 +129,6 @@ public class TestActivity extends AppCompatActivity implements CustomDialog.onCl
         CustomDialog dialog = CustomDialog.getInstance();
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(),DIALOG_TAG_LOGIN);
-        /*
-        AlertDialog.Builder builder = new AlertDialog.Builder(TestActivity.this);
-        builder.setTitle("Your Account");
-        Context context = TestActivity.this;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ViewGroup root = (ViewGroup)findViewById(R.id.dialogAccountRoot);
-        final View view = inflater.inflate(R.layout.dialog_account, root, true);
-        builder.setView(view);
-        builder.setMessage("Do you want to Login in NicoNico? You don't always have to, but some function needs login.");
-        builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EditText editMail = (EditText) view.findViewById(R.id.editTextMail);
-                EditText editPass = (EditText) view.findViewById(R.id.editTextPass);
-                login(editMail.getText().toString(),editPass.getText().toString());
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                showMessage("Not login");
-            }
-        });
-        builder.create();
-        builder.show();*/
     }
 
     @Override

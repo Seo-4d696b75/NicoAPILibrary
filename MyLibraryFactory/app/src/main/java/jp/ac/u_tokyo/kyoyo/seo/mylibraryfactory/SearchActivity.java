@@ -1,15 +1,19 @@
 package jp.ac.u_tokyo.kyoyo.seo.mylibraryfactory;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import java.util.List;
@@ -22,10 +26,11 @@ import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
  * Created by Seo-4d696b75 on 2017/02/09.
  */
 
-public class SearchActivity extends CustomListActivity {
+public class SearchActivity extends CustomListActivity implements CustomDialog.onClickListener{
 
     private NicoSearch nicoSearch;
     private AlertDialog dialog;
+    private final String DIALOG_TAG_SEARCH = "dialogSearch";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,65 +51,87 @@ public class SearchActivity extends CustomListActivity {
         });
     }
 
-    private void showSearchDialog(){
-        if ( dialog != null ){
-            dialog.cancel();
-            dialog = null;
+    public static class SearchDialog extends CustomDialog{
+        public static SearchDialog getInstance(){
+            return new SearchDialog();
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(SearchActivity.this);
-        builder.setTitle("Search Setting");
-        Context context = SearchActivity.this;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ViewGroup root = (ViewGroup)findViewById(R.id.dialogSearchRoot);
-        View view = inflater.inflate(R.layout.dialog_search, root, true);
-        final EditText editTextQuery = (EditText)view.findViewById(R.id.editTextSearchQuery);
-        final CheckBox checkBoxTag = (CheckBox)view.findViewById(R.id.checkBoxSearchTag);
-        builder.setView(view);
-        builder.setPositiveButton("GET", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String query = editTextQuery.getText().toString();
-                if ( query.isEmpty() ){
-                    showMessage("You have to set query");
-                    return;
-                }
-                new AsyncTask<String, Void, String>(){
+        @Override
+        protected void onCreateContentView(View view){
+            if ( param != null && param instanceof NicoSearch){
+                final NicoSearch nicoSearch = (NicoSearch)param;
+                EditText editTextQuery = (EditText)view.findViewById(R.id.editTextSearchQuery);
+                CheckBox checkBoxTag = (CheckBox)view.findViewById(R.id.checkBoxSearchTag);
+                editTextQuery.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        nicoSearch.setQuery(s.toString());
+                    }
+                });
+                checkBoxTag.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        nicoSearch.setTagsSearch(isChecked);
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onDialogButtonClicked(String tag, Dialog dialog, int which, Object param){
+        super.onDialogButtonClicked(tag,dialog,which,param);
+        if ( tag.equals(DIALOG_TAG_SEARCH) && which == DialogInterface.BUTTON_POSITIVE ){
+            if ( param != null && param instanceof NicoSearch ){
+                final NicoSearch nicoSearch = (NicoSearch)param;
+                new AsyncTask<Void, Void, NicoAPIException>(){
                     private ProgressDialog progress = null;
-                    private List<VideoInfo> list;
+                    private NicoSearch.SearchGroup group;
                     @Override
                     protected void onPreExecute() {
                         progress = new ProgressDialog(SearchActivity.this);
                         progress.setMessage("Getting videos...");
                         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         progress.show();
-                        String[] queryArray = query.split("[\\s]+");
-                        boolean isTagSearch = checkBoxTag.isChecked();
-                        for ( String target : queryArray ){
-                            nicoSearch.addQuery(target);
-                        }
-                        nicoSearch.setTagsSearch(isTagSearch);
                     }
                     @Override
-                    protected String doInBackground(String... params) {
+                    protected NicoAPIException doInBackground(Void... params) {
                         try {
-                            list = nicoSearch.search();
+                            group = nicoSearch.search();
                             return null;
                         }catch (NicoAPIException e){
-                            return e.getMessage();
+                            return e;
                         }
                     }
                     @Override
-                    protected void onPostExecute(String response) {
-                        setVideos(list);
-                        showMessage(response);
+                    protected void onPostExecute(NicoAPIException e) {
                         progress.cancel();
-                        textViewMes.setText("query : " + query);
+                        progress = null;
+                        if ( e == null ) {
+                            setVideos(group.getVideoList());
+                            textViewMes.setText("query : " + group.getQuery());
+                        }else{
+                            showMessage(e);
+                        }
                     }
                 }.execute();
             }
-        });
-        dialog = builder.create();
-        dialog.show();
+        }
+    }
+
+    private void showSearchDialog(){
+        Bundle args = new Bundle();
+        args.putInt(CustomDialog.LAYOUT, R.layout.dialog_search);
+        args.putString(CustomDialog.TITLE,"Search Setting");
+        args.putString(CustomDialog.BUTTON_POSITIVE,"Search");
+        args.putString(CustomDialog.BUTTON_NEUTRAL,"Cancel");
+        args.putParcelable(CustomDialog.PARAM, nicoClient.getNicoSearch());
+        CustomDialog dialog = SearchDialog.getInstance();
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(),DIALOG_TAG_SEARCH);
     }
 
 }

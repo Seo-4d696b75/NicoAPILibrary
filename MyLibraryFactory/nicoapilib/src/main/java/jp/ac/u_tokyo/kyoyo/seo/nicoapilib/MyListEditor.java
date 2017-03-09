@@ -109,7 +109,7 @@ public abstract class MyListEditor extends HttpResponseGetter {
         params.put("description",description);
         params.put("token",getToken(target.getID()));
         if ( myListID != null ) {
-            params.put("gruop_id", myListID);
+            params.put("group_id", myListID);
         }
         if ( tryPost(path,params,info.getCookieStore()) ){
             checkStatusCode(super.response);
@@ -141,7 +141,7 @@ public abstract class MyListEditor extends HttpResponseGetter {
         params.put("item_id", getThreadID(target) );
         params.put("item_type", "0");
         if ( myListID != null ){
-            params.put("gruop_id", myListID );
+            params.put("group_id", myListID );
         }
         if ( tryPost(path,params,info.getCookieStore()) ){
             checkStatusCode(super.response);
