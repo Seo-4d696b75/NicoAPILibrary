@@ -1,6 +1,6 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import org.apache.http.client.CookieStore;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,30 +41,6 @@ public class VideoInfoStorage {
      * But if not, return this value.
      */
     public final String UNKNOWN = "unknown";
-
-    //in case of ranking
-    /**
-     * ランキングのジャンルパラメータ（ランキング限定）<br>
-     *     genre (category tag) param in ranking (ranking only>.
-     */
-    protected String genre;
-    /**
-     * ランキングの種類パラメータ（ランキング限定）<br>
-     *     kind param in ranking (ranking only>.
-     */
-    protected String rankKind;
-    /**
-     * ランキング期間パラメータ（ランキング限定）<br>
-     *     period param in ranking (ranking only>.
-     */
-    protected String period;
-    /**
-     * ランキングの発表日時（ランキング限定）<br>
-     *     ranking published date (ranking only>.<br>
-     *     ライブラリ内の{@link VideoInfo#dateFormatBase 共通形式}に従います<br>
-     *     this follows {@link VideoInfo#dateFormatBase common format} in this library.
-     */
-    protected String pubDate;
 
     //common
     /**
@@ -117,7 +93,7 @@ public class VideoInfoStorage {
      * Androidでの仕様の前提とした動画のサムネイル画像<br>
      * thumbnail image, which is supposed to be used in Android.<br>
      */
-    protected Drawable thumbnail;
+    protected Bitmap thumbnail;
     /**
      * 動画の長さ、秒単位<br>
      *     video length in seconds.<br>
@@ -200,15 +176,11 @@ public class VideoInfoStorage {
      * 公式動画の場合はチャンネルアイコンで代替されます。<br>
      * In case of an official video, this is substituted with channel icon.
      */
-    protected Drawable contributorIcon;
+    protected Bitmap contributorIcon;
 
     //comment
     protected CommentInfo.CommentGroup commentGroup;
 
-    public static final int GENRE = 0;
-    public static final int RANK_KIND = 1;
-    public static final int PERIOD = 2;
-    public static final int PUB_DATE = 3;
     public static final int TITLE = 4;
     public static final int ID = 5;
     public static final int DATE = 6;
@@ -277,18 +249,6 @@ public class VideoInfoStorage {
     public synchronized String getString(int key) throws NicoAPIException{
         String target = null;
         switch ( key ){
-            case GENRE:
-                target = genre;
-                break;
-            case RANK_KIND:
-                target = rankKind;
-                break;
-            case PERIOD:
-                target = period;
-                break;
-            case PUB_DATE:
-                target = pubDate;
-                break;
             case TITLE:
                 target = title;
                 break;
@@ -369,6 +329,36 @@ public class VideoInfoStorage {
             throw new NicoAPIException.NotInitializedException("requested video field not initialized",key);
         }else{
             return  target;
+        }
+    }
+    public synchronized CommentInfo.CommentGroup getComment () throws NicoAPIException{
+        if ( commentGroup == null ) {
+            throw new NicoAPIException.IllegalStateException(
+                    "commentGroup not ready",
+                    NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT
+            );
+        }else {
+            return commentGroup;
+        }
+    }
+    public synchronized Bitmap getThumbnail()throws NicoAPIException{
+        if ( thumbnail == null ){
+            throw new NicoAPIException.IllegalStateException(
+                    "thumbnail not ready",
+                    NicoAPIException.EXCEPTION_ILLEGAL_STATE_THUMBNAIL
+            );
+        }else{
+            return thumbnail;
+        }
+    }
+    public synchronized Bitmap getContributorIcon()throws NicoAPIException{
+        if ( contributorIcon == null ){
+            throw new NicoAPIException.IllegalStateException(
+                    "contributorIcon not ready",
+                    NicoAPIException.EXCEPTION_ILLEGAL_STATE_CONTRIBUTOR_ICON
+            );
+        }else{
+            return contributorIcon;
         }
     }
 
@@ -489,15 +479,6 @@ public class VideoInfoStorage {
 
     public float getPoint(){
         return point;
-    }
-
-    /**
-     * フィールドを保存したまま{@link VideoInfoPackage}クラスのインスタンスに変換します
-     * Converts itself into {@link VideoInfoPackage} instance keeping all the fields.
-     * @return Returns serializable instance
-     */
-    public synchronized VideoInfoPackage pack() throws NicoAPIException{
-        return new VideoInfoPackage(this);
     }
 
 }

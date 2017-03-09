@@ -1,13 +1,14 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.apache.http.client.CookieStore;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.cookie.BasicClientCookie;
-
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -21,19 +22,21 @@ import java.util.List;
  * @version 0.0 on 2017/01/21.
  */
 
-public class LoginInfo implements Serializable{
+public class LoginInfo implements Parcelable{
 
-    private boolean login;
-    private String userName;
-    private int userID;
-    private boolean isPremium;
+    protected boolean login;
+    protected String userName;
+    protected int userID;
+    protected boolean isPremium;
+    protected String userIconUrl;
+    protected Bitmap userIcon;
 
-    private int cookieNum;
-    private int[] cookieVersion;
-    private String[] cookieName;
-    private String[] cookieValue;
-    private String[] cookiePath;
-    private String[] cookieDomain;
+    protected int cookieNum;
+    protected int[] cookieVersion;
+    protected String[] cookieName;
+    protected String[] cookieValue;
+    protected String[] cookiePath;
+    protected String[] cookieDomain;
 
     protected LoginInfo (){
         login = false;
@@ -86,6 +89,41 @@ public class LoginInfo implements Serializable{
         }
         return isPremium;
     }
+
+    private final Object iconGetLock = new Object();
+    /**
+     * ユーザのアイコンを取得する【ログイン必須】<br>
+     * Gets user icon image, be sure to login beforehand.<br>
+     * ログインしていないと取得に失敗して例外を投げます。<br>
+     * If not login, this fails to get the image and throws exception.
+     * @return Returns user icon, not {@code null}
+     * @throws NicoAPIException if fail to get image
+     */
+    public Bitmap getUserIcon () throws NicoAPIException{
+        synchronized (iconGetLock) {
+            synchronized (this) {
+                if (login && userIconUrl != null) {
+                    if (userIcon != null) {
+                        return userIcon;
+                    }
+                } else {
+                    throw new NicoAPIException.NoLoginException(
+                            "no login > user Icon",
+                            NicoAPIException.EXCEPTION_NOT_LOGIN_USER_ICON
+                    );
+                }
+            }
+            userIcon = new HttpResponseGetter().getBitmap(userIconUrl);
+            if (userIcon == null) {
+                throw new NicoAPIException.DrawableFailureException(
+                        "fail to get user icon > ",
+                        NicoAPIException.EXCEPTION_DRAWABLE_USER_ICON
+                );
+            } else {
+                return userIcon;
+            }
+        }
+    }
     protected synchronized void setUserName (String userName){
         this.userName = userName;
     }
@@ -94,6 +132,9 @@ public class LoginInfo implements Serializable{
     }
     protected synchronized void setPremium (boolean isPremium){
         this.isPremium = isPremium;
+    }
+    protected synchronized void setUserIconUrl(String userIconUrl){
+        this.userIconUrl = userIconUrl;
     }
 
     /**
@@ -156,4 +197,58 @@ public class LoginInfo implements Serializable{
             login = true;
         }
     }
+
+    /*implementation of parcelable*/
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeBooleanArray(new boolean[]{login});
+        out.writeString(userName);
+        out.writeInt(userID);
+        out.writeBooleanArray(new boolean[]{isPremium});
+        out.writeString(userIconUrl);
+        out.writeParcelable(userIcon,flags);
+        out.writeInt(cookieNum);
+        out.writeIntArray(cookieVersion);
+        out.writeStringArray(cookieName);
+        out.writeStringArray(cookieValue);
+        out.writeStringArray(cookiePath);
+        out.writeStringArray(cookieDomain);
+    }
+
+    public static final Parcelable.Creator<LoginInfo> CREATOR = new Parcelable.Creator<LoginInfo>() {
+        public LoginInfo createFromParcel(Parcel in) {
+            return new LoginInfo(in);
+        }
+        public LoginInfo[] newArray(int size) {
+            return new LoginInfo[size];
+        }
+    };
+
+    private LoginInfo(Parcel in) {
+        boolean[] booleanValue = new boolean[1];
+        in.readBooleanArray(booleanValue);
+        this.login = booleanValue[0];
+        this.userName = in.readString();
+        this.userID = in.readInt();
+        in.readBooleanArray(booleanValue);
+        this.isPremium = booleanValue[0];
+        this.userIconUrl = in.readString();
+        this.userIcon = in.readParcelable(Bitmap.class.getClassLoader());
+        this.cookieNum = in.readInt();
+        this.cookieVersion = new int[cookieNum];
+        in.readIntArray(this.cookieVersion);
+        this.cookieName = new String[cookieNum];
+        in.readStringArray(this.cookieName);
+        this.cookieValue = new String[cookieNum];
+        in.readStringArray(this.cookieValue);
+        this.cookiePath = new String[cookieNum];
+        in.readStringArray(this.cookiePath);
+        this.cookieDomain = new String[cookieNum];
+        in.readStringArray(this.cookieDomain);
+    }
+
 }

@@ -1,12 +1,16 @@
 package jp.ac.u_tokyo.kyoyo.seo.mylibraryfactory;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,7 +27,7 @@ import android.widget.Toast;
 
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.*;
 
-public class TestActivity extends AppCompatActivity {
+public class TestActivity extends AppCompatActivity implements CustomDialog.onClickListener{
 
     private String appName = "NicoAPIDemoApp";
 
@@ -33,6 +38,8 @@ public class TestActivity extends AppCompatActivity {
     private Button buttonSearch;
     private Button buttonMyList;
     private Button buttonTempMyList;
+
+    private final String DIALOG_TAG_LOGIN = "loginDialog";
 
     private NicoClient nicoClient;
 
@@ -101,7 +108,10 @@ public class TestActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        login("sendakaoru509@gmail.com","testaccount");
+
+        if ( !nicoClient.isLogin()) {
+            login("sendakaoru509@gmail.com", "testaccount");
+        }
     }
 
     private void showMessage(String message){
@@ -110,6 +120,16 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void loginDialogShow(){
+        Bundle args = new Bundle();
+        args.putInt(CustomDialog.LAYOUT, R.layout.dialog_account);
+        args.putString(CustomDialog.TITLE,"Your Account");
+        args.putString(CustomDialog.MESSAGE,"Do you want to Login in NicoNico? You don't always have to, but some function needs login.");
+        args.putString(CustomDialog.BUTTON_POSITIVE,"Login");
+        args.putString(CustomDialog.BUTTON_NEUTRAL,"Cancel");
+        CustomDialog dialog = CustomDialog.getInstance();
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(),DIALOG_TAG_LOGIN);
+        /*
         AlertDialog.Builder builder = new AlertDialog.Builder(TestActivity.this);
         builder.setTitle("Your Account");
         Context context = TestActivity.this;
@@ -133,13 +153,31 @@ public class TestActivity extends AppCompatActivity {
             }
         });
         builder.create();
-        builder.show();
+        builder.show();*/
     }
+
+    @Override
+    public void onDialogButtonClicked(String tag, Dialog dialog, int which, Object param){
+        if ( tag.equals(DIALOG_TAG_LOGIN)){
+            switch ( which ){
+                case DialogInterface.BUTTON_POSITIVE:
+                    EditText editMail = (EditText) dialog.findViewById(R.id.editTextMail);
+                    EditText editPass = (EditText) dialog.findViewById(R.id.editTextPass);
+                    login(editMail.getText().toString(),editPass.getText().toString());
+                    break;
+                case DialogInterface.BUTTON_NEUTRAL:
+                    showMessage("Not login");
+                    break;
+                default:
+            }
+        }
+    }
+
 
     private void login (final String mail, final String pass){
         new AsyncTask<String, Void, String>() {
             private ProgressDialog progress;
-            private Drawable userIcon;
+            private Bitmap userIcon;
             @Override
             protected void onPreExecute() {
                 progress = new ProgressDialog(TestActivity.this);
@@ -173,7 +211,7 @@ public class TestActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     if ( userIcon != null ){
-                        imageViewUserIcon.setImageDrawable(userIcon);
+                        imageViewUserIcon.setImageBitmap(userIcon);
                     }
                 }else{
                     message = "fail to login \n" + response;

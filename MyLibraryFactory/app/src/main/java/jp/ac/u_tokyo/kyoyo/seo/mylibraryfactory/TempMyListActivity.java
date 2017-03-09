@@ -43,7 +43,7 @@ public class TempMyListActivity extends CustomListActivity {
             protected String doInBackground(String... params) {
                 try {
                     group = nicoClient.getTempMyList();
-                    list = group.getVideoList();
+                    list = group.getVideos();
                     return null;
                 } catch (NicoAPIException e) {
                     return e.getMessage();
@@ -51,10 +51,14 @@ public class TempMyListActivity extends CustomListActivity {
             }
             @Override
             protected void onPostExecute(String response) {
-                progress.cancel();
-                progress = null;
-                showMessage(response);
-                setVideos(list);
+                if ( response == null ) {
+                    progress.cancel();
+                    progress = null;
+                    showMessage(response);
+                    setVideos(list);
+                }else{
+                    showMessage(response);
+                }
             }
         }.execute();
 

@@ -1,5 +1,9 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,17 +34,17 @@ import java.util.regex.Pattern;
  * @version 0.0 on 2017/02/22.
  */
 
-public class NicoCommentPost {
+public class NicoCommentPost implements Parcelable{
 
-    private final NicoClient client;
-    private final VideoInfo targetVideo;
+    private NicoClient client;
+    private VideoInfo targetVideo;
     private int startTime = -1;
-    private String comment;
+    private String comment = "";
     private boolean isAnonymous = true;
     private int color = COLOR_WHITE;
     private int position = POSITION_MIDDLE;
     private int size = SIZE_MEDIUM;
-    private int commentNo;
+    private int commentNo = 0;
 
     private boolean isPost = false;
 
@@ -58,7 +62,7 @@ public class NicoCommentPost {
      * @param client the information of the user, cannot be {@code null}
      * @throws NicoAPIException if any param is {@code null} or not login
      */
-    protected NicoCommentPost(VideoInfo targetVideo,NicoClient client)throws NicoAPIException{
+    protected NicoCommentPost(VideoInfo targetVideo, NicoClient client)throws NicoAPIException{
         if ( targetVideo == null ){
             throw new NicoAPIException.InvalidParamsException(
                     "target video not found > comment",
@@ -68,6 +72,50 @@ public class NicoCommentPost {
         this.targetVideo = targetVideo;
         this.client = client;
     }
+
+    /* <implementation of parcelable> */
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeParcelable(client,flags);
+        out.writeParcelable(targetVideo,flags);
+        out.writeInt(startTime);
+        out.writeString(comment);
+        out.writeInt(color);
+        out.writeInt(position);
+        out.writeInt(size);
+        out.writeInt(commentNo);
+        out.writeBooleanArray(new boolean[]{isAnonymous, isPost});
+    }
+
+    public static final Parcelable.Creator<NicoCommentPost> CREATOR = new Parcelable.Creator<NicoCommentPost>() {
+        public NicoCommentPost createFromParcel(Parcel in) {
+            return new NicoCommentPost(in);
+        }
+        public NicoCommentPost[] newArray(int size) {
+            return new NicoCommentPost[size];
+        }
+    };
+
+    private NicoCommentPost(Parcel in) {
+        this.client = in.readParcelable(NicoClient.class.getClassLoader());
+        this.targetVideo = in.readParcelable(VideoInfo.class.getClassLoader());
+        this.startTime = in.readInt();
+        this.comment = in.readString();
+        this.color = in.readInt();
+        this.position = in.readInt();
+        this.size = in.readInt();
+        this.commentNo = in.readInt();
+        boolean[] val = new boolean[2];
+        in.readBooleanArray(val);
+        this.isAnonymous = val[0];
+        this.isPost = val[1];
+    }
+
+    /* </implementation of parcelable> */
 
     /**
      * コメントの本文を設定します Sets the text of new comment.<br>
@@ -326,7 +374,7 @@ public class NicoCommentPost {
             } catch (NicoAPIException e) {
                 targetVideo.getFlv(client.getCookieStore());
             }
-            targetVideo.getComment(1);
+            targetVideo.loadComment(1);
             CommentInfo.CommentGroup group = targetVideo.commentGroup;
             String command = "";
             if (!commandList.isEmpty()) {

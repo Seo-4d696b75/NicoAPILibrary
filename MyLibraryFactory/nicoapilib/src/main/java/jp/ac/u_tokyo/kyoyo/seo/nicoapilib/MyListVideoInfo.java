@@ -1,6 +1,10 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
 
+import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,7 +62,7 @@ import java.util.List;
  * @version 0.0  on 2017/01/16.
  */
 
-public class MyListVideoInfo extends VideoInfo {
+public class MyListVideoInfo extends VideoInfo implements Parcelable{
 
     private MyListVideoInfo( JSONObject item)  throws NicoAPIException.ParseException {
         initialize(item);
@@ -88,18 +92,18 @@ public class MyListVideoInfo extends VideoInfo {
         this.myListItemDescription = description;
     }
 
-    private String myListItemDescription;
-    private String addDate,updateDate;
-    public synchronized String getDescription(){
+    protected String myListItemDescription;
+    protected String addDate,updateDate;
+    public synchronized String getMyListItemDescription(){
         return myListItemDescription;
     }
     public synchronized String getAddDate(){
         return addDate;
     }
     public synchronized String getUpdateDate(){
-        return pubDate;
+        return updateDate;
     }
-    protected synchronized void setDescription(String description){
+    protected synchronized void setMyListItemDescription(String description){
         this.myListItemDescription = description;
     }
     protected synchronized void setUpdateDate (String updateDate){
@@ -195,4 +199,52 @@ public class MyListVideoInfo extends VideoInfo {
         }
     }
 
+    /*implementation of parcelable*/
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        super.writeToParcel(out,flags);
+        out.writeString(myListItemDescription);
+        out.writeString(addDate);
+        out.writeString(updateDate);
+    }
+
+    public static final Parcelable.Creator<MyListVideoInfo> CREATOR = new Parcelable.Creator<MyListVideoInfo>() {
+        public MyListVideoInfo createFromParcel(Parcel in) {
+            return new MyListVideoInfo(in);
+        }
+        public MyListVideoInfo[] newArray(int size) {
+            return new MyListVideoInfo[size];
+        }
+    };
+
+    private MyListVideoInfo(Parcel in) {
+        title = in.readString();
+        id = in.readString();
+        date = in.readString();
+        description = in.readString();
+        thumbnailUrl = in.readArrayList(ArrayList.class.getClassLoader());
+        thumbnail = in.readParcelable(Bitmap.class.getClassLoader());
+        length = in.readInt();
+        viewCounter = in.readInt();
+        commentCounter = in.readInt();
+        myListCounter = in.readInt();
+        tags = in.readArrayList(ArrayList.class.getClassLoader());
+        threadID = in.readInt();
+        messageServerUrl = in.readString();
+        flvUrl = in.readString();
+        contributorID = in.readInt();
+        contributorName = in.readString();
+        contributorIconUrl = in.readString();
+        contributorIcon = in.readParcelable(Bitmap.class.getClassLoader());
+        point = in.readFloat();
+        commentGroup = in.readParcelable(CommentInfo.CommentGroup.class.getClassLoader());
+        myListItemDescription = in.readString();
+        addDate = in.readString();
+        updateDate = in.readString();
+    }
 }

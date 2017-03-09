@@ -1,6 +1,9 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -78,19 +81,6 @@ public class NicoClient extends LoginInfo{
     public synchronized void login (String mail, String pass) throws NicoAPIException {
         NicoLogin nicoLogin = new NicoLogin(NicoClient.this);
         nicoLogin.login(mail, pass);
-    }
-
-    /**
-     * ユーザのアイコンを取得する【ログイン必須】<br>
-     * Gets user icon image, be sure to login beforehand.<br>
-     * ログインしていないと取得に失敗して例外を投げます。<br>
-     * If not login, this fails to get the image and throws exception.
-     * @return Returns user icon, not {@code null}
-     * @throws NicoAPIException if fail to get image
-     */
-    public synchronized Drawable getUserIcon() throws NicoAPIException{
-        NicoLogin nicoLogin = new NicoLogin(NicoClient.this);
-        return nicoLogin.getUserIcon();
     }
 
     /**
@@ -189,15 +179,17 @@ public class NicoClient extends LoginInfo{
     /**
      * 対象の動画を渡して、コメントを取得する【ログイン必須】<br>
      * Gets comments of the video passed in argument, be sure to login.<br>
-     * すでにコメントを取得済みだった場合、そのコメントを返します。
-     * 取得するコメント数は動画長さに応じて適当に設定されます。<br>
-     * If comments are already gotten, this returns them.
+     * 【ＵＩスレッド禁止】HTTP通信を行うのでバックグランド処理してください。
+     * 取得するコメント数は動画長さに応じて適当に設定されます。
+     * 一度取得すれば{@link VideoInfo#getComment()}からいつでも取得できます。<br>
+     *【No UI thread】HTTP communication is done.
      * The number of comments is set corresponding to video length.
+     * Once the comment is gotten, it can be accessed from {@link VideoInfo#getComment()}
      * @param videoInfo the target video, cannot be {@code null}
      * @return Returns List of CommentInfo sorted along time series, not {@code null}
      * @throws NicoAPIException NicoAPIException if fail to get comment
      */
-    public synchronized List<CommentInfo> getComment (VideoInfo videoInfo) throws NicoAPIException{
+    public synchronized CommentInfo.CommentGroup getComment (VideoInfo videoInfo) throws NicoAPIException{
         if ( videoInfo == null ){
             throw new NicoAPIException.InvalidParamsException(
                     "target video is null > comment",
@@ -210,18 +202,22 @@ public class NicoClient extends LoginInfo{
         }catch (NicoAPIException e){
             videoInfo.getFlv(getCookieStore());
         }
-        return videoInfo.getComment(true);
+        return videoInfo.loadComment();
     }
 
     /**
      * 対象の動画を渡して、コメントを取得する【ログイン必須】<br>
      * Gets comments of the video passed in argument, be sure to login.
+     * 【ＵＩスレッド禁止】HTTP通信を行うのでバックグランド処理してください。
+     * 一度取得すれば{@link VideoInfo#getComment()}からいつでも取得できます。<br>
+     *【No UI thread】HTTP communication is done.
+     * Once the comment is gotten, it can be accessed from {@link VideoInfo#getComment()}
      * @param videoInfo the target video, cannot be {@code null}
      * @param max the limit number comment response from 0 to 1000, if over 1000, fixed to 1000
      * @return Returns List of CommentInfo sorted along time series, not {@code null}
      * @throws NicoAPIException if fail to get comment
      */
-    public synchronized List<CommentInfo> getComment (VideoInfo videoInfo, int max) throws NicoAPIException{
+    public synchronized CommentInfo.CommentGroup getComment (VideoInfo videoInfo, int max) throws NicoAPIException{
         if ( videoInfo == null ){
             throw new NicoAPIException.InvalidParamsException(
                     "target video is null > comment",
@@ -240,8 +236,8 @@ public class NicoClient extends LoginInfo{
         }catch (NicoAPIException e){
             videoInfo.getFlv(getCookieStore());
         }
-        return videoInfo.getComment(max);
-        //return videoInfo.getCommentByJson(max);
+        return videoInfo.loadComment(max);
+        //return videoInfo.loadCommentByJson(max);
     }
 
     /**
@@ -260,6 +256,64 @@ public class NicoClient extends LoginInfo{
                     NicoAPIException.EXCEPTION_NOT_LOGIN_COMMENT_POST
             );
         }
+    }
+
+    /*implementation of parcelable*/
+
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeBooleanArray(new boolean[]{login});
+        out.writeString(userName);
+        out.writeInt(userID);
+        out.writeBooleanArray(new boolean[]{isPremium});
+        out.writeString(userIconUrl);
+        out.writeParcelable(userIcon,flags);
+        out.writeInt(cookieNum);
+        out.writeIntArray(cookieVersion);
+        out.writeStringArray(cookieName);
+        out.writeStringArray(cookieValue);
+        out.writeStringArray(cookiePath);
+        out.writeStringArray(cookieDomain);
+        out.writeString(appName);
+        out.writeString(deviceName);
+    }
+
+    public static final Parcelable.Creator<NicoClient> CREATOR = new Parcelable.Creator<NicoClient>() {
+        public NicoClient createFromParcel(Parcel in) {
+            return new NicoClient(in);
+        }
+        public NicoClient[] newArray(int size) {
+            return new NicoClient[size];
+        }
+    };
+
+    private NicoClient(Parcel in) {
+        boolean[] booleanValue = new boolean[1];
+        in.readBooleanArray(booleanValue);
+        super.login = booleanValue[0];
+        super.userName = in.readString();
+        super.userID = in.readInt();
+        in.readBooleanArray(booleanValue);
+        super.isPremium = booleanValue[0];
+        super.userIconUrl = in.readString();
+        super.userIcon = in.readParcelable(Bitmap.class.getClassLoader());
+        super.cookieNum = in.readInt();
+        super.cookieVersion = new int[cookieNum];
+        in.readIntArray(super.cookieVersion);
+        super.cookieName = new String[cookieNum];
+        in.readStringArray(super.cookieName);
+        super.cookieValue = new String[cookieNum];
+        in.readStringArray(super.cookieValue);
+        super.cookiePath = new String[cookieNum];
+        in.readStringArray(super.cookiePath);
+        super.cookieDomain = new String[cookieNum];
+        in.readStringArray(super.cookieDomain);
+        this.appName = in.readString();
+        this.deviceName = in.readString();
     }
 
 

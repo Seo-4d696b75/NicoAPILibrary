@@ -134,7 +134,6 @@ public class RSSVideoInfo extends VideoInfo {
         {
             put(VideoInfo.TITLE,Pattern.compile("<title>(.+?)</title>",Pattern.DOTALL));
             put(VideoInfo.ID,Pattern.compile("<link>.+/(.+?)</link>",Pattern.DOTALL));
-            put(VideoInfo.PUB_DATE,Pattern.compile("<pubDate>(.+?)</pubDate>",Pattern.DOTALL));
             put(VideoInfo.THUMBNAIL_URL,Pattern.compile("src=\"(.+?)\"",Pattern.DOTALL));
             put(VideoInfo.DESCRIPTION,Pattern.compile("<p class=\"nico-description\">(.+?)</p>",Pattern.DOTALL));
             put(VideoInfo.LENGTH,Pattern.compile("<strong class=\"nico-info-length\">(.+?)</strong>",Pattern.DOTALL));
@@ -171,9 +170,6 @@ public class RSSVideoInfo extends VideoInfo {
                         break;
                     case VideoInfo.DESCRIPTION:
                         info.description = value;
-                        break;
-                    case VideoInfo.PUB_DATE:
-                        info.pubDate = convertPubDate(value);
                         break;
                     case VideoInfo.THUMBNAIL_URL:
                         info.setThumbnailUrl(value);
@@ -236,15 +232,6 @@ public class RSSVideoInfo extends VideoInfo {
         }
     }
 
-    private static String convertPubDate (String date) throws NicoAPIException.ParseException{
-        try{
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
-            return dateFormatBase.format(dateFormat.parse(date));
-        }catch (ParseException e){
-            throw new NicoAPIException.ParseException(e.getMessage(), date,NicoAPIException.EXCEPTION_PARSE_RANKING_MYLIST_PUB_DATE);
-        }
-    }
-
     private static String convertDate (String date) throws NicoAPIException.ParseException{
         try{
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy'年'MM'月'dd'日' HH：mm：ss");
@@ -255,13 +242,12 @@ public class RSSVideoInfo extends VideoInfo {
     }
 
     /**
-     * ニコ動APIから取得したXML形式のランキングおよびマイリス情報をパースします<br>
-     * Parses xml text from Nico API about ranking or myList.<br>
+     * ニコ動APIから取得したXML形式のランキング情報をパースします<br>
+     * Parses xml text from Nico API about ranking.<br>
      * APIの詳細や有効なパラメータ、レスポンスの形式は{@link RSSVideoInfo ここから参照}できます。<br>
      * 取得できる動画のフィールドは以下の通りです。<br>
      *     {@link VideoInfo#title 動画タイトル}<br>
      *     {@link VideoInfo#id 動画ID}<br>
-     *     {@link VideoInfo#pubDate ランキング発表日時}<br>
      *     {@link VideoInfo#description 動画説明}<br>
      *     {@link VideoInfo#length 動画長さ}<br>
      *     {@link VideoInfo#date 動画投稿日時}<br>
@@ -272,7 +258,6 @@ public class RSSVideoInfo extends VideoInfo {
      *     You can get following fields of videos;<br>
      *     {@link VideoInfo#title title of video}<br>
      *     {@link VideoInfo#id video ID}<br>
-     *     {@link VideoInfo#pubDate ranking published date}<br>
      *     {@link VideoInfo#description video description}<br>
      *     {@link VideoInfo#length length}<br>
      *     {@link VideoInfo#date contributed date}<br>
@@ -289,7 +274,6 @@ public class RSSVideoInfo extends VideoInfo {
                     "parse target is null",null,
                     NicoAPIException.EXCEPTION_PARSE_RANKING_NO_TARGET);
         }
-        checkResponse(xml);
         List<VideoInfo> list = new ArrayList<VideoInfo>();
         Matcher matcher = Pattern.compile("<item>.+?</item>",Pattern.DOTALL).matcher(xml);
         while ( matcher.find() ){
@@ -299,15 +283,4 @@ public class RSSVideoInfo extends VideoInfo {
         return list;
     }
 
-    private static void checkResponse(String xml) throws NicoAPIException{
-        Matcher matcher = Pattern.compile("<channel>.+<title>.+?ランキング.+?‐ニコニコ動画</title>.+</channel>",Pattern.DOTALL).matcher(xml);
-        if ( matcher.find() ){
-            return;
-        }else{
-            throw new NicoAPIException.APIUnexpectedException(
-                    "not ranking RSS > ranking",
-                    NicoAPIException.EXCEPTION_UNEXPECTED_RANKING
-            );
-        }
-    }
 }

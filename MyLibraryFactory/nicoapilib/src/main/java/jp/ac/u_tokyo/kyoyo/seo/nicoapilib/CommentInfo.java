@@ -1,12 +1,16 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
 
+import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,7 +88,7 @@ import java.util.regex.Pattern;
  * @version 0.0 on 2017/01/01.
  */
 
-public class CommentInfo {
+public class CommentInfo implements Parcelable{
 
     private long start;
     private String[] mail;   //list of comment commands, not mail address
@@ -96,9 +100,10 @@ public class CommentInfo {
 
     private boolean initialized = false;
 
-    public float x,y;
-    public float length = -1f;
-    public float speed;
+    public float x = 0f;
+    public float y = 0f;
+    public float length = 0f;
+    public float speed = 0f;
     private int color = 0;
     private float size = -1f;
     private int position = -1;
@@ -329,7 +334,7 @@ public class CommentInfo {
         }
     }
 
-    private String convertDate (long time){
+    protected static String convertDate (long time){
         return VideoInfo.dateFormatBase.format(new Date(time * 1000));
     }
 
@@ -361,138 +366,220 @@ public class CommentInfo {
         }
     }
 
-    /**
-     * APIからのレスポンスをパースして、時系列に整列したリストを返す<br>
-     * Parses JSONObject form message server and return items sorted along the time series
-     * @param root response from message server, cannot be {@code null}
-     * @return Returns empty list if response contains no items
-     * @throws NicoAPIException if API response does not follow expected format or argument is {@code null}
-     * @see CommentInfo expected response format
-     *
-     */
-    protected static CommentGroup parse(JSONArray root) throws NicoAPIException{
-        List<CommentInfo>commentList = new ArrayList<CommentInfo>();
-        try{
-            JSONObject meta = root.getJSONObject(0);
-            meta = meta.getJSONObject("thread");
-            int resultCode = meta.getInt("resultcode");
-            int threadID = meta.getInt("thread");
-            int lastComment = meta.getInt("last_res");
-            String ticket = meta.getString("ticket");
-            if (resultCode == 0) {
-                for (int i = 1; i < root.length(); i++) {
-                    JSONObject item = root.getJSONObject(i);
-                    if (item.has("chat")) {
-                        item = item.getJSONObject("chat");
-                        if (!item.has("vpos") || !item.has("content")) {
-                            continue;
-                        }
-                        commentList.add(new CommentInfo(item));
-                    }
-                }
-                return new CommentGroup(sortComment(commentList), threadID, lastComment, ticket);
-            } else {
-                throw new NicoAPIException.APIUnexpectedException(
-                        "Unexpected API response status > comment",
-                        NicoAPIException.EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE
-                );
-            }
-        } catch( JSONException e){
-            throw new NicoAPIException.ParseException(
-                    e.getMessage(),root.toString(),
-                    NicoAPIException.EXCEPTION_PARSE_COMMENT_JSON_META
-            );
-        }
+    /*implementation of parcelable*/
+
+    public int describeContents() {
+        return 0;
     }
 
-    protected static CommentGroup parse(String xml) throws NicoAPIException{
-        List<CommentInfo>commentList = new ArrayList<CommentInfo>();
-        Pattern metaPattern = Pattern.compile("<thread resultcode=\"([0-9]+?)\" thread=\"([0-9]+?)\".+? last_res=\"([0-9]+?)\" ticket=\"(.+?)\".+?/>");
-        Matcher matcher = metaPattern.matcher(xml);
-        if ( matcher.find() ){
-            String resultCode = matcher.group(1);
-            int threadID = Integer.parseInt(matcher.group(2));
-            int lastComment = Integer.parseInt( matcher.group(3) );
-            String ticket = matcher.group(4);
-            if ( resultCode.equals("0") ){
-                Pattern itemPattern = Pattern.compile("<chat ((?!deleted).)+?>.+?</chat>");
-                matcher = itemPattern.matcher(xml);
-                while( matcher.find() ){
-                    CommentInfo info = new CommentInfo(matcher.group());
-                    commentList.add( info );
-                }
-                return new CommentGroup(sortComment(commentList),threadID,lastComment,ticket);
-            }else{
-                throw new NicoAPIException.APIUnexpectedException(
-                        "Unexpected API response status > comment",
-                        NicoAPIException.EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE
-                );
-            }
-        }else{
-            throw  new NicoAPIException.ParseException(
-                    "meta not found in XML > comment",xml,
-                    NicoAPIException.EXCEPTION_PARSE_COMMENT_XML_META
-            );
-        }
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(content);
+        out.writeString(date);
+        out.writeBooleanArray(new boolean[]{isAnonymous});
+        out.writeInt(ngLevel);
+        out.writeInt(commentNo);
+        out.writeBooleanArray(new boolean[]{initialized});
+        out.writeFloat(x);
+        out.writeFloat(y);
+        out.writeFloat(length);
+        out.writeFloat(speed);
+        out.writeInt(color);
+        out.writeFloat(size);
+        out.writeInt(position);
     }
 
-    protected static class CommentGroup {
+    public static final Parcelable.Creator<CommentInfo> CREATOR = new Parcelable.Creator<CommentInfo>() {
+        public CommentInfo createFromParcel(Parcel in) {
+            return new CommentInfo(in);
+        }
+        public CommentInfo[] newArray(int size) {
+            return new CommentInfo[size];
+        }
+    };
+
+    private CommentInfo(Parcel in) {
+        this.content = in.readString();
+        this.date = in.readString();
+        boolean[] val = new boolean[1];
+        in.readBooleanArray(val);
+        this.isAnonymous = val[0];
+        this.ngLevel = in.readInt();
+        this.commentNo = in.readInt();
+        in.readBooleanArray(val);
+        this.initialized = val[0];
+        this.x = in.readFloat();
+        this.y = in.readFloat();
+        this.length = in.readFloat();
+        this.speed = in.readFloat();
+        this.color = in.readInt();
+        this.size = in.readFloat();
+        this.position = in.readInt();
+    }
+
+    public static class CommentGroup implements Parcelable {
         protected List<CommentInfo> commentList;
         protected int threadID;
         protected String ticket;
         protected int lastComment;
-        private CommentGroup (List<CommentInfo> list, int threadID, int lastComment, String ticket){
-            this.commentList = list;
-            this.threadID = threadID;
-            this.ticket = ticket;
-            this.lastComment = lastComment;
+        protected String date;
+        protected CommentGroup (String xml) throws NicoAPIException{
+            Pattern metaPattern = Pattern.compile("<thread resultcode=\"([0-9]+?)\" thread=\"([0-9]+?)\" server_time=\"([0-9]+?)\" last_res=\"([0-9]+?)\" ticket=\"(.+?)\".+?/>");
+            Matcher matcher = metaPattern.matcher(xml);
+            if ( matcher.find() ){
+                String resultCode = matcher.group(1);
+                this.date = CommentInfo.convertDate(Long.parseLong(matcher.group(2)));
+                this.threadID = Integer.parseInt(matcher.group(3));
+                this.lastComment = Integer.parseInt( matcher.group(4) );
+                this.ticket = matcher.group(5);
+                if ( resultCode.equals("0") ){
+                    this.commentList = new ArrayList<CommentInfo>();
+                    Pattern itemPattern = Pattern.compile("<chat ((?!deleted).)+?>.+?</chat>");
+                    matcher = itemPattern.matcher(xml);
+                    while (matcher.find()) {
+                        CommentInfo info = new CommentInfo(matcher.group());
+                        commentList.add(info);
+                    }
+                    sortComment();
+                }else{
+                    throw new NicoAPIException.APIUnexpectedException(
+                            "Unexpected API response status > comment",
+                            NicoAPIException.EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE
+                    );
+                }
+            }else{
+                throw  new NicoAPIException.ParseException(
+                        "meta not found in XML > comment",xml,
+                        NicoAPIException.EXCEPTION_PARSE_COMMENT_XML_META
+                );
+            }
         }
-    }
-
-    //sort list of CommentInfo along the time series, using merge sort
-    private static List<CommentInfo> sortComment(List<CommentInfo> list){
-        if ( list.size() < 2 ){
+        protected CommentGroup (JSONArray root) throws NicoAPIException{
+            try{
+                JSONObject meta = root.getJSONObject(0);
+                meta = meta.getJSONObject("thread");
+                int resultCode = meta.getInt("resultcode");
+                this.threadID = meta.getInt("thread");
+                this.date = CommentInfo.convertDate(meta.getLong("server_time"));
+                this.lastComment = meta.getInt("last_res");
+                this.ticket = meta.getString("ticket");
+                if (resultCode == 0) {
+                    this.commentList = new ArrayList<CommentInfo>();
+                    for (int i = 1; i < root.length(); i++) {
+                        JSONObject item = root.getJSONObject(i);
+                        if (item.has("chat")) {
+                            item = item.getJSONObject("chat");
+                            if (!item.has("vpos") || !item.has("content")) {
+                                continue;
+                            }
+                            commentList.add(new CommentInfo(item));
+                        }
+                    }
+                    sortComment();
+                } else {
+                    throw new NicoAPIException.APIUnexpectedException(
+                            "Unexpected API response status > comment",
+                            NicoAPIException.EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE
+                    );
+                }
+            } catch( JSONException e){
+                throw new NicoAPIException.ParseException(
+                        e.getMessage(),root.toString(),
+                        NicoAPIException.EXCEPTION_PARSE_COMMENT_JSON_META
+                );
+            }
+        }
+        public List<CommentInfo> getComments(){
+            List<CommentInfo> list = new ArrayList<CommentInfo>();
+            list.addAll(commentList);
             return list;
         }
-        List<List<CommentInfo>> sort = new ArrayList<List<CommentInfo>>();
-        for ( int i=0 ; i<list.size() ; i++){
-            List<CommentInfo> item = new ArrayList<CommentInfo>();
-            item.add(list.get(i));
-            sort.add(item);
+        public int getThreadID(){
+            return threadID;
         }
-        int n = sort.size();
-        while ( n > 1 ){
-            List<List<CommentInfo>> temp = new ArrayList<List<CommentInfo>>();
-            for ( int i=0 ; i<n/2 ; i++){
-                temp.add(merge(sort.get(2*i),sort.get(2*i+1)));
-            }
-            if ( sort.size() == 2*n+1){
-                temp.add(sort.get(2*n));
-            }
-            sort = temp;
-            n = sort.size();
+        public String getTicket(){
+            return ticket;
         }
-        return sort.get(0);
+        public int getLastComment(){
+            return lastComment;
+        }
+        public String getDate(){
+            return date;
+        }
+
+        //sort list of CommentInfo along the time series, using merge sort
+        private void sortComment(){
+            List<CommentInfo> list = this.commentList;
+            if ( list.size() < 2 ){
+                return;
+            }
+            List<List<CommentInfo>> sort = new ArrayList<List<CommentInfo>>();
+            for ( int i=0 ; i<list.size() ; i++){
+                List<CommentInfo> item = new ArrayList<CommentInfo>();
+                item.add(list.get(i));
+                sort.add(item);
+            }
+            int n = sort.size();
+            while ( n > 1 ){
+                List<List<CommentInfo>> temp = new ArrayList<List<CommentInfo>>();
+                for ( int i=0 ; i<n/2 ; i++){
+                    temp.add(merge(sort.get(2*i),sort.get(2*i+1)));
+                }
+                if ( sort.size() == 2*n+1){
+                    temp.add(sort.get(2*n));
+                }
+                sort = temp;
+                n = sort.size();
+            }
+            this.commentList = sort.get(0);
+        }
+
+        private List<CommentInfo> merge (List<CommentInfo> a, List<CommentInfo> b){
+            List<CommentInfo> list = new ArrayList<CommentInfo>();
+            while ( a.size() > 0 && b.size() > 0 ){
+                if ( a.get(0).start < b.get(0).start ){
+                    list.add(a.get(0));
+                    a.remove(0);
+                }else{
+                    list.add(b.get(0));
+                    b.remove(0);
+                }
+            }
+            for ( int i=0 ; i<a.size() ; i++){
+                list.add(a.get(i));
+            }
+            for ( int i=0 ; i<b.size() ; i++){
+                list.add(b.get(i));
+            }
+            return list;
+        }
+
+        public int describeContents() {
+            return 0;
+        }
+        public void writeToParcel(Parcel out, int flags) {
+            out.writeList(commentList);
+            out.writeInt(threadID);
+            out.writeString(ticket);
+            out.writeInt(lastComment);
+            out.writeString(date);
+        }
+        public static final Parcelable.Creator<CommentGroup> CREATOR = new Parcelable.Creator<CommentGroup>() {
+            public CommentGroup createFromParcel(Parcel in) {
+                return new CommentGroup(in);
+            }
+            public CommentGroup[] newArray(int size) {
+                return new CommentGroup[size];
+            }
+        };
+        private CommentGroup(Parcel in) {
+            this.commentList = in.readArrayList(ArrayList.class.getClassLoader());
+            this.threadID = in.readInt();
+            this.ticket = in.readString();
+            this.lastComment = in.readInt();
+            this.date = in.readString();
+        }
     }
 
-    private static List<CommentInfo> merge (List<CommentInfo> a, List<CommentInfo> b){
-        List<CommentInfo> list = new ArrayList<CommentInfo>();
-        while ( a.size() > 0 && b.size() > 0 ){
-            if ( a.get(0).start < b.get(0).start ){
-                list.add(a.get(0));
-                a.remove(0);
-            }else{
-                list.add(b.get(0));
-                b.remove(0);
-            }
-        }
-        for ( int i=0 ; i<a.size() ; i++){
-            list.add(a.get(i));
-        }
-        for ( int i=0 ; i<b.size() ; i++){
-            list.add(b.get(i));
-        }
-        return list;
-    }
+
 
 }

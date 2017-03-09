@@ -2,10 +2,6 @@ package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
 import org.apache.http.client.CookieStore;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
 /**
  * この例外クラスはライブラリ内で発生したエラーを区分するものです<br>
  * This class extending Exception helps you recognize what king of error happened.<br><br>
@@ -37,26 +33,6 @@ public class NicoAPIException extends Exception {
         return code;
     }
 
-    /**
-     * try to get {@link VideoInfo#genre} of video, but this value is not set yet.
-     * at {@link VideoInfo#getString(int)}
-     */
-    public static final int EXCEPTION_NOT_INITIALIZED_GENRE = VideoInfo.GENRE;
-    /**
-     * try to get {@link VideoInfo#rankKind} of video, but this value is not set yet.
-     * at {@link VideoInfo#getString(int)}
-     */
-    public static final int EXCEPTION_NOT_INITIALIZED_RANK_KIND = VideoInfo.RANK_KIND;
-    /**
-     * try to get {@link VideoInfo#period} of video, but this value is not set yet.
-     * at {@link VideoInfo#getString(int)}
-     */
-    public static final int EXCEPTION_NOT_INITIALIZED_PERIOD = VideoInfo.PERIOD;
-    /**
-     * try to get {@link VideoInfo#pubDate} of video, but this value is not set yet.
-     * at {@link VideoInfo#getString(int)}
-     */
-    public static final int EXCEPTION_NOT_INITIALIZED_PUB_DATE = VideoInfo.PUB_DATE;
     /**
      * try to get {@link VideoInfo#date} of video, but this value is not set yet.
      * at {@link VideoInfo#getDate()}, {@link VideoInfo#getString(int)}
@@ -144,7 +120,6 @@ public class NicoAPIException extends Exception {
 
     /**
      * tried to get user icon image, but failed.
-     * at {@link NicoLogin#getUserIcon()} probably via {@link NicoClient#getUserIcon()}
      */
     public static final int EXCEPTION_DRAWABLE_USER_ICON = 100;
     /**
@@ -295,6 +270,10 @@ public class NicoAPIException extends Exception {
      * because target fields not found or unexpected format.
      */
     public static final int EXCEPTION_PARSE_RECOMMEND = 225;
+    /**
+     * fail to find userIconUrl from my page HTML.
+     */
+    public static final int EXCEPTION_PARSE_LOGIN_USER_ICON = 226;
 
 
     /**
@@ -429,6 +408,10 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_PARAM_LOGIN = 323;
     /**
+     * fail to get myList object specified by the ID from myListGroup object.
+     */
+    public static final int EXCEPTION_PARAM_MYLIST_GROUP_ID = 324;
+    /**
      * 不正な引数を渡すと投げられます<br>
      * Thrown if invalid argument is passed.
      */
@@ -481,6 +464,10 @@ public class NicoAPIException extends Exception {
      * tried to edit myList without login.
      */
     public static final int EXCEPTION_NOT_LOGIN_MYLIST_EDIT = 409;
+    /**
+     * tried to get userIcon with no login
+     */
+    public static final int EXCEPTION_NOT_LOGIN_USER_ICON = 410;
     /**
      * ログインしていない状態でログイン必須の機能を使おうとすると投げます<br>
      * Thrown if try to use login-required method without login.
@@ -564,6 +551,27 @@ public class NicoAPIException extends Exception {
      */
     public static final int EXCEPTION_ILLEGAL_STATE_LOGIN_USER_ID = 605;
     /**
+     * fail to get videos in target myList because videos are not initialized yet.
+     * In advance, be sure to call {@link MyListVideoGroup#loadVideos()}.
+     */
+    public static final int EXCEPTION_ILLEGAL_STATE_MYLIST_VIDEO = 606;
+    /**
+     * cannot to get userIconUrl before access to my page.
+     */
+    public static final int EXCEPTION_ILLEGAL_STATE_LOGIN_USER_ICON = 607;
+    /**
+     * try to get {@link jp.ac.u_tokyo.kyoyo.seo.nicoapilib.CommentInfo.CommentGroup} without getting it at {@link VideoInfo#getComment()}
+     */
+    public static final int EXCEPTION_ILLEGAL_STATE_COMMENT = 608;
+    /**
+     * tried to get thumbnail image before setting it to video field.
+     */
+    public static final int EXCEPTION_ILLEGAL_STATE_THUMBNAIL = 609;
+    /**
+     * tried to get contributor icon before setting it to video field.
+     */
+    public static final int EXCEPTION_ILLEGAL_STATE_CONTRIBUTOR_ICON = 610;
+    /**
      * 想定してない状態を意味します
      */
     static class IllegalStateException extends NicoAPIException{
@@ -636,6 +644,10 @@ public class NicoAPIException extends Exception {
      * HTTP failure while getting ranking.
      */
     public static final int EXCEPTION_HTTP_RANKING = 715;
+    /**
+     * HTTP failure while getting comments.
+     */
+    public static final int EXCEPTION_HTTP_COMMENT = 716;
     /**
      * HTTP通信に失敗
      */

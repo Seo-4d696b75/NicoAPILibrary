@@ -1,10 +1,18 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import org.apache.http.client.CookieStore;
+import org.json.JSONArray;
+import org.json.JSONException;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -116,37 +124,78 @@ import java.util.regex.Pattern;
  * @version 0.0  on 2017/01/15.
  */
 
-public class VideoInfo extends VideoInfoStorage {
+public class VideoInfo extends VideoInfoStorage implements Parcelable{
 
     protected VideoInfo(){}
-    protected VideoInfo(VideoInfoPackage info){
-        unPack(info);
+
+    public static final String VIDEO_KEY = "videoInfoObject";
+
+    /* <implementation of parcelable> */
+
+    public int describeContents() {
+        return 0;
     }
 
-    private synchronized void unPack(VideoInfoPackage info){
-        genre = info.genre;
-        rankKind = info.rankKind;
-        period = info.period;
-        pubDate = info.pubDate;
-        title = info.title;
-        id = info.id;
-        date = info.date;
-        description = info.description;
-        setThumbnailUrl(info.thumbnailUrl);
-        length = info.length;
-        viewCounter = info.viewCounter;
-        commentCounter = info.commentCounter;
-        myListCounter = info.myListCounter;
-        setTags(tags);
-        point = info.point;
-        threadID = info.threadID;
-        messageServerUrl = info.messageServerURL;
-        flvUrl = info.flvURL;
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(title);
+        out.writeString(id);
+        out.writeString(date);
+        out.writeString(description);
+        out.writeList(thumbnailUrl);
+        out.writeParcelable(thumbnail,flags);
+        out.writeInt(length);
+        out.writeInt(viewCounter);
+        out.writeInt(commentCounter);
+        out.writeInt(myListCounter);
+        out.writeList(tags);
+        out.writeInt(threadID);
+        out.writeString(messageServerUrl);
+        out.writeString(flvUrl);
+        out.writeInt(contributorID);
+        out.writeString(contributorName);
+        out.writeString(contributorIconUrl);
+        out.writeParcelable(contributorIcon,flags);
+        out.writeFloat(point);
+        out.writeParcelable(commentGroup,flags);
     }
+
+    public static final Parcelable.Creator<VideoInfo> CREATOR = new Parcelable.Creator<VideoInfo>() {
+        public VideoInfo createFromParcel(Parcel in) {
+            return new VideoInfo(in);
+        }
+        public VideoInfo[] newArray(int size) {
+            return new VideoInfo[size];
+        }
+    };
+
+    private VideoInfo(Parcel in) {
+        title = in.readString();
+        id = in.readString();
+        date = in.readString();
+        description = in.readString();
+        thumbnailUrl = in.readArrayList(ArrayList.class.getClassLoader());
+        thumbnail = in.readParcelable(Bitmap.class.getClassLoader());
+        length = in.readInt();
+        viewCounter = in.readInt();
+        commentCounter = in.readInt();
+        myListCounter = in.readInt();
+        tags = in.readArrayList(ArrayList.class.getClassLoader());
+        threadID = in.readInt();
+        messageServerUrl = in.readString();
+        flvUrl = in.readString();
+        contributorID = in.readInt();
+        contributorName = in.readString();
+        contributorIconUrl = in.readString();
+        contributorIcon = in.readParcelable(Bitmap.class.getClassLoader());
+        point = in.readFloat();
+        commentGroup = in.readParcelable(CommentInfo.CommentGroup.class.getClassLoader());
+    }
+
+    /* </implementation of parcelable> */
 
     //url from which details of video you can get
-    private String thumbUrl = "http://ext.nicovideo.jp/api/getthumbinfo/";
-    private String getFlvUrl = "http://flapi.nicovideo.jp/api/getflv/";
+    private final String thumbUrl = "http://ext.nicovideo.jp/api/getthumbinfo/";
+    private final String getFlvUrl = "http://flapi.nicovideo.jp/api/getflv/";
     //Pattern to extract value from plain text
     private final int STATUS = 100;
     private final Map<Integer,Pattern> patternMap = new HashMap<Integer,Pattern>(){
@@ -224,51 +273,31 @@ public class VideoInfo extends VideoInfoStorage {
             String target;
             int num;
             synchronized (this) {
-                if (description == null) {
-                    target = extract(res, VideoInfo.DESCRIPTION);
-                    description = target;
-                }
-                if (thumbnailUrl == null) {
-                    target = extract(res, VideoInfo.THUMBNAIL_URL);
-                    setThumbnailUrl(target);
-                }
-                if (date == null) {
-                    target = extract(res, VideoInfo.DATE);
-                    target = convertDate(target);
-                    date = target;
-                }
-                if (contributorName == null) {
-                    target = extract(res, VideoInfo.CONTRIBUTOR_NAME, 2);
-                    contributorName = target;
-                }
-                if (contributorIconUrl == null) {
-                    target = extract(res, VideoInfo.CONTRIBUTOR_ICON_URL, 2);
-                    contributorIconUrl = target;
-                }
-                if (viewCounter < 0) {
-                    target = extract(res, VideoInfo.VIEW_COUNTER);
-                    num = Integer.parseInt(target);
-                    viewCounter = num;
-                }
-                if (commentCounter < 0) {
-                    target = extract(res, VideoInfo.COMMENT_COUNTER);
-                    num = Integer.parseInt(target);
-                    commentCounter = num;
-                }
-                if (myListCounter < 0) {
-                    target = extract(res, VideoInfo.MY_LIST_COUNTER);
-                    num = Integer.parseInt(target);
-                    myListCounter = num;
-                }
-                if (contributorID <= 0) {
-                    target = extract(res, VideoInfo.CONTRIBUTOR_ID, 2);
-                    num = Integer.parseInt(target);
-                    contributorID = num;
-                }
-                if (tags == null) {
-                    target = extract(res, VideoInfo.TAGS);
-                    parseTags(target);
-                }
+                target = extract(res, VideoInfo.DESCRIPTION);
+                description = target;
+                target = extract(res, VideoInfo.THUMBNAIL_URL);
+                setThumbnailUrl(target);
+                target = extract(res, VideoInfo.DATE);
+                target = convertDate(target);
+                date = target;
+                target = extract(res, VideoInfo.CONTRIBUTOR_NAME, 2);
+                contributorName = target;
+                target = extract(res, VideoInfo.CONTRIBUTOR_ICON_URL, 2);
+                contributorIconUrl = target;
+                target = extract(res, VideoInfo.VIEW_COUNTER);
+                num = Integer.parseInt(target);
+                viewCounter = num;
+                target = extract(res, VideoInfo.COMMENT_COUNTER);
+                num = Integer.parseInt(target);
+                commentCounter = num;
+                target = extract(res, VideoInfo.MY_LIST_COUNTER);
+                num = Integer.parseInt(target);
+                myListCounter = num;
+                target = extract(res, VideoInfo.CONTRIBUTOR_ID, 2);
+                num = Integer.parseInt(target);
+                contributorID = num;
+                target = extract(res, VideoInfo.TAGS);
+                parseTags(target);
             }
             return true;
         } catch (NicoAPIException e){
@@ -359,18 +388,12 @@ public class VideoInfo extends VideoInfoStorage {
         String target;
         try {
             synchronized (this) {
-                if (threadID < 0) {
-                    target = extract(res, VideoInfo.THREAD_ID);
-                    threadID = Integer.parseInt(URLDecoder.decode(target));
-                }
-                if (messageServerUrl == null) {
-                    target = extract(res, VideoInfo.MESSAGE_SERVER_URL);
-                    messageServerUrl = URLDecoder.decode(target);
-                }
-                if (super.flvUrl == null) {
-                    target = extract(res, VideoInfo.FLV_URL);
-                    super.flvUrl = URLDecoder.decode(target);
-                }
+                target = extract(res, VideoInfo.THREAD_ID);
+                threadID = Integer.parseInt(URLDecoder.decode(target));
+                target = extract(res, VideoInfo.MESSAGE_SERVER_URL);
+                messageServerUrl = URLDecoder.decode(target);
+                target = extract(res, VideoInfo.FLV_URL);
+                super.flvUrl = URLDecoder.decode(target);
             }
         }catch(NicoAPIException e){
             e.printStackTrace();
@@ -380,38 +403,38 @@ public class VideoInfo extends VideoInfoStorage {
     }
 
     /**
-     * Androidでの使用を前提にサムネイル画像を取得します【ＵＩスレッド禁止】<br>
+     * サムネイル画像を取得しフィールドに保存します【ＵＩスレッド禁止】<br>
      * Gets thumbnail image, supposed to be used in Android.<br>
-     * 一度取得した画像は動画フィールドに保存されます。
+     * 一度取得した画像は動画フィールドに保存され、{@link VideoInfo#getThumbnail()}から取得できます。
      * @return Returns thumbnail image, not {@code null}
      * @throws NicoAPIException if fail to get
      */
-    public Drawable getThumbnail () throws NicoAPIException{
-        return getThumbnail(false);
+    public Bitmap loadThumbnail () throws NicoAPIException{
+        return loadThumbnail(false);
     }
-    private Object thumbnailGetLock = new Object();
-    public Drawable getThumbnail (boolean isHigh) throws NicoAPIException{
-        //TODO 参照値を返すのではなくオブジェクトをコピーするべき
-        synchronized (thumbnailGetLock) {
-            if (thumbnail != null) {
-                return thumbnail;
-            }
-            Drawable thumbnail = null;
-            String path = "";
+    public Bitmap loadThumbnail (boolean isHigh) throws NicoAPIException{
+        String path;
+        try {
+            path = getThumbnailUrl(isHigh);
+        } catch (NicoAPIException.NotInitializedException e) {
+            complete();
             try {
                 path = getThumbnailUrl(isHigh);
-            } catch (NicoAPIException.NotInitializedException e) {
-                complete();
-                try {
-                    path = getThumbnailUrl(isHigh);
-                } catch (NicoAPIException.NotInitializedException ee) {
-                    throw new NicoAPIException.DrawableFailureException("fail to get thumbnail URL > " + id, NicoAPIException.EXCEPTION_DRAWABLE_THUMBNAIL_URL);
-                }
+            } catch (NicoAPIException.NotInitializedException ee) {
+                throw new NicoAPIException.DrawableFailureException(
+                        "fail to get thumbnail URL > " + id,
+                        NicoAPIException.EXCEPTION_DRAWABLE_THUMBNAIL_URL
+                );
             }
-            thumbnail = getDrawable(path);
-            if (thumbnail == null) {
-                throw new NicoAPIException.DrawableFailureException("fail to get thumbnail > " + id, NicoAPIException.EXCEPTION_DRAWABLE_THUMBNAIL);
-            } else {
+        }
+        Bitmap thumbnail = new HttpResponseGetter().getBitmap(path);
+        if (thumbnail == null) {
+            throw new NicoAPIException.DrawableFailureException(
+                    "fail to get thumbnail > " + id,
+                    NicoAPIException.EXCEPTION_DRAWABLE_THUMBNAIL
+            );
+        } else {
+            synchronized (this){
                 this.thumbnail = thumbnail;
                 return thumbnail;
             }
@@ -419,30 +442,42 @@ public class VideoInfo extends VideoInfoStorage {
     }
 
     /**
-     * Androidでの使用を前提に投稿者のユーザアイコン画像を取得します【ＵＩスレッド禁止】<br>
+     * 投稿者のユーザアイコン画像を取得し保存します【ＵＩスレッド禁止】<br>
      * Gets user icon image of contributor, supposed to be used in Android.<br>
-     * 一度取得した画像は動画フィールドに保存されます。HTTP通信を行うためバックグランド処理してください。<br>
+     * 一度取得した画像は動画フィールドに保存され、{@link VideoInfo#getContributorIcon()}からいつでも取得できます。
+     * HTTP通信を行うためバックグランド処理してください。<br>
      * This communicates by HTTP, so has to be called in background.
      * @return Returns contributor icon, not {@code null}
      * @throws NicoAPIException if fail to get
      */
-    public Drawable getContributorIcon() throws NicoAPIException{
-        synchronized ( contributorIconGetLock ) {
-            if (contributorIcon == null) {
-                if (contributorIconUrl == null) {
-                    if (!complete()) {
-                        throw new NicoAPIException.DrawableFailureException("fail to get contributor icon URL > " + id, NicoAPIException.EXCEPTION_DRAWABLE_CONTRIBUTOR_ICON_URL);
-                    }
-                }
-                contributorIcon = getDrawable(contributorIconUrl);
+    public Bitmap loadContributorIcon() throws NicoAPIException{
+        String path;
+        try {
+            path = getContributorIconUrl();
+        } catch (NicoAPIException.NotInitializedException e) {
+            complete();
+            try {
+                path = getContributorIconUrl();
+            } catch (NicoAPIException.NotInitializedException ee) {
+                throw new NicoAPIException.DrawableFailureException(
+                        "fail to get contributor icon URL > " + id,
+                        NicoAPIException.EXCEPTION_DRAWABLE_CONTRIBUTOR_ICON_URL
+                );
             }
-            if (contributorIcon == null) {
-                throw new NicoAPIException.DrawableFailureException("fail to get contributor icon > " + id, NicoAPIException.EXCEPTION_DRAWABLE_CONTRIBUTOR_ICON);
+        }
+        Bitmap icon = new HttpResponseGetter().getBitmap(path);
+        if (icon == null) {
+            throw new NicoAPIException.DrawableFailureException(
+                    "fail to get contributor icon > " + id,
+                    NicoAPIException.EXCEPTION_DRAWABLE_CONTRIBUTOR_ICON
+            );
+        } else {
+            synchronized (this){
+                this.contributorIcon = icon;
+                return icon;
             }
-            return contributorIcon;
         }
     }
-    private Object contributorIconGetLock = new Object();
 
     private Drawable getDrawable (String path){
         if ( path != null ){
@@ -460,32 +495,6 @@ public class VideoInfo extends VideoInfoStorage {
         }
         return null;
     }
-
-    /*
-
-     memo;
-     2016/12/28
-     動画長さ
-     nico ranking/myList(xml):	String.format("%d:%02d",min,sec)
-     nico search(Json):	sec
-     nico tempMyList(Json):	"sec" //String型
-     youtube:	String.format("PT%dM%dS",min,sec)
-
-     カウント数
-     nico myList/ranking(xml):	NumberFormat.getNumberInstance().format(counter)  //三桁区切りに半角コンマ
-     nico search (Json):	counter
-     nico tempMyList(Json):	"counter"//String
-     youtube:	"counter"
-
-     日時
-     nico ranking/myList pubDate(xml):	SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z",Locale.ENGLISH)//月と曜日は英略表記,間に半角スペース
-
-     nico ranking/myLilst upDate(xml):	SimpleDateFormat("yyyy'年'MM'月'dd'日' HH：mm：ss")//間に半角スペース,全角コンマあり
-     nico tempMyList(Json):	UnixTime(sec)
-     nico search(Json):	SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")//タイムゾーンはHH:mm、間の半角コロンあり
-     youtube:	 ISO 8601 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")//常にUTC
-     //parse時はsetTimeZone(TimeZone.getTimeZone("UTC"))でタイムゾーンを明示的に指定
-     */
 
     /**
      * 表示のため動画長さをフォーマットします<br>
@@ -547,117 +556,121 @@ public class VideoInfo extends VideoInfoStorage {
     /**
      * コメントを取得します<br>
      * Gets comments.<br>
+     * 【ＵＩスレッド禁止】HTTP通信を行うのでバックグランド処理してください。
      * メッセージサーバーのURLとスレッドＩＤが必要で、未取得の場合は例外を投げます。
      * 必ず事前に{@link #getFlv(CookieStore)}を呼んでください。
      * 取得するコメント数は動画長さに応じて適当に設定されます。
-     * ただし、すでにコメントを取得済みだった場合、そのコメントを返します。<br>
+     * 一度取得すれば{@link VideoInfo#getComment()}からいつでも取得できます。<br>
+     *【No UI thread】HTTP communication is done.
      * This requires message server Url and Thread ID, and throws an exception if these values are not gotten.
      * Be sure to call {@link #getFlv(CookieStore)} in advance.
      * The number of comments is set corresponding to video length.
-     * If comments are already gotten, this returns them.
+     * Once the comment is gotten, it can be accessed from {@link VideoInfo#getComment()}
      * @return Returns List of {@link CommentInfo} sorted along time series, not {@code null}
      * @throws NicoAPIException if fail to get comment
      */
-    public List<CommentInfo> getComment () throws NicoAPIException{
-        return  getComment(false);
-    }
-    public List<CommentInfo> getComment (boolean isNew) throws NicoAPIException{
-        synchronized (commentGetLock) {
-            if ( isNew || commentGroup == null) {
-                try{
-                    int threadID = getThreadID();
-                    String messageServerUrl = getMessageServerUrl();
-                    HttpResponseGetter getter = new HttpResponseGetter();
-                    String postEntityFormat = "<packet><thread thread=\"%1$d\" version=\"20090904\"  /><thread_leaves scores=\"1\" thread=\"%1$d\">0-%2$d:100,1000</thread_leaves></packet>";
-                    String postEntity = String.format(postEntityFormat, threadID, getLength() / 60 + 1);
-                    getter.tryPost(messageServerUrl, postEntity);
-                    commentGroup = CommentInfo.parse(getter.response);
-                }catch (NicoAPIException.NotInitializedException e) {
-                    throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown", NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY);
+    public CommentInfo.CommentGroup loadComment () throws NicoAPIException{
+        try {
+            int threadID = getThreadID();
+            String messageServerUrl = getMessageServerUrl();
+            HttpResponseGetter getter = new HttpResponseGetter();
+            String postEntityFormat = "<packet><thread thread=\"%1$d\" version=\"20090904\"  /><thread_leaves scores=\"1\" thread=\"%1$d\">0-%2$d:100,1000</thread_leaves></packet>";
+            String postEntity = String.format(postEntityFormat, threadID, getLength() / 60 + 1);
+            if (getter.tryPost(messageServerUrl, postEntity)) {
+                CommentInfo.CommentGroup commentGroup = new CommentInfo.CommentGroup(getter.response);
+                synchronized (this) {
+                    this.commentGroup = commentGroup;
+                    return commentGroup;
                 }
+            } else {
+                throw new NicoAPIException.HttpException(
+                        "HTTP failure > comment",
+                        NicoAPIException.EXCEPTION_HTTP_COMMENT,
+                        getter.statusCode, messageServerUrl, "POST"
+                );
             }
-            return commentGroup.commentList;
+        } catch (NicoAPIException.NotInitializedException e) {
+            throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown", NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY);
         }
     }
     /**
      * コメントを取得します<br>
      * Gets comments.<br>
+     * 【ＵＩスレッド禁止】HTTP通信を行うのでバックグランド処理してください。
      * メッセージサーバーのURLとスレッドＩＤが必要で、未取得の場合は例外を投げます。
-     * 必ず事前に{@link #getFlv(CookieStore)}を呼んでください。<br>
+     * 必ず事前に{@link #getFlv(CookieStore)}を呼んでください。
+     * 一度取得すれば{@link VideoInfo#getComment()}からいつでも取得できます。<br>
+     * 【No UI thread】HTTP communication is done.
      * This requires message server Url and Thread ID, and throws an exception if these values are not gotten.
      * Be sure to call {@link #getFlv(CookieStore)} in advance.
+     * Once the comment is gotten, it can be accessed from {@link VideoInfo#getComment()}
      * @param max the limit number of comment response from 0 to 1000, if over 1000, fixed to 1000
      * @return Returns List of {@link CommentInfo} sorted along time series, not {@code null}
      * @throws NicoAPIException if fail to get comment
      */
-    public List<CommentInfo> getComment (int max) throws NicoAPIException{
-        synchronized (commentGetLock) {
-            if (max <= 0) {
-                max = 100;
+    public CommentInfo.CommentGroup loadComment (int max) throws NicoAPIException{
+        if (max <= 0) {
+            max = 100;
+        }
+        if (max > 1000) {
+            max = 1000;
+        }
+        try {
+            int threadID = getThreadID();
+            String messageServerUrl = getMessageServerUrl();
+            HttpResponseGetter getter = new HttpResponseGetter();
+            String postEntityFormat = "<thread res_from=\"-%d\" version=\"20061206\" scores=\"1\" thread=\"%d\" />";
+            String postEntity = String.format(postEntityFormat, max, threadID);
+            if (getter.tryPost(messageServerUrl, postEntity)) {
+                CommentInfo.CommentGroup commentGroup = new CommentInfo.CommentGroup(getter.response);
+                synchronized (this) {
+                    this.commentGroup = commentGroup;
+                    return commentGroup;
+                }
+            } else {
+                throw new NicoAPIException.HttpException(
+                        "HTTP failure > comment",
+                        NicoAPIException.EXCEPTION_HTTP_COMMENT,
+                        getter.statusCode, messageServerUrl, "POST"
+                );
             }
-            if (max > 1000) {
-                max = 1000;
-            }
-            try {
-                int threadID = getThreadID();
-                String messageServerUrl = getMessageServerUrl();
-                HttpResponseGetter getter = new HttpResponseGetter();
-                String postEntityFormat = "<thread res_from=\"-%d\" version=\"20061206\" scores=\"1\" thread=\"%d\" />";
-                String postEntity = String.format(postEntityFormat, max, threadID);
-                getter.tryPost(messageServerUrl, postEntity);
-                commentGroup = CommentInfo.parse(getter.response);
-                return commentGroup.commentList;
-            } catch (NicoAPIException.NotInitializedException e) {
-                throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown", NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY);
-            }
+        } catch (NicoAPIException.NotInitializedException e) {
+            throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown", NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY);
         }
     }
     //Jsonでも取得できる
-    public List<CommentInfo> getCommentByJson (int max) throws NicoAPIException{
-        synchronized (commentGetLock) {
-            try {
-                int threadID = getThreadID();
-                String messageServerUrl = getMessageServerUrl();
-                String paramFormat = ".json/thread?version=20090904&thread=%d&res_from=-%d";
-                String param = String.format(paramFormat, threadID, max);
-                String path = messageServerUrl;
-                Matcher matcher = Pattern.compile("(.+/api)/?").matcher(path);
-                if (matcher.find()) {
-                    path = matcher.group(1) + param;
-                    HttpResponseGetter getter = new HttpResponseGetter();
-                    getter.tryGet(path);
-                    commentGroup = CommentInfo.parse(getter.response);
-                    return commentGroup.commentList;
-                } else {
-                    throw new NicoAPIException.APIUnexpectedException("format of message server URL is unexpected > " + path);
+    public CommentInfo.CommentGroup loadCommentByJson (int max) throws NicoAPIException{
+        HttpResponseGetter getter = new HttpResponseGetter();
+        try {
+            int threadID = getThreadID();
+            String messageServerUrl = getMessageServerUrl();
+            String paramFormat = ".json/thread?version=20090904&thread=%d&res_from=-%d";
+            String param = String.format(paramFormat, threadID, max);
+            String path = messageServerUrl;
+            Matcher matcher = Pattern.compile("(.+/api)/?").matcher(path);
+            if (matcher.find()) {
+                path = matcher.group(1) + param;
+                getter.tryGet(path);
+                CommentInfo.CommentGroup commentGroup = new CommentInfo.CommentGroup(new JSONArray(getter.response));
+                synchronized (this) {
+                    this.commentGroup = commentGroup;
+                    return commentGroup;
                 }
-            } catch (NicoAPIException.NotInitializedException e) {
-                throw new NicoAPIException.IllegalStateException("ThreadID and MessageServerUrl are unknown", NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY);
+            } else {
+                throw new NicoAPIException.APIUnexpectedException("format of message server URL is unexpected > " + path);
             }
+        } catch (NicoAPIException.NotInitializedException e) {
+            throw new NicoAPIException.IllegalStateException(
+                    "ThreadID and MessageServerUrl are unknown",
+                    NicoAPIException.EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY
+            );
+        } catch (JSONException e) {
+            throw new NicoAPIException.ParseException(
+                    e.getMessage(), getter.response,
+                    NicoAPIException.EXCEPTION_PARSE_COMMENT_JSON_META
+            );
         }
     }
-    private Object commentGetLock = new Object();
-
-    //convert to instance of rapent class
-    /*
-    public VideoInfo upCast(){
-        VideoInfo info = new VideoInfo();
-        info.setString(VideoInfo.GENRE,genre);
-        info.setString(VideoInfo.RANK_KIND,rankKind);
-        info.setString(VideoInfo.PERIOD,period);
-        info.setString(VideoInfo.PUB_DATE,pubDate);
-        info.setString(VideoInfo.TITLE,title);
-        info.setString(VideoInfo.ID,id);
-        info.setString(VideoInfo.DATE,date);
-        info.setString(VideoInfo.DESCRIPTION,description);
-        info.setThumbnailUrl(thumbnailUrl);
-        info.setInt(VideoInfo.LENGTH,length);
-        info.setInt(VideoInfo.VIEW_COUNTER,viewCounter);
-        info.setInt(VideoInfo.COMMENT_COUNTER,commentCounter);
-        info.setInt(VideoInfo.MY_LIST_COUNTER,myListCounter);
-        info.setTags(tags);
-        return info;
-    }*/
 
     //list of em punctuation
     private String emPunct = "・：；´｀¨＾￣＿〆〇―‐／＼～∥｜…‥‘’“”（）〔〕［］｛｝〈〉《》「」『』【】＜＞≦≧＃＆＠§☆★○●◎◇◆□■△▲▽▼※〒→←↑↓〓∈∋⊆⊇⊂⊃∪∩∧∨￢⇒⇔∀∃∠⊥≪≫♯";

@@ -3,13 +3,11 @@ package jp.ac.u_tokyo.kyoyo.seo.mylibraryfactory;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.ListView;
 
 import java.util.List;
 
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoAPIException;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
-import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfoPackage;
 
 /**
  * Created by Seo-4d696b75 on 2017/02/06.
@@ -30,7 +28,7 @@ public class RecommendActivity extends CustomListActivity {
 
         Intent intent = getIntent();
         if ( intent != null ){
-            target = ((VideoInfoPackage)intent.getSerializableExtra(VideoInfoPackage.INTENT_KEY)).unpack();
+            target = intent.getParcelableExtra(VideoInfo.VIDEO_KEY);
         }
         if ( target == null ){
             showMessage("fail to get target video");

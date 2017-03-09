@@ -1,10 +1,17 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo.dateFormatBase;
 
 /**
  * ニコ動のランキングを取得する<br>
@@ -343,7 +350,7 @@ public class NicoRanking extends HttpResponseGetter {
         }
         String path = String.format(rankingUrl, kind, period, genre);
         if ( tryGet(path) ) {
-            return new RankingVideoGroup(RSSVideoInfo.parse(super.response),genre,period,kind);
+            return new RankingVideoGroup(super.response,genre,period,kind);
         }else{
             throw new NicoAPIException.HttpException(
                     "fail to get ranking",
@@ -353,29 +360,84 @@ public class NicoRanking extends HttpResponseGetter {
         }
     }
 
+    /**
+     * ランキング検索結果を保持するクラスです<br>
+     * This class object contains the result of ranking search.<br><br>
+     * ランキング検索に用いたパラメータと取得した動画のリストを保持します。<br>
+     * This keeps the three parameters used to get ranking and result-videos in List.
+     */
     public class RankingVideoGroup {
 
         private String genre;
         private String period;
         private String kind;
+        private String pubDate;
         private List<VideoInfo> videoList;
 
-        protected RankingVideoGroup (List<VideoInfo> videoList, String genre, String period, String kind){
+        protected RankingVideoGroup (String xml, String genre, String period, String kind) throws NicoAPIException{
             this.genre = genre;
             this.kind = kind;
             this.period = period;
-            this.videoList = videoList;
+            Matcher matcher = Pattern.compile("<channel>.+<title>.+?ランキング.+?‐ニコニコ動画</title>.+?<pubDate>(.+?)</pubDate>",Pattern.DOTALL).matcher(xml);
+            if ( matcher.find() ) {
+                this.pubDate = convertPubDate(matcher.group(1));
+                this.videoList = RSSVideoInfo.parse(xml);
+            }else{
+                throw new NicoAPIException.APIUnexpectedException(
+                        "not ranking RSS > ranking",
+                        NicoAPIException.EXCEPTION_UNEXPECTED_RANKING
+                );
+            }
         }
-
+        private String convertPubDate (String date) throws NicoAPIException.ParseException{
+            try{
+                SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
+                return dateFormatBase.format(dateFormat.parse(date));
+            }catch (ParseException e){
+                throw new NicoAPIException.ParseException(e.getMessage(), date,NicoAPIException.EXCEPTION_PARSE_RANKING_MYLIST_PUB_DATE);
+            }
+        }
+        /**
+         * 検索に使用したカテゴリ（ジャンル）パラメータの値を取得します<br>
+         * Gets category/genre parameter used to get ranking results.
+         * @return the category parameter
+         */
         public String getGenre(){
             return genre;
         }
+        /**
+         * 検索に使用した対象期間パラメータの値を取得します<br>
+         * Gets target period parameter used to get ranking results.
+         * @return the period parameter
+         */
         public String getPeriod(){
             return period;
         }
+        /**
+         * 検索に使用したランキング種類パラメータの値を取得します<br>
+         * Gets ranking kind parameter used to get ranking results.
+         * @return the kind parameter
+         */
         public String getKind(){
             return kind;
         }
+        /**
+         * ランキングの発表日時を取得します<br>
+         *     Gets ranking published date.<br>
+         *     ライブラリ内の{@link VideoInfo#dateFormatBase 共通形式}に従います<br>
+         *     this follows {@link VideoInfo#dateFormatBase common format} in this library.
+         * @return the publication date
+         */
+        public String getPubDate(){
+            return pubDate;
+        }
+        /**
+         * ランキング検索で得た動画を取得します<br>
+         * Gets the videos gotten from ranking search.<br>
+         * 返り値である動画を格納する{@code List}オブジェクトに変更を加えても問題はありません。
+         * Making changes to {@code List} object returned does not matter.
+         * @return the videos in {@code List}
+         */
         public List<VideoInfo> getVideoList(){
             List<VideoInfo> list = new ArrayList<VideoInfo>();
             for ( VideoInfo info : videoList ){

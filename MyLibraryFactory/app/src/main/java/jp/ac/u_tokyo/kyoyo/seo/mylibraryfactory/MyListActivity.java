@@ -1,5 +1,6 @@
 package jp.ac.u_tokyo.kyoyo.seo.mylibraryfactory;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.MyListGroup;
@@ -25,10 +27,11 @@ import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo;
  * Created by Seo-4d696b75 on 2017/02/07.
  */
 
-public class MyListActivity extends CustomListActivity {
+public class MyListActivity extends CustomListActivity implements CustomDialog.OnItemClickListener {
 
     private MyListGroup myListGroup;
-    private AlertDialog dialog;
+
+    private final String DIALOG_TAG_MYLIST = "dialogMyList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +40,6 @@ public class MyListActivity extends CustomListActivity {
 
         setTitle("MyList");
 
-        myListDialog();
-
         buttonGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,15 +47,7 @@ public class MyListActivity extends CustomListActivity {
             }
         });
 
-    }
-
-    private void myListDialog(){
-        if ( dialog != null ){
-            dialog.cancel();
-            dialog = null;
-        }
         new AsyncTask<String, Void, String>() {
-            List<MyListVideoGroup> videoGroup = null;
             @Override
             protected void onPreExecute() {
                 textViewMes.setText("Your My List Group");
@@ -64,7 +57,6 @@ public class MyListActivity extends CustomListActivity {
                 try {
                     myListGroup = null;
                     myListGroup = nicoClient.getMyListGroup();
-                    videoGroup = myListGroup.getMyListVideoGroup();
                     return null;
                 } catch (NicoAPIException e) {
                     return e.getMessage();
@@ -73,52 +65,113 @@ public class MyListActivity extends CustomListActivity {
             @Override
             protected void onPostExecute(String response) {
                 showMessage(response);
-                if ( myListGroup != null ){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MyListActivity.this);
-                    builder.setTitle("My List Selecting");
-                    Context context = MyListActivity.this;
-                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    ViewGroup root = (ViewGroup)findViewById(R.id.dialogMyListRoot);
-                    View view = inflater.inflate(R.layout.dialog_my_list, root, true);
-                    builder.setView(view);
-                    ListView listView = (ListView)view.findViewById(R.id.listViewMyList);
-                    listView.setAdapter(new MyListAdapter(MyListActivity.this, videoGroup));
+                myListDialog();
+            }
+        }.execute();
+
+    }
+
+
+    private void myListDialog(){
+        if  ( myListGroup != null ){
+            Bundle args = new Bundle();
+            args.putInt(CustomDialog.LAYOUT, R.layout.dialog_my_list);
+            args.putString(CustomDialog.TITLE,"My List Selecting");
+            args.putString(CustomDialog.BUTTON_NEUTRAL,"Cancel");
+            args.putParcelable(MyListPickerDialog.GROUP_LIST, myListGroup);
+            CustomDialog dialog = MyListPickerDialog.getInstance();
+            dialog.setArguments(args);
+            dialog.show(getSupportFragmentManager(),DIALOG_TAG_MYLIST);
+        }
+    }
+
+    public static class MyListPickerDialog extends CustomDialog {
+
+        public static final String GROUP_LIST = "groups";
+        private OnItemClickListener listener;
+
+        public static MyListPickerDialog getInstance (){
+            return new MyListPickerDialog();
+        }
+
+        @Override
+        protected void onCreateContentView (View view){
+            if ( args.containsKey(GROUP_LIST)) {
+                ListView listView = (ListView) view.findViewById(R.id.listViewMyList);
+                MyListGroup group = args.getParcelable(GROUP_LIST);
+                listView.setAdapter(new MyListAdapter(context,group.getMyListVideoGroup()));
+                if ( context instanceof OnItemClickListener ){
+                    listener = (OnItemClickListener) context;
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             ArrayAdapter adapter = (ArrayAdapter) parent.getAdapter();
-                            MyListVideoGroup item = (MyListVideoGroup) adapter.getItem(position);
-                            showMyList(item);
+                            Object item = adapter.getItem(position);
+                            listener.onItemClick(getTag(),item,null);
+                            dialog.dismiss();
+                            dialog = null;
                         }
                     });
-                    dialog = builder.create();
-                    dialog.show();
                 }
             }
-        }.execute();
-    }
-
-    private class MyListAdapter extends ArrayAdapter<MyListVideoGroup>{
-        private LayoutInflater inflater;
-        protected MyListAdapter(Context context, List<MyListVideoGroup> list){
-            super(context,0,list);
-            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
+
+
+        private class MyListAdapter extends ArrayAdapter<MyListVideoGroup> {
+            private LayoutInflater inflater;
+            protected MyListAdapter(Context context, List<MyListVideoGroup> list){
+                super(context,0,list);
+                inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            }
+            @Override
+            public View getView(final int position, View convertView, final ViewGroup parent) {
+                View view = convertView;
+                MyListVideoGroup item = this.getItem(position);
+                if ( view == null ){
+                    view = inflater.inflate(android.R.layout.simple_list_item_1,null);
+                }
+                if ( item != null ){
+                    TextView text = (TextView)view.findViewById(android.R.id.text1);
+                    text.setText(item.getName());
+                }
+                return view;
+            }
+
+        }
+
         @Override
-        public View getView(final int position, View convertView, final ViewGroup parent) {
-            View view = convertView;
-            MyListVideoGroup item = this.getItem(position);
-            if ( view == null ){
-                view = inflater.inflate(android.R.layout.simple_list_item_1,null);
-            }
-            if ( item != null ){
-                TextView text = (TextView)view.findViewById(android.R.id.text1);
-                text.setText(item.getName());
-            }
-            return view;
+        public void onDestroy(){
+            super.onDestroy();
+            this.listener = null;
         }
 
     }
+
+    public static class MyListInfo {
+        public MyListInfo (String name, int id){
+            this.name = name;
+            this.id = id;
+        }
+        public String name;
+        public int id;
+        public static ArrayList<MyListInfo> getList(List<MyListVideoGroup> target){
+            ArrayList<MyListInfo> list = new ArrayList<MyListInfo>();
+            for ( MyListVideoGroup group : target){
+                list.add( new MyListInfo(group.getName(),group.getMyListID()));
+            }
+            return list;
+        }
+    }
+
+
+    @Override
+    public void onItemClick(String tag, Object item, Object param){
+        super.onItemClick(tag,item,param);
+        if ( tag.equals(DIALOG_TAG_MYLIST) && item instanceof MyListVideoGroup) {
+            showMyList((MyListVideoGroup)item);
+        }
+    }
+
 
     private void showMyList(final MyListVideoGroup target) {
             final int myListID = target.getMyListID();
@@ -129,10 +182,6 @@ public class MyListActivity extends CustomListActivity {
                 @Override
                 protected void onPreExecute() {
                     textViewMes.setText("Your My List : " + myListID);
-                    if (dialog != null) {
-                        dialog.cancel();
-                        dialog = null;
-                    }
                     progress = new ProgressDialog(MyListActivity.this);
                     progress.setMessage("Getting my list...");
                     progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -142,8 +191,10 @@ public class MyListActivity extends CustomListActivity {
                 @Override
                 protected String doInBackground(String... params) {
                     try {
-                        list = nicoClient.getMyList(myListID).getVideos();
-                        //list = target.getVideos();
+                        list = null;
+                        //list = nicoClient.getMyList(myListID).getVideos();
+                        target.loadVideos();
+                        list = target.getVideos();
                         return null;
                     } catch (NicoAPIException e) {
                         return e.getMessage();

@@ -1,5 +1,8 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.CookieStore;
@@ -11,7 +14,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -151,6 +158,23 @@ public class HttpResponseGetter {
             client.getConnectionManager().shutdown();
         }
         return  false;
+    }
+
+    public Bitmap getBitmap (String path){
+        if ( path != null ){
+            try{
+                URL url = new URL(path);
+                HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(input);
+                return bitmap;
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     private final Map<String,String> symbolMap = new HashMap<String, String>(){

@@ -96,6 +96,7 @@ public class NicoLogin extends HttpResponseGetter {
             if ( loginInfo.isLogin() ){
                 getUserID();
                 getUserName();
+                getUserIconUrl();
                 return;
             }
         }
@@ -159,31 +160,22 @@ public class NicoLogin extends HttpResponseGetter {
         }
     }
 
-    /**
-     * supposed to be called from {@link NicoClient} only.
-     * @return Returns user icon image, not {@code null}
-     * @throws NicoAPIException if fail to get image
-     */
-    protected Drawable getUserIcon() throws NicoAPIException{
-        try {
-            userID = loginInfo.getUserID();
-            String path = String.format(userIconUrl,userID/10000,userID);
-            Drawable image = null;
-            URL url = new URL(path);
-            InputStream input = (InputStream)url.getContent();
-            image = Drawable.createFromStream(input,"uer_icon");
-            input.close();
-            return image;
-        }catch (NicoAPIException.NoLoginException e){
-            throw e;
-        }catch (Exception e){
-            throw new NicoAPIException.DrawableFailureException(
-                    "fail to get user icon > "+e.getMessage(),
-                    NicoAPIException.EXCEPTION_DRAWABLE_USER_ICON
+    private void getUserIconUrl() throws NicoAPIException{
+        if ( super.response == null ){
+            throw new NicoAPIException.IllegalStateException(
+                    "not login yet",
+                    NicoAPIException.EXCEPTION_ILLEGAL_STATE_LOGIN_USER_ICON
+            );
+        }
+        Matcher matcher = Pattern.compile("<img src=\"(.+?)\" alt=").matcher(super.response);
+        if ( matcher.find() ){
+            loginInfo.setUserIconUrl(matcher.group(1));
+        }else{
+            throw new NicoAPIException.ParseException(
+                    "cannot find userIconUrl ",super.response,
+                    NicoAPIException.EXCEPTION_PARSE_LOGIN_USER_ICON
             );
         }
     }
-
-
 
 }

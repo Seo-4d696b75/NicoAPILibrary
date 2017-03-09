@@ -1,51 +1,85 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import org.apache.http.client.CookieStore;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Seo-4d696b75 on 2017/02/27.
+ * このクラスはマイリストの編集機能を提供します<br>
+ * This provides utilities to make changes to myLists.<br>
+ * このクラスを継承した各子クラスで各メソッドは使用されます。<br>
+ *  {@link MyListGroup マイリスグループを管理するクラス}<br>
+ *  {@link MyListVideoGroup マイリスを管理するクラス}<br>
+ *  {@link TempMyListVideoGroup とりあえずマイリスを管理するクラス}<br>
+ * Each methods are called by these classes extending this;<br>
+ *  {@link MyListGroup the class managing MyListGroup}<br>
+ *  {@link MyListVideoGroup the class managing MyList}<br>
+ *  {@link TempMyListVideoGroup the class managing TempMyList}<br>
+ *
+ * @author Seo-4d696b75
+ * @version 0.0 on 2017/02/27.
  */
 
-public class MyListEditor extends HttpResponseGetter {
+public abstract class MyListEditor extends HttpResponseGetter {
 
-    protected MyListEditor(LoginInfo info){
-        this.info = info;
-    }
-    private String tokenURL = "http://www.nicovideo.jp/mylist_add/video/";
+    protected MyListEditor(){}
+    private final String tokenURL = "http://www.nicovideo.jp/mylist_add/video/";
     protected LoginInfo info;
-
+    /**
+     * トークンを得るための動画ＩＤ初期値 Default videoID to get Nico.token<br>
+     * マイリスに変更を加えるのに必須なトークンを得るには何らかの有効な動画ＩＤが必要です。
+     * この値が将来的に有効である保証はないので他の値で代用するよう推奨されます。
+     */
     protected final String defaultVideoID = "sm9";
-
+    /**
+     * マイリス変更に必要なトークンを取得する Gets Nico.token to edit myList.<br>
+     * トークンを得るには何らかの有効な動画ＩＤが必要です。
+     * 一つでも動画を取得済みならその有効な動画ＩＤを用いますが、見つからない場合は初期値で代用します。
+     * Getting the token requires any valid videoID.<br>
+     * <strong>ＵＩスレッド禁止</strong> HTTP通信を行うのでバックグランドで処理して下さい。<br>
+     * <strong>No UI thread</strong>: HTTP communication is done<br>
+     * @param anyVideoID the videoID
+     * @return Nico.token
+     * @throws NicoAPIException if not login or passed videoID is invalid
+     */
     protected String getToken(String anyVideoID) throws NicoAPIException{
         String path = tokenURL + anyVideoID;
-        try {
-            if ( tryGet(path, info.getCookieStore()) ) {
-                Matcher matcher = Pattern.compile("NicoAPI.token = '(.+?)';").matcher(super.response);
-                if ( matcher.find() ){
-                    return matcher.group(1);
-                }else{
-                    throw new NicoAPIException.ParseException(
-                            "fail to find NicoAPI.token",super.response,
-                            NicoAPIException.EXCEPTION_PARSE_MYLIST_TOKEN);
-                }
-            }else{
-                throw new NicoAPIException.HttpException(
-                        "fail to get token",
-                        NicoAPIException.EXCEPTION_HTTP_MYLIST_TOKEN,
-                        super.statusCode, path, "GET");
+        if (tryGet(path, info.getCookieStore())) {
+            Matcher matcher = Pattern.compile("NicoAPI.token = '(.+?)';").matcher(super.response);
+            if (matcher.find()) {
+                return matcher.group(1);
+            } else {
+                throw new NicoAPIException.ParseException(
+                        "fail to find NicoAPI.token", super.response,
+                        NicoAPIException.EXCEPTION_PARSE_MYLIST_TOKEN);
             }
-        }catch (NicoAPIException e){
-            throw e;
+        } else {
+            throw new NicoAPIException.HttpException(
+                    "fail to get token",
+                    NicoAPIException.EXCEPTION_HTTP_MYLIST_TOKEN,
+                    super.statusCode, path, "GET");
         }
     }
-
+    /**
+     * マイリス編集に必要な対象動画のスレッドＩＤを取得します
+     * Gets target Video threadID.<br>
+     * 動画のスレッドＩＤが欠損している場合も{@link VideoInfo#getFlv(CookieStore)}で補って返します。
+     * If the target threadID is not set yet, call {@link VideoInfo#getFlv(CookieStore)} and get that value.<br>
+     * <strong>ＵＩスレッド禁止</strong> HTTP通信を行うのでバックグランドで処理して下さい。<br>
+     * <strong>No UI thread</strong>: HTTP communication is done<br>
+     * @param video the target video
+     * @return threadID in String
+     * @throws NicoAPIException if fail to get threadID in {@link VideoInfo#getFlv(CookieStore)}
+     */
     protected String getThreadID(VideoInfo video) throws NicoAPIException{
         try {
             video.getThreadID();
@@ -133,7 +167,14 @@ public class MyListEditor extends HttpResponseGetter {
             params.put("group_id", myListID);
         }
         for ( int i=0 ; i<videoList.length ; i++){
-            params.put(String.format("id_list[0][%d]",i), getThreadID(videoList[i]) );
+            if ( videoList[i] == null ){
+                throw new NicoAPIException.InvalidParamsException(
+                        "no target video > delete - myList",
+                        NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_VIDEO
+                );
+            }else {
+                params.put(String.format("id_list[0][%d]", i), getThreadID(videoList[i]));
+            }
         }
         if ( tryPost(path,params,info.getCookieStore()) ){
             JSONObject root = checkStatusCode(super.response);
@@ -185,7 +226,14 @@ public class MyListEditor extends HttpResponseGetter {
             params.put("group_id", myListID);
         }
         for ( int i=0 ; i<videoList.length ; i++){
-            params.put(String.format("id_list[0][%d]",i), getThreadID(videoList[i]) );
+            if ( videoList[i] == null ){
+                throw new NicoAPIException.InvalidParamsException(
+                        "no target video > move - myList",
+                        NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_VIDEO
+                );
+            }else {
+                params.put(String.format("id_list[0][%d]", i), getThreadID(videoList[i]));
+            }
         }
         if ( tryPost(path,params,info.getCookieStore()) ){
             JSONObject root = checkStatusCode(super.response);
@@ -226,7 +274,14 @@ public class MyListEditor extends HttpResponseGetter {
             params.put("group_id", myListID);
         }
         for ( int i=0 ; i<videoList.length ; i++){
-            params.put(String.format("id_list[0][%d]",i), getThreadID(videoList[i]) );
+            if ( videoList[i] == null ){
+                throw new NicoAPIException.InvalidParamsException(
+                        "no target video > copy - myList",
+                        NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_VIDEO
+                );
+            }else {
+                params.put(String.format("id_list[0][%d]", i), getThreadID(videoList[i]));
+            }
         }
         if ( tryPost(path,params,info.getCookieStore()) ){
             JSONObject root = checkStatusCode(super.response);
@@ -278,7 +333,7 @@ public class MyListEditor extends HttpResponseGetter {
         }
     }
 
-    protected MoveState getMoveState (JSONObject root) throws NicoAPIException{
+    private MoveState getMoveState (JSONObject root) throws NicoAPIException{
         return new MoveState(
                 getItem(root,"matches"),
                 getItem(root,"duplicates"),
@@ -314,6 +369,15 @@ public class MyListEditor extends HttpResponseGetter {
             put("EXPIRETOKEN","token too old");
         }
     };
+
+    /**
+     * マイリス編集のレスポンスのステータスを確認します
+     * Checks the response status of editing myList.<br>
+     * マイリス編集のパラメータをPOSTしたJSON形式のレスポンスのステータスは共通形式なのでまとめて確認します。
+     * @param response the response of posting
+     * @return JSONObject which the response is converted into
+     * @throws NicoAPIException if format or error code is unexpected
+     */
     protected JSONObject checkStatusCode(String response) throws NicoAPIException{
         try{
             JSONObject root = new JSONObject(response);
@@ -365,5 +429,41 @@ public class MyListEditor extends HttpResponseGetter {
         }catch (JSONException e){
             throw new NicoAPIException.ParseException(e.getMessage(),response);
         }
+    }
+
+    protected List<MyListVideoInfo> replaceList (List<MyListVideoInfo> beforeList, List<MyListVideoInfo> afterList){
+        List<MyListVideoInfo> list = new ArrayList<MyListVideoInfo>();
+        if ( beforeList != null ){
+            //元のリストがセット済みならなるべく元のオブジェクトを維持して差分のみ変更する
+            for (Iterator<MyListVideoInfo> iteratorBefore = beforeList.iterator(); iteratorBefore.hasNext() ; ){
+                MyListVideoInfo before = iteratorBefore.next();
+                boolean isFind = false;
+                for ( Iterator<MyListVideoInfo> iteratorAfter = afterList.iterator() ; iteratorAfter.hasNext() ;  ){
+                    MyListVideoInfo after = iteratorAfter.next();
+                    if ( after.getID().equals( before.getID() ) ){
+                        isFind = true;
+                        synchronized ( before ) {
+                            before.myListItemDescription = after.myListItemDescription;
+                            before.addDate = after.addDate;
+                            before.updateDate = after.updateDate;
+                        }
+                        iteratorAfter.remove();
+                        break;
+                    }
+                }
+                if ( !isFind ){
+                    iteratorBefore.remove();
+                }
+            }
+            if ( !beforeList.isEmpty() ){
+                list.addAll(beforeList);
+            }
+            if ( !afterList.isEmpty() ){
+                list.addAll(afterList);
+            }
+        }else {
+            list.addAll(afterList);
+        }
+        return list;
     }
 }
