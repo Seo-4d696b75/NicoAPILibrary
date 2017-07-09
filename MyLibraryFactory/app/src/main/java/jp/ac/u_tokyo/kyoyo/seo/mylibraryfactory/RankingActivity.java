@@ -141,7 +141,7 @@ public class RankingActivity extends CustomListActivity implements CustomDialog.
                             @Override
                             protected NicoAPIException doInBackground(Void... params) {
                                 try {
-                                    group = nicoRanking.get();
+                                    group = nicoRanking.getRanking();
                                     return null;
                                 } catch (NicoAPIException e) {
                                     return e;

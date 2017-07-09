@@ -4,12 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import java.util.List;
-
-import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.MyListVideoGroup;
-import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.MyListVideoInfo;
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.NicoAPIException;
-import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.TempMyListVideoGroup;
 
 /**
  * Created by Seo-4d696b75 on 2017/02/06.

@@ -3,20 +3,11 @@ package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-
-import org.apache.http.client.CookieStore;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import java.util.List;
 
 /**
  * ニコ動のユーザー情報を管理する<br>
  *     This class manages information of user.<br><br>
  *
- *     Intentで渡す場合を想定してSerializableにしてある<br>
- *     This is Serializable so that it can be passed with Intent.
  *
  * @author Seo-4d696b75
  * @version 0.0 on 2017/01/21.
@@ -31,12 +22,7 @@ public class LoginInfo implements Parcelable{
     protected String userIconUrl;
     protected Bitmap userIcon;
 
-    protected int cookieNum;
-    protected int[] cookieVersion;
-    protected String[] cookieName;
-    protected String[] cookieValue;
-    protected String[] cookiePath;
-    protected String[] cookieDomain;
+    protected CookieGroup cookieGroup;
 
     protected LoginInfo (){
         login = false;
@@ -80,6 +66,13 @@ public class LoginInfo implements Parcelable{
         }
         return userID;
     }
+
+    /**
+     * ログインしているユーザがプレミアムかどうか取得します
+     * Gets whether or not the user is premium.
+     * @return Returns {@code true} if succeed to login
+     * @throws NicoAPIException.NoLoginException
+     */
     public synchronized boolean isPremium () throws NicoAPIException.NoLoginException {
         if ( !login ){
             throw new NicoAPIException.NoLoginException(
@@ -113,7 +106,7 @@ public class LoginInfo implements Parcelable{
                     );
                 }
             }
-            userIcon = new HttpResponseGetter().getBitmap(userIconUrl);
+            userIcon = ResourceStore.getInstance().getHttpClient().getBitmap(userIconUrl,null);
             if (userIcon == null) {
                 throw new NicoAPIException.DrawableFailureException(
                         "fail to get user icon > ",
@@ -124,6 +117,7 @@ public class LoginInfo implements Parcelable{
             }
         }
     }
+
     protected synchronized void setUserName (String userName){
         this.userName = userName;
     }
@@ -143,58 +137,27 @@ public class LoginInfo implements Parcelable{
      * @return CookieStore contains login session
      * @throws NicoAPIException.NoLoginException if not login
      */
-    public synchronized CookieStore getCookieStore() throws NicoAPIException.NoLoginException{
-        if ( !login ){
+    public synchronized CookieGroup getCookies() throws NicoAPIException.NoLoginException{
+        if ( !login || cookieGroup == null ){
             throw new NicoAPIException.NoLoginException(
                     "no login > getCookieStore",
                     NicoAPIException.EXCEPTION_NOT_LOGIN_COOKIE
             );
         }
-        CookieStore cookieStore = new DefaultHttpClient().getCookieStore();
-        for (int i = 0; i < cookieNum; i++) {
-            BasicClientCookie cookie = new BasicClientCookie(cookieName[i], cookieValue[i]);
-            cookie.setVersion(cookieVersion[i]);
-            cookie.setPath(cookiePath[i]);
-            cookie.setDomain(cookieDomain[i]);
-            cookieStore.addCookie(cookie);
-        }
-        return cookieStore;
+        return cookieGroup;
     }
-    /**
-     * supposed to be called within NicoAPI only.
-     */
-    protected synchronized void setCookieStore(CookieStore cookieStore){
-        if ( cookieStore == null ){
+
+    protected synchronized void setCookies(CookieGroup cookies){
+        if ( cookies != null ){
+            cookieGroup = cookies;
             login = false;
-            cookieNum = 0;
-            cookieVersion = new int[0];
-            cookieName = new String[0];
-            cookieValue = new String[0];
-            cookieDomain = new String[0];
-            cookiePath = new String[0];
-            userName = "";
-            userID = 0;
-            return;
-        }
-        List<Cookie> list = cookieStore.getCookies();
-        cookieNum = list.size();
-        cookieVersion = new int[cookieNum];
-        cookieName = new String[cookieNum];
-        cookieValue = new String[cookieNum];
-        cookieDomain = new String[cookieNum];
-        cookiePath = new String[cookieNum];
-        for ( int i=0 ; i<cookieNum ; i++){
-            Cookie cookie = list.get(i);
-            cookieVersion[i] = cookie.getVersion();
-            cookieName[i] = cookie.getName();
-            cookieValue[i] = cookie.getValue();
-            cookiePath[i] = cookie.getPath();
-            cookieDomain[i] = cookie.getDomain();
-            Log.d("login-cookies",cookie.getName() +" :"  +cookie.getValue());
-        }
-        //TODO checking cookie name is better
-        if ( cookieNum > 1 ){
-            login = true;
+            String key = ResourceStore.getInstance().getString(R.string.key_login_session);
+            for ( CookieInfo info : cookies ){
+                if ( info.getName().equals(key) ){
+                    login = true;
+                    break;
+                }
+            }
         }
     }
 
@@ -211,12 +174,7 @@ public class LoginInfo implements Parcelable{
         out.writeBooleanArray(new boolean[]{isPremium});
         out.writeString(userIconUrl);
         out.writeParcelable(userIcon,flags);
-        out.writeInt(cookieNum);
-        out.writeIntArray(cookieVersion);
-        out.writeStringArray(cookieName);
-        out.writeStringArray(cookieValue);
-        out.writeStringArray(cookiePath);
-        out.writeStringArray(cookieDomain);
+        out.writeParcelable(cookieGroup,flags);
     }
 
     public static final Parcelable.Creator<LoginInfo> CREATOR = new Parcelable.Creator<LoginInfo>() {
@@ -228,7 +186,7 @@ public class LoginInfo implements Parcelable{
         }
     };
 
-    private LoginInfo(Parcel in) {
+    protected LoginInfo(Parcel in) {
         boolean[] booleanValue = new boolean[1];
         in.readBooleanArray(booleanValue);
         this.login = booleanValue[0];
@@ -238,17 +196,7 @@ public class LoginInfo implements Parcelable{
         this.isPremium = booleanValue[0];
         this.userIconUrl = in.readString();
         this.userIcon = in.readParcelable(Bitmap.class.getClassLoader());
-        this.cookieNum = in.readInt();
-        this.cookieVersion = new int[cookieNum];
-        in.readIntArray(this.cookieVersion);
-        this.cookieName = new String[cookieNum];
-        in.readStringArray(this.cookieName);
-        this.cookieValue = new String[cookieNum];
-        in.readStringArray(this.cookieValue);
-        this.cookiePath = new String[cookieNum];
-        in.readStringArray(this.cookiePath);
-        this.cookieDomain = new String[cookieNum];
-        in.readStringArray(this.cookieDomain);
+        this.cookieGroup = in.readParcelable(CookieGroup.class.getClassLoader());
     }
 
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,9 +29,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import jp.ac.u_tokyo.kyoyo.seo.nicoapilib.CommentInfo;
@@ -65,6 +69,13 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
     private final String DIALOG_TAG_COMMENT_POST = "dialogCommentPost";
     private final String DIALOG_TAG_MYLIST_PICK = "dialogMyListPick";
 
+    protected static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
+
+    protected static String formatDate(Date date){
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+        return format.format(date);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
@@ -77,7 +88,10 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
 
         Intent intent = getIntent();
         if ( intent != null ){
-               nicoClient = (NicoClient)intent.getExtras().getParcelable(NicoClient.INTENT);
+            Bundle bundle = intent.getExtras();
+            if ( bundle != null ) {
+                nicoClient = (NicoClient) bundle.getParcelable(NicoClient.INTENT);
+            }
         }
         resources = getResources();
         if ( nicoClient == null || resources == null ){
@@ -191,13 +205,8 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
             @Override
             protected NicoAPIException doInBackground(Void... params) {
                 try {
-                    if ( nicoClient.isLogin() ) {
-                        if ( !info.isOfficial() ) {
-                            info.complete();
-                            info.getFlv(nicoClient.getCookieStore());
-                        }
-                    }
                     info.complete();
+                    info.getFlv(nicoClient.getCookies());
                 }catch(NicoAPIException e){
                     return e;
                 }
@@ -247,9 +256,9 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
                 ((TextView) view.findViewById(R.id.textViewDetailsView)).setText(info.formatViewCounter());
                 ((TextView) view.findViewById(R.id.textViewDetailsMyList)).setText(info.formatMyListCounter());
                 ((TextView) view.findViewById(R.id.textViewDetailsComment)).setText(info.formatCommentCounter());
-                ((TextView) view.findViewById(R.id.textViewDetailsThumbnailURL)).setText(info.getThumbnailUrl());
-                ((TextView) view.findViewById(R.id.textViewDetailsDate)).setText(info.getDate());
-                List<String> tags = info.getTagsList();
+                ((TextView) view.findViewById(R.id.textViewDetailsThumbnailURL)).setText(info.getThumbnailURL());
+                ((TextView) view.findViewById(R.id.textViewDetailsDate)).setText(formatDate(info.getDate()));
+                List<String> tags = info.getTags();
                 StringBuilder stringBuilder = new StringBuilder();
                 for (String tag : tags) {
                     stringBuilder.append(tag);
@@ -258,19 +267,17 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
                 ((TextView) view.findViewById(R.id.textViewDetailsTags)).setText(stringBuilder.toString());
                 ((TextView) view.findViewById(R.id.textViewDetailsContributorID)).setText(String.valueOf(info.getContributorID()));
                 ((TextView) view.findViewById(R.id.textViewDetailsContributorName)).setText(info.getContributorName());
-                ((TextView) view.findViewById(R.id.textViewDetailsContributorIconUrl)).setText(info.getContributorIconUrl());
-                if ( isLogin && !info.isOfficial()) {
-                    ((TextView) view.findViewById(R.id.textViewDetailsThreadID)).setText(String.valueOf(info.getThreadID()));
-                    ((TextView) view.findViewById(R.id.textViewDetailsMesServer)).setText(info.getMessageServerUrl());
-                    ((TextView) view.findViewById(R.id.textViewDetailsFlvURL)).setText(info.getFlvUrl());
-                }
+                ((TextView) view.findViewById(R.id.textViewDetailsContributorIconUrl)).setText(info.getContributorIconURL());
+                ((TextView) view.findViewById(R.id.textViewDetailsThreadID)).setText(String.valueOf(info.getThreadID()));
+                ((TextView) view.findViewById(R.id.textViewDetailsMesServer)).setText(info.getMessageServerURL());
+                ((TextView) view.findViewById(R.id.textViewDetailsFlvURL)).setText(info.getFlvURL());
                 if ( info instanceof MyListVideoInfo ){
                     MyListVideoInfo myListVideoInfo = (MyListVideoInfo)info;
                     ViewGroup container = (LinearLayout)view.findViewById(R.id.linearLayoutMyListDetailsContainer);
                     LayoutInflater inflater = context.getLayoutInflater();
                     View myListDetails = inflater.inflate(R.layout.video_mylist_cell,null,false);
-                    ((TextView)myListDetails.findViewById(R.id.textViewDetailsMyListAdd)).setText(myListVideoInfo.getAddDate());
-                    ((TextView)myListDetails.findViewById(R.id.textViewDetailsMyListUpdate)).setText(myListVideoInfo.getUpdateDate());
+                    ((TextView)myListDetails.findViewById(R.id.textViewDetailsMyListAdd)).setText(formatDate(myListVideoInfo.getAddDate()));
+                    ((TextView)myListDetails.findViewById(R.id.textViewDetailsMyListUpdate)).setText(formatDate(myListVideoInfo.getUpdateDate()));
                     ((TextView)myListDetails.findViewById(R.id.textViewDetailsMyListDescription)).setText(myListVideoInfo.getMyListItemDescription());
                     container.addView(myListDetails);
                 }
@@ -538,14 +545,14 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
                     String name = (String) parent.getSelectedItem();
                     int color = colorMap.get(name);
                     spinnerBack.setBackgroundColor(color);
-                    commentPost.setColor(color);
+                    commentPost.setColor(name);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
-            spinnerBack.setBackgroundColor(NicoCommentPost.COLOR_WHITE);
+            spinnerBack.setBackgroundColor(colorMap.get(CommentInfo.COLOR_WHITE));
             pickerMin.setValue(0);
             pickerSec.setValue(0);
             pickerDecimalSec.setValue(0);
@@ -559,7 +566,7 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
             protected void onPreExecute() {
                 progress = new ProgressDialog(CustomListActivity.this);
                 String comment = commentPost.getComment();
-                int time = commentPost.getStartTime();
+                int time = commentPost.getTime();
                 int min = time / 6000;
                 float sec = (time % 6000) / 100f;
                 progress.setMessage(String.format("Posting comment :\n \"%s\" at %02d:%04.2f", comment, min, sec));
@@ -620,39 +627,37 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
                 TextView viewCount = (TextView)view.findViewById(R.id.textViewViewCounter);
                 TextView mylistCount = (TextView)view.findViewById(R.id.textViewMylistCounter);
                 final ImageView thumbnail = (ImageView)view.findViewById(R.id.imageViewThumbnail);
-                TextView length = (TextView)view.findViewById(R.id.textViewLength);
-                try{
-                    title.setText(item.getString(VideoInfo.TITLE));
-                    length.setText(item.formatLength());
-                    viewCount.setText("views:" + item.formatCounter(VideoInfo.VIEW_COUNTER));
-                    mylistCount.setText("myList:" + item.formatCounter(VideoInfo.MY_LIST_COUNTER));
-                    new AsyncTask<Void, Void, String> (){
-                        @Override
-                        protected void onPreExecute() {
-                            thumbnail.setImageDrawable(resources.getDrawable(R.drawable.temp_thumbnail));
+                TextView length = (TextView) view.findViewById(R.id.textViewLength);
+                title.setText(item.getTitle());
+                length.setText(item.formatLength());
+                viewCount.setText("views:" + item.formatViewCounter());
+                mylistCount.setText("myList:" + item.formatMyListCounter());
+                new AsyncTask<Void, Void, String>() {
+                    private Bitmap image;
+
+                    @Override
+                    protected void onPreExecute() {
+                        thumbnail.setImageDrawable(resources.getDrawable(R.drawable.temp_thumbnail));
+                    }
+
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        try {
+                            image = item.getThumbnail();
+                            return null;
+                        } catch (NicoAPIException e) {
+                            return e.getMessage();
                         }
-                        @Override
-                        protected String doInBackground(Void... params) {
-                            try {
-                                item.loadThumbnail();
-                                return null;
-                            }catch (NicoAPIException e){
-                                return e.getMessage();
-                            }
+                    }
+
+                    @Override
+                    protected void onPostExecute(String response) {
+                        showMessage(response);
+                        if (viewMap.containsValue(item.getID()) && image != null) {
+                            thumbnail.setImageBitmap(image);
                         }
-                        @Override
-                        protected void onPostExecute(String response) {
-                            showMessage(response);
-                            try{
-                                if ( viewMap.containsValue(item.getID()) ){
-                                    thumbnail.setImageBitmap(item.getThumbnail());
-                                }
-                            }catch (NicoAPIException e){}
-                        }
-                    }.execute();
-                }catch (NicoAPIException e){
-                    showMessage(e.getMessage());
-                }
+                    }
+                }.execute();
             }
             return view;
         }
@@ -731,9 +736,6 @@ public abstract class CustomListActivity extends AppCompatActivity implements Cu
 
     protected void showMyListPikerDialog(final String tag, final VideoInfo info){
         new AsyncTask<Void, Void, NicoAPIException>() {
-            @Override
-            protected void onPreExecute() {
-            }
             @Override
             protected NicoAPIException doInBackground(Void... params) {
                 try {

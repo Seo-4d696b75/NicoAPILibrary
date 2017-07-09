@@ -12,33 +12,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
 /**
  * ニコ動の検索を行う<br>
- *     this class search videos in Nico.<br><br>
+ *     This class searches videos in Nico.<br><br>
  *
  * {@link NicoClient#getNicoSearch()}で取得したこのインスタンスにメソッドを呼び各種パラメータを設定して、
- * {@link #search()}を呼ぶ。<br>
- *     get this class instance from {@link NicoClient#getNicoSearch()},
- *     then set search params by calling methods,
+ * {@link #search()}を呼ぶこので検索します<br>
+ *     Get this object from {@link NicoClient#getNicoSearch()},
+ *     then set search params by calling appropriate methods,
  *     finally call {@link #search()} and get results.
  *
  * @author Seo-4d696b75
  * @version 0.0 on 2017/01/22.
  */
 
-public class NicoSearch extends HttpResponseGetter implements Parcelable{
+public class NicoSearch implements Parcelable{
 
-    protected String appName;
-    protected final String searchUrl = "http://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search?q=";
-    protected String query = "";
-    protected boolean tagsSearch = false;
-    protected String sortParam = null;
-    protected boolean sortDown = true;
-    protected int resultMax = 50;
-    protected List<String> filterList;
+    private String appName;
+    private String keyword = "";
+    private boolean tagsSearch = false;
+    private String sortParam = null;
+    private boolean sortDown = true;
+    private int resultMax = 50;
+    private List<String> filterList;
+
+    private String query = null;
 
     /* <implementation of parcelable> */
 
@@ -48,7 +50,7 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(appName);
-        out.writeString(query);
+        out.writeString(keyword);
         out.writeString(sortParam);
         out.writeInt(resultMax);
         out.writeBooleanArray(new boolean[]{tagsSearch,sortDown});
@@ -66,7 +68,7 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
 
     private NicoSearch(Parcel in) {
         appName = in.readString();
-        query = in.readString();
+        keyword = in.readString();
         sortParam = in.readString();
         resultMax = in.readInt();
         boolean[] val = new boolean[2];
@@ -74,6 +76,8 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
         tagsSearch = val[0];
         sortDown = val[1];
         in.readStringList(filterList);
+        res = ResourceStore.getInstance();
+        initializeConstants();
     }
 
     /* </implementation of parcelable> */
@@ -81,26 +85,20 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
     public static final int QUERY_OPERATOR_AND = 0;
     public static final int QUERY_OPERATOR_OR = 1;
     public static final int QUERY_OPERATOR_NOT = 2;
-    private final Map<Integer,String> queryOperatorMap = new HashMap<Integer, String>(){
-        {
-            put(QUERY_OPERATOR_AND," ");
-            put(QUERY_OPERATOR_OR," OR ");
-            put(QUERY_OPERATOR_NOT," -");
-        }
-    };
+    private Map<Integer,String> queryOperatorMap;
 
     public static final int SORT_PARAM_VIEW = 10;
     public static final int SORT_PARAM_MY_LIST = 11;
     public static final int SORT_PARAM_COMMENT = 12;
     public static final int SORT_PARAM_DATE = 13;
     public static final int SORT_PARAM_LENGTH = 14;
-    private final Map<Integer,String> sortParamMap = new HashMap<Integer, String>(){
+    private final Map<Integer,Integer> sortParamMap = new HashMap<Integer, Integer>(){
         {
-            put(SORT_PARAM_VIEW,"viewCounter");
-            put(SORT_PARAM_MY_LIST,"mylistCounter");
-            put(SORT_PARAM_COMMENT,"commentCounter");
-            put(SORT_PARAM_DATE,"startTime");
-            put(SORT_PARAM_LENGTH,"lengthSeconds");
+            put(SORT_PARAM_VIEW,R.string.key_search_view_counter);
+            put(SORT_PARAM_MY_LIST,R.string.key_search_myList_counter);
+            put(SORT_PARAM_COMMENT,R.string.key_search_comment_counter);
+            put(SORT_PARAM_DATE,R.string.key_search_date);
+            put(SORT_PARAM_LENGTH,R.string.key_search_duration);
         }
     };
 
@@ -112,65 +110,85 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
     private static final int FILTER_COMMENT = 25;
     private static final int FILTER_DATE = 26;
     private static final int FILTER_LENGTH = 27;
-    private final String filterFormat = "&filters[%s][%S]=%s";
-    private final String filterFrom = "gte";
-    private final String filterTo = "lte";
-    private final String filterExact = "0";
+    private String filterFormat;
+    private String filterFrom;
+    private String filterTo;
+    private String filterExact;
+    private SimpleDateFormat dateFormat;
+    private ResourceStore res;
 
-    protected NicoSearch (String appName){
-        this(appName,null);
-    }
+    private CookieGroup cookieGroup;
 
     /**
-     * 検索キーワードの設定を同時に行うコンストラクタ<br>
+     * 検索クエリの設定を同時に行うコンストラクタ<br>
      * Constructs an instance, setting search keyword at the same time.
      * @param query can be {@code null}
      * @param appName your application name, cannot be {@code null}
+     * @param cookieGroup the login session, may be {@code null} in case of search with no login
      */
-    protected NicoSearch (String appName,String query){
+    protected NicoSearch (String appName,String query, CookieGroup cookieGroup){
         this.appName = appName;
-        if ( query == null){
-            this.query = "";
-        }else {
-            this.query = query;
-        }
+        this.query = query;
+        this.cookieGroup = cookieGroup;
+        res = ResourceStore.getInstance();
         filterList = new ArrayList<String>();
-        sortParam = sortParamMap.get(SORT_PARAM_VIEW);
+        setSortParam(SORT_PARAM_VIEW);
+        initializeConstants();
+    }
+
+    private void initializeConstants(){
+        filterFormat = res.getString(R.string.format_search_range);
+        filterFrom = res.getString(R.string.value_search_range_lower);
+        filterTo = res.getString(R.string.value_search_range_upper);
+        filterExact = res.getString(R.string.value_search_range_exact);
+        dateFormat = new SimpleDateFormat(res.getString(R.string.format_search_date), Locale.JAPAN);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Japan"));
+        queryOperatorMap = res.searchQueryOperators.getMap();
     }
 
     /**
-     * 検索キーワードを全て自前で設定します,{@link SearchVideoInfo 検索ＡＰＩの詳細}<br>
+     * 検索クエリを全て自前で設定します,{@link SearchVideoInfo 検索ＡＰＩの詳細}<br>
      * Sets all the search keyword following {@link SearchVideoInfo required format}.
      * @param query should not be {@code null}, or throw exception in {@link #search()}
      */
     public synchronized void setQuery (String query){
         this.query = query;
     }
+
+    /**
+     * 検索キーワードを設定します。
+     * @param keyword the word, should not be {@code null} or empty string
+     */
+    public synchronized void setKeyword (String keyword){
+        if (keyword != null && !keyword.isEmpty()) {
+            this.keyword = keyword;
+        }
+    }
     /**
      * 検索キーワードをAND演算子で追加します<br>
      * Adds search keyword with AND operator.
-     * @param query should not be {@code null} or empty, or no change is applied
+     * @param keyword should not be {@code null} or empty, or no change is applied
      */
-    public synchronized void addQuery (String query){
-        addQuery(query, QUERY_OPERATOR_AND);
+    public synchronized void addKeyword (String keyword){
+        addKeyword(keyword, QUERY_OPERATOR_AND);
     }
     /**
      * 検索キーワードを追加します,{@link #QUERY_OPERATOR_AND AND}/{@link #QUERY_OPERATOR_NOT NOT}/{@link #QUERY_OPERATOR_OR OR}の演算子が定数で指定できます<br>
      * Adds search keyword, with operator {@link #QUERY_OPERATOR_AND AND}/{@link #QUERY_OPERATOR_NOT NOT}/{@link #QUERY_OPERATOR_OR OR} in constant.
-     * @param query should not be {@code null} or empty, or no change is applied
+     * @param keyword should not be {@code null} or empty, or no change is applied
      * @param operatorKey chosen from these constants; {@link #QUERY_OPERATOR_AND AND}/{@link #QUERY_OPERATOR_NOT NOT}/{@link #QUERY_OPERATOR_OR OR}, or no change is applied
      */
-    public synchronized void addQuery (String query, int operatorKey) {
-        if ( query == null || query.isEmpty() ){
+    public synchronized void addKeyword (String keyword, int operatorKey) {
+        if ( keyword == null || keyword.isEmpty() ){
             return;
         }
-        if ( queryOperatorMap.containsKey(operatorKey) ) {
-            String addition = queryOperatorMap.get(operatorKey) + query;
-            if ( query.isEmpty()) {
-                this.query = addition.substring(1);
-            }else{
-                this.query += addition;
+        if ( this.keyword.isEmpty()) {
+            if (queryOperatorMap.containsKey(operatorKey)) {
+                String addition = queryOperatorMap.get(operatorKey) + keyword;
+                this.keyword += addition;
             }
+        }else{
+            this.keyword = keyword;
         }
     }
     /**
@@ -190,7 +208,7 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
      */
     public synchronized void setSortParam (int paramKey){
         if ( sortParamMap.containsKey(paramKey) ){
-            this.sortParam = sortParamMap.get(paramKey);
+            this.sortParam = res.getString(sortParamMap.get(paramKey));
         }
     }
     /**
@@ -235,19 +253,33 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
      * @param genre the target genre, should not be {@code null}, or no change applied
      */
     public void setFilterGenre( String genre){
-        setFilter(FILTER_GENRE,genre);
+        if ( genre != null && ResourceStore.getInstance().rankingGenreParam.getMap().containsValue(genre) ) {
+            setFilter(FILTER_GENRE, genre);
+        }
+    }
+    /**
+     * 検索フィルターをジャンル(カテゴリタグ)に関して設定します<br>
+     *  Sets search filter about genre, what is called {@link NicoRanking category tag}.
+     *  ジャンルは{@link NicoRanking ランキング取得}で定義された定数で指定できます
+     * @param key the genre key, defined in {@link NicoRanking }
+     */
+    public void setFilterGenre (int key){
+        Map<Integer,String> genreMap = ResourceStore.getInstance().rankingGenreParam.getMap();
+        if ( genreMap.containsKey(key) ){
+            setFilter(FILTER_GENRE, genreMap.get(key));
+        }
     }
     private synchronized void setFilter (int filterKey, String target){
         String param = "";
         switch ( filterKey ){
             case FILTER_ID:
-                param = "contentId";
+                param = res.getString(R.string.key_search_videoID);
                 break;
             case FILTER_TAGS:
-                param = "tags";
+                param = res.getString(R.string.key_search_tags);
                 break;
             case FILTER_GENRE:
-                param = "categoryTags";
+                param = res.getString(R.string.key_search_genre);
                 break;
             case FILTER_DATE:
                 return;
@@ -317,16 +349,16 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
         String param = "";
         switch ( filterKey ){
             case FILTER_VIEW:
-                param = "viewCounter";
+                param = res.getString(R.string.key_search_view_counter);
                 break;
             case FILTER_MY_LIST:
-                param = "mylistCounter";
+                param = res.getString(R.string.key_search_myList_counter);
                 break;
             case FILTER_COMMENT:
-                param = "commentCounter";
+                param = res.getString(R.string.key_search_comment_counter);
                 break;
             case FILTER_LENGTH:
-                param = "lengthSeconds";
+                param = res.getString(R.string.key_search_duration);
                 break;
             default:
                 return;
@@ -363,14 +395,15 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
         if ( from != null && to != null && from.getTime() > to.getTime() ){
             return;
         }
+        String param = res.getString(R.string.key_search_date);
         if ( from != null ) {
             String target = dateFormat.format(from);
-            String filter = String.format(filterFormat, "startTime", filterFrom, target);
+            String filter = String.format(filterFormat, param, filterFrom, target);
             filterList.add(filter);
         }
         if ( to != null ) {
             String target = dateFormat.format(to);
-            String filter = String.format(filterFormat, "startTime", filterTo, target);
+            String filter = String.format(filterFormat, param, filterTo, target);
             filterList.add(filter);
         }
     }
@@ -386,88 +419,94 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
         try{
             Date dateFrom = null;
             if ( from != null ){
-                dateFormat.parse(from);
+                dateFrom = dateFormat.parse(from);
             }
             Date dateTo = null;
             if ( to != null ){
-                dateFormat.parse(to);
+                dateTo = dateFormat.parse(to);
             }
             setFilter(dateFrom,dateTo);
         }catch (ParseException e){
             e.printStackTrace();
-            return;
         }
     }
-    /**
-     * ニコ動検索ＡＰＩでの日時形式です"yyyy-MM-dd'T'HH:mm:ss'+09:00'"<br>
-     *  date format in Nico search API; "yyyy-MM-dd'T'HH:mm:ss'+09:00'".<br>
-     *  基本的にはISO8601の拡張型に準拠しているが、タイムゾーンはJAPANで固定の模様でかつ、HHとmmの間に半角コロンが挿入されているので注意してください。<br>
-     *  based on extended ISO8691, but be careful that time zone seems fixed JAPAN and that ':' is inserted between HH and mm.
-     */
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'+09:00'"){
-        {
-            setTimeZone(TimeZone.getTimeZone("Japan"));
-        }
-    };
+
+
     /**
      * 検索を実行して結果を取得します<br>
      * Searches videos and gets results.<br>
-     * 必ず{@link #setQuery(String)}/{@link #addQuery(String, int)}で検索ワードを設定してから呼んでください。<br>
-     * Be sure to call this after setting search keywords in {@link #setQuery(String)}/{@link #addQuery(String, int)}.
+     * 必ず{@link #setKeyword(String)}/{@link #addKeyword(String)}で検索ワードを設定してから呼んでください。<br>
+     * Be sure to call this after setting search keywords in {@link #setKeyword(String)}/{@link #addKeyword(String)}.<br>
+     * <strong>ＵＩスレッド禁止</strong>HTTP通信を行うのでバックグランド処理してください。<br>
+     * <strong>No UI thread</strong> HTTP communication is done.
      * @return Returns empty List, not {@code null}
-     * @throws NicoAPIException if no query set or fail to parse response
+     * @throws NicoAPIException if neither of query or keyword is set or fail to parse response
      */
-    public SearchGroup search () throws NicoAPIException{
-        StringBuilder builder = new StringBuilder();
-        SearchGroup group;
+    public SearchVideoGroup search () throws NicoAPIException{
+        SearchVideoGroup group;
         synchronized (this) {
             if (appName == null || appName.isEmpty()) {
                 throw new NicoAPIException.InvalidParamsException("appName is required in Search");
             }
-            if (query.isEmpty()) {
-                throw new NicoAPIException.InvalidParamsException("no query is set > search");
+            if ( this.query == null ) {
+                StringBuilder builder = new StringBuilder();
+                if (keyword.isEmpty()) {
+                    throw new NicoAPIException.InvalidParamsException("no keyword is set > search");
+                }
+                builder.append(keyword);
+                if (tagsSearch) {
+                    builder.append(res.getString(R.string.value_search_tagSearch));
+                } else {
+                    builder.append(res.getString(R.string.value_search_nonTagSearch));
+                }
+                builder.append(res.getString(R.string.value_search_target_fields));
+                for (String filter : filterList) {
+                    builder.append(filter);
+                }
+                builder.append(res.getString(R.string.key_search_sort_order));
+                if (sortDown) {
+                    builder.append(res.getString(R.string.value_search_sort_order_down));
+                } else {
+                    builder.append(res.getString(R.string.value_search_sort_order_up));
+                }
+                builder.append(sortParam);
+                builder.append(res.getString(R.string.key_search_result_max));
+                builder.append(resultMax);
+                builder.append(res.getString(R.string.key_search_appName));
+                builder.append(appName);
+                this.query = builder.toString();
+            }else{
+                String key = res.getString(R.string.key_search_appName);
+                if ( !query.contains(key) ){
+                    query += key;
+                    query += appName;
+                }
             }
-            builder.append(searchUrl);
-            builder.append(query);
-            if (tagsSearch) {
-                builder.append("&targets=tagsExact");
-            } else {
-                builder.append("&targets=title,description,tags");
-            }
-            builder.append("&fields=contentId,title,description,tags,viewCounter,mylistCounter,commentCounter,startTime,lengthSeconds");
-            for (String filter : filterList) {
-                builder.append(filter);
-            }
-            builder.append("&_sort=");
-            if (sortDown) {
-                builder.append("-");
-            } else {
-                builder.append("+");
-            }
-            builder.append(sortParam);
-            builder.append("&_limit=");
-            builder.append(resultMax);
-            builder.append("&_context=");
-            builder.append(appName);
-            group = new SearchGroup(this);
+
+            group = new SearchVideoGroup(this);
         }
-        String path = builder.toString();
-        if ( tryGet(path) ){
-            group.setVideoList(super.response);
+        String path = res.getURL(R.string.url_search) + query;
+        HttpClient client = res.getHttpClient();
+        if ( client.get(path,null) ){
+            group.setVideoList(cookieGroup,client.getResponse());
             return group;
         }else{
             throw new NicoAPIException.HttpException(
                     "fail to get search response",
                     NicoAPIException.EXCEPTION_HTTP_SEARCH,
-                    super.statusCode, path, "GET"
+                    client.getStatusCode(), path, "GET"
             );
         }
     }
-    
-    public class SearchGroup {
-        private SearchGroup(NicoSearch nicoSearch){
+
+    /**
+     * 検索結果を保持するクラスです　This class keeps the search results.
+     */
+    public static class SearchVideoGroup {
+        private SearchVideoGroup(NicoSearch nicoSearch){
             this.appName = nicoSearch.appName;
             this.query = nicoSearch.query;
+            this.keyword = nicoSearch.keyword;
             this.sortParam = nicoSearch.sortParam;
             this.tagSearch = nicoSearch.tagsSearch;
             this.sortDown = nicoSearch.sortDown;
@@ -475,24 +514,25 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
             this.filterList = new ArrayList<String>();
             this.filterList.addAll(nicoSearch.filterList);
         }
-        protected void setVideoList(String response) throws NicoAPIException{
+        private void setVideoList(CookieGroup cookieGroup,String response) throws NicoAPIException{
             try {
+                ResourceStore res = ResourceStore.getInstance();
                 JSONObject root = new JSONObject(response);
-                JSONObject meta = root.getJSONObject("meta");
-                if ( meta.getInt("status") != 200 ){
+                JSONObject meta = root.getJSONObject(res.getString(R.string.key_search_result_meta));
+                if ( meta.getInt(res.getString(R.string.key_search_result_status)) != Integer.parseInt(res.getString(R.string.value_search_result_status_success)) ){
                     String message = "Unexpected API response status > search ";
                     try {
-                        String errorCode = meta.getString("errorCode");
-                        String errorMessage = meta.getString("errorMessage");
+                        String errorCode = meta.getString(res.getString(R.string.key_search_result_error_code));
+                        String errorMessage = meta.getString(res.getString(R.string.key_search_result_error_message));
                         message += (errorCode + ":" + errorMessage);
                     }catch (JSONException e){}
                     throw new NicoAPIException.APIUnexpectedException(
                             message
                     );
                 }
-                this.id = meta.getInt("id");
-                this.totalCount = meta.getInt("totalCount");
-                this.videoList = SearchVideoInfo.parse(root);
+                this.id = meta.getString(res.getString(R.string.key_search_result_id));
+                this.totalCount = meta.getInt(res.getString(R.string.key_search_result_total_hit));
+                this.videoList = SearchVideoInfo.parse(cookieGroup,root);
             }catch (JSONException e){
                 throw new NicoAPIException.ParseException(
                         e.getMessage(),response
@@ -501,32 +541,81 @@ public class NicoSearch extends HttpResponseGetter implements Parcelable{
         }
         private String appName;
         private String query;
+        private String keyword;
         private boolean tagSearch;
         private String sortParam;
         private boolean sortDown;
         private int resultMax;
         private List<String> filterList;
         private List<VideoInfo> videoList;
-        private int id;
+        private String id;
         private int totalCount;
-
+        /**
+         * 検索に用いたアプリ名を取得します Gets the application name used to search videos.
+         * @return the application name param
+         */
         public String getAppName(){return appName;}
+        /**
+         * 検索に用いた検索クエリを取得します Gets the query used to search videos.
+         * @return the query
+         */
         public String getQuery(){return query;}
+        /**
+         * 検索に用いたキーワードを取得します<br> Gets the keywords used in search of videos.
+         * @return the keyword, or keywords joined with an operator, such as "AND" and "OR".
+         */
+        public String getKeyword(){return keyword;}
+        /**
+         * 検索に用いた検索結果の整列パラメータを取得します Gets the sort param used to search videos.
+         */
         public String getSortParam(){return sortParam;}
+        /**
+         * この検索結果がタグ検索か否かを取得します Gets whether or not the search is tag-search.
+         * @return tag-search?
+         */
         public boolean isTagSearch(){return tagSearch;}
+        /**
+         * 検索結果が降順にソートされているか否か取得します
+         * Gets whether or not the videos are sorted in descending order.
+         * @return in descending order ?
+         */
         public boolean isSortDown(){return sortDown;}
+        /**
+         * 指定した検索結果の最大数を取得します
+         * Gets the limit number of results.
+         * @return the result number
+         */
         public int getResultMax(){return resultMax;}
+        /**
+         * 指定したフィルター値をまとめて{@code List}で取得します
+         * Gets filter values used to search videos.
+         * @return filter values in {@code List}, not {@code null}
+         */
         public List<String> getFilterList(){
             List<String> list = new ArrayList<String>();
             list.addAll(this.filterList);
             return list;
         }
-        public List<VideoInfo> getVideoList(){
+        /**
+         * 検索結果の動画を取得します Gets results videos.<br>
+         * 動画が検索結果の順にソートされて格納された{@code List}オブジェクトを返します。
+         * このリストオブジェクトに変更を加えても構いません。
+         * @return {@code List} object in which videos are sorted as same as in results, not {@code null}
+         */
+        public List<VideoInfo> getVideos(){
             List<VideoInfo> list = new ArrayList<VideoInfo>();
             list.addAll(this.videoList);
             return list;
         }
-        public int getId(){return id;}
+        /**
+         * 検索ＩＤを取得します Gets searchID.
+         * @return the search ID
+         */
+        public String getSearchId(){return id;}
+        /**
+         * 検索の合計ヒット数を取得します Gets the total number of hit videos.
+         * @return the total hit number
+         */
         public int getTotalCount(){return totalCount;}
     }
 

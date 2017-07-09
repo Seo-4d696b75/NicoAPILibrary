@@ -6,15 +6,13 @@ import android.os.Parcelable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo.dateFormatBase;
 
 /**
  * ニコ動のランキングを取得する<br>
@@ -24,7 +22,7 @@ import static jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo.dateFormatBase;
  * これらパラメータを各種適当なメソッドを呼び設定してからランキングを取得します。
  * 各パラメータに対応した定数が用意されているので、これを指定することができます。
  * また、各パラメータの名前と値のMapを取得してその値で指定することも可能です。
- * 例）ジャンルパラメータ ("カテゴリ合算","all")... 　#この"all"またはこれに対応した定数GENRE_ALLを#setGenre(String/int)に渡す。
+ * 例）ジャンルパラメータ ("カテゴリ合算":all)... 　##この"all"またはこれに対応した定数GENRE_ALLを#setGenre(String/int)に渡す。
  * 独自に設定をしないとデフォルトでカテゴリ合算、期間合計、総合ランキングとして扱います。
  * パラメータの詳細は<a href=http://dic.nicovideo.jp/a/%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E3%82%BF%E3%82%B0>ここから参照してください。</a><br>
  * Getting ranking needs 3 params; category, period and ranking kind.
@@ -38,13 +36,15 @@ import static jp.ac.u_tokyo.kyoyo.seo.nicoapilib.VideoInfo.dateFormatBase;
  * @version  0.0 on 2017/02/03.
  */
 
-public class NicoRanking extends HttpResponseGetter implements Parcelable {
+public class NicoRanking implements Parcelable {
 
-    private String rankingUrl = "http://www.nicovideo.jp/ranking/%s/%s/%s?rss=2.0";
+    private String rankingUrl;
 
     private String genre;
     private String kind;
     private String period;
+
+    private CookieGroup cookieGroup;
 
     private boolean isDone;
 
@@ -77,6 +77,7 @@ public class NicoRanking extends HttpResponseGetter implements Parcelable {
         boolean[] val = new boolean[1];
         in.readBooleanArray(val);
         this.isDone = val[0];
+        setMap();
     }
 
     /* </implementation of parcelable> */
@@ -123,119 +124,31 @@ public class NicoRanking extends HttpResponseGetter implements Parcelable {
     public static final int PERIOD_DAILY = 603;
     public static final int PERIOD_HOURLY = 604;
 
-    private Map<Integer,String> genreNameMap = new LinkedHashMap<Integer, String>(){
-        {
-            put(GENRE_ALL, "カテゴリ合算");
-            put(GENRE_VOCALOID, "VOCALOID");
-            put(GENRE_MUSIC, "音楽");
-            put(GENRE_ANIME, "アニメ");
-            put(GENRE_GAME, "ゲーム");
-            put(GENRE_DANCE, "踊ってみた");
-            put(GENRE_SING, "歌ってみた");
-            put(GENRE_PLAY, "演奏してみた");
-            put(GENRE_TOHO, "東方");
-            put(GENRE_IMAS, "アイドルマスター");
-            put(GENRE_ENT, "エンターテイメント");
-            put(GENRE_ANIMAL, "動物");
-            put(GENRE_RADIO, "ラジオ");
-            put(GENRE_SPORT, "スポーツ");
-            put(GENRE_POLITICS, "政治");
-            put(GENRE_SCIENCE, "科学");
-            put(GENRE_HISTORY, "歴史");
-            put(GENRE_COOKING, "料理");
-            put(GENRE_NATURE, "自然");
-            put(GENRE_DIARY, "日記");
-            put(GENRE_LECTURE, "ニコニコ動画講座");
-            put(GENRE_NICOINDIES, "ニコニコインディーズ");
-            put(GENRE_DRIVE, "車載動画");
-            put(GENRE_TECH, "ニコニコ技術部");
-            put(GENRE_HANDCRAFT, "ニコニコ手芸部");
-            put(GENRE_MAKE, "作ってみた");
-            put(GENRE_DRAW, "描いてみた");
-            put(GENRE_TRAVEL, "旅行");
-            put(GENRE_ARE, "例のアレ");
-            put(GENRE_OTHER, "その他");
-        }
-    };
+    private Map<Integer,String> genreNameMap;
+    private Map<Integer,String> genreValueMap;
+    private Map<Integer,String> periodNameMap;
+    private Map<Integer,String> periodValueMap;
+    private Map<Integer,String> kindNameMap;
+    private Map<Integer,String> kindValueMap;
 
-    private Map<Integer,String> genreValueMap = new LinkedHashMap<Integer, String>(){
-        {
-            put(GENRE_ALL, "all");
-            put(GENRE_VOCALOID, "vocaloid");
-            put(GENRE_MUSIC, "music");
-            put(GENRE_ANIME, "anime");
-            put(GENRE_GAME, "game");
-            put(GENRE_DANCE, "dance");
-            put(GENRE_SING, "sing");
-            put(GENRE_PLAY, "play");
-            put(GENRE_TOHO, "toho");
-            put(GENRE_IMAS, "imas");
-            put(GENRE_ENT, "ent");
-            put(GENRE_ANIMAL, "animal");
-            put(GENRE_RADIO, "radio");
-            put(GENRE_SPORT, "sport");
-            put(GENRE_POLITICS, "politics");
-            put(GENRE_SCIENCE, "science");
-            put(GENRE_HISTORY, "history");
-            put(GENRE_COOKING, "cooking");
-            put(GENRE_NATURE, "nature");
-            put(GENRE_DIARY, "diary");
-            put(GENRE_LECTURE, "lecture");
-            put(GENRE_NICOINDIES, "nicoindies");
-            put(GENRE_DRIVE, "drive");
-            put(GENRE_TECH, "tech");
-            put(GENRE_HANDCRAFT, "handcraft");
-            put(GENRE_MAKE, "make");
-            put(GENRE_DRAW, "draw");
-            put(GENRE_TRAVEL, "travel");
-            put(GENRE_ARE, "are");
-            put(GENRE_OTHER, "other");
-        }
-    };
+    private void setMap(){
+        ResourceStore res = ResourceStore.getInstance();
+        rankingUrl = res.getURL(R.string.url_ranking);
+        genreNameMap = res.rankingGenreName.getMap();
+        genreValueMap = res.rankingGenreParam.getMap();
+        periodNameMap = res.rankingPeriodName.getMap();
+        periodValueMap = res.rankingPeriodParam.getMap();
+        kindNameMap = res.rankingKindName.getMap();
+        kindValueMap = res.rankingKindParam.getMap();
+    }
 
-    private Map<Integer,String> periodNameMap = new LinkedHashMap<Integer, String>(){
-        {
-            put(PERIOD_TOTAL,"合計");
-            put(PERIOD_MONTHLY,"月間");
-            put(PERIOD_WEEKLY,"週間");
-            put(PERIOD_DAILY,"24時間");
-            put(PERIOD_HOURLY,"毎時");
-        }
-    };
-
-    private Map<Integer,String> periodValueMap = new LinkedHashMap<Integer, String>(){
-        {
-            put(PERIOD_TOTAL,"total");
-            put(PERIOD_MONTHLY,"monthly");
-            put(PERIOD_WEEKLY,"weekly");
-            put(PERIOD_DAILY,"daily");
-            put(PERIOD_HOURLY,"hourly");
-        }
-    };
-
-    private Map<Integer,String> kindNameMap = new LinkedHashMap<Integer, String>(){
-        {
-            put(KIND_FAV,"総合");
-            put(KIND_VIEW,"再生");
-            put(KIND_RES,"コメント");
-            put(KIND_MYLIST,"マイリスト");
-        }
-    };
-
-    private Map<Integer,String> kindValueMap = new LinkedHashMap<Integer, String>(){
-        {
-            put(KIND_FAV,"fav");
-            put(KIND_VIEW,"view");
-            put(KIND_RES,"res");
-            put(KIND_MYLIST,"mylist");
-        }
-    };
-
-    protected NicoRanking (){
+    protected NicoRanking (CookieGroup cookieGroup){
         genre = "";
         period = "";
         kind = "";
         isDone = false;
+        setMap();
+        this.cookieGroup = cookieGroup;
     }
 
     /**
@@ -366,7 +279,7 @@ public class NicoRanking extends HttpResponseGetter implements Parcelable {
      * @return Returns {@link RankingVideoGroup} instance with empty List if no hit, not {@code null}
      * @throws NicoAPIException if fail to get or call this twice again
      */
-    public RankingVideoGroup get () throws NicoAPIException {
+    public RankingVideoGroup getRanking () throws NicoAPIException {
         String kind,period,genre;
         synchronized (this) {
             if (isDone) {
@@ -384,14 +297,15 @@ public class NicoRanking extends HttpResponseGetter implements Parcelable {
                 kind = kindValueMap.get(KIND_FAV);
             }
         }
+        HttpClient client = ResourceStore.getInstance().getHttpClient();
         String path = String.format(rankingUrl, kind, period, genre);
-        if ( tryGet(path) ) {
-            return new RankingVideoGroup(super.response,genre,period,kind);
+        if ( client.get(path,null) ) {
+            return new RankingVideoGroup(cookieGroup,client.getResponse(),genre,period,kind);
         }else{
             throw new NicoAPIException.HttpException(
                     "fail to get ranking",
                     NicoAPIException.EXCEPTION_HTTP_RANKING,
-                    super.statusCode, path, "GET"
+                    client.getStatusCode(), path, "GET"
             );
         }
     }
@@ -402,22 +316,22 @@ public class NicoRanking extends HttpResponseGetter implements Parcelable {
      * ランキング検索に用いたパラメータと取得した動画のリストを保持します。<br>
      * This keeps the three parameters used to get ranking and result-videos in List.
      */
-    public class RankingVideoGroup {
+    public static class RankingVideoGroup {
 
         private String genre;
         private String period;
         private String kind;
-        private String pubDate;
+        private Date pubDate;
         private List<VideoInfo> videoList;
 
-        protected RankingVideoGroup (String xml, String genre, String period, String kind) throws NicoAPIException{
+        private RankingVideoGroup (CookieGroup cookieGroup, String xml, String genre, String period, String kind) throws NicoAPIException{
             this.genre = genre;
             this.kind = kind;
             this.period = period;
-            Matcher matcher = Pattern.compile("<channel>.+<title>.+?ランキング.+?‐ニコニコ動画</title>.+?<pubDate>(.+?)</pubDate>",Pattern.DOTALL).matcher(xml);
+            Matcher matcher = ResourceStore.getInstance().getPattern(R.string.regex_rss_ranking_meta).matcher(xml);
             if ( matcher.find() ) {
                 this.pubDate = convertPubDate(matcher.group(1));
-                this.videoList = RSSVideoInfo.parse(xml);
+                this.videoList = RSSVideoInfo.parse(cookieGroup,xml);
             }else{
                 throw new NicoAPIException.APIUnexpectedException(
                         "not ranking RSS > ranking",
@@ -425,10 +339,10 @@ public class NicoRanking extends HttpResponseGetter implements Parcelable {
                 );
             }
         }
-        private String convertPubDate (String date) throws NicoAPIException.ParseException{
+        private Date convertPubDate (String date) throws NicoAPIException.ParseException{
             try{
-                SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
-                return dateFormatBase.format(dateFormat.parse(date));
+                SimpleDateFormat dateFormat = new SimpleDateFormat(ResourceStore.getInstance().getString(R.string.format_rss_publish_date), Locale.US);
+                return dateFormat.parse(date);
             }catch (ParseException e){
                 throw new NicoAPIException.ParseException(e.getMessage(), date,NicoAPIException.EXCEPTION_PARSE_RANKING_MYLIST_PUB_DATE);
             }
@@ -460,11 +374,9 @@ public class NicoRanking extends HttpResponseGetter implements Parcelable {
         /**
          * ランキングの発表日時を取得します<br>
          *     Gets ranking published date.<br>
-         *     ライブラリ内の{@link VideoInfo#dateFormatBase 共通形式}に従います<br>
-         *     this follows {@link VideoInfo#dateFormatBase common format} in this library.
          * @return the publication date
          */
-        public String getPubDate(){
+        public Date getPubDate(){
             return pubDate;
         }
         /**

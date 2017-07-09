@@ -1,50 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AnalysisUIOptions">
-    <option name="ANALYZE_TEST_SOURCES" value="false" />
-    <option name="SCOPE_TYPE" value="8" />
-    <option name="CUSTOM_SCOPE_NAME" value="library" />
-  </component>
-  <component name="AndroidLayouts">
-    <shared>
-      <config />
-    </shared>
-  </component>
-  <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b6aca32-905e-4ebd-bb8f-deef77987869" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/video_mylist_cell.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/cache.properties.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_nicoapilib_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_nicoapilib_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_nicoapilib_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_nicoapilib_compileReleaseJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_nicoapilib_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_nicoapilib_compileReleaseJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomListActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomListActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RankingActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RankingActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RecommendActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RecommendActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/SearchActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/SearchActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TempMyListActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TempMyListActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TestActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TestActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/dialog_details.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/dialog_details.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListEditor.java" afterPath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListEditor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoInfo.java" afterPath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoInfo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.java" afterPath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.java" afterPath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/SearchVideoInfo.java" afterPath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/SearchVideoInfo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoStorage.java" afterPath="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoStorage.java" />
-    </list>
+    <list default="true" id="b1af7594-b456-45f3-959c-3c5be83236b4" name="Default" comment="" />
     <ignored path="MyLibraryFactory.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,87 +21,32 @@
       <ProjectState />
     </projectState>
   </component>
-  <component name="ExternalProjectsManager">
-    <system id="GRADLE">
-      <state>
-        <projects_view>
-          <tree_state />
-        </projects_view>
-      </state>
-    </system>
-  </component>
   <component name="FavoritesManager">
     <favorites_list name="MyLibraryFactory" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="CustomListActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomListActivity.java">
+    <leaf>
+      <file leaf-file-name="regex.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/res/values/regex.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6402">
-              <caret line="354" column="0" selection-start-line="354" selection-start-column="0" selection-end-line="354" selection-end-column="0" />
+            <state relative-caret-position="286">
+              <caret line="64" column="42" selection-start-line="64" selection-start-column="42" selection-end-line="64" selection-end-column="42" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RecommendActivity.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RecommendActivity.java">
+      <file leaf-file-name="VideoInfo.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TempMyListActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TempMyListActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="156">
-              <caret line="33" column="64" selection-start-line="33" selection-start-column="64" selection-end-line="33" selection-end-column="64" />
+            <state relative-caret-position="39">
+              <caret line="317" column="156" selection-start-line="317" selection-start-column="156" selection-end-line="317" selection-end-column="156" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MyListActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
-              <caret line="164" column="0" selection-start-line="164" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CustomDialog.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomDialog.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="616">
-              <caret line="68" column="66" selection-start-line="68" selection-start-column="12" selection-end-line="68" selection-end-column="66" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="resourceFile" />
-        <option value="ASClass" />
-        <option value="layoutResourceFile_vertical" />
-      </list>
-    </option>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="GradleLocalSettings">
     <option name="availableProjects">
@@ -2679,58 +2581,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoManager.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoListEditor.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RankingVideoInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListVideoInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListEditor.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RecommendVideoInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RankingVideoGroup.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListInfo.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/drawable/dialog_custom.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/drawable/back_dialog.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/drawable/back_dialog_title.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/dialog_account.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListPickerDialog.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RSSVideoInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/HttpResponseGetter.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoLogin.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/LoginInfo.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/dialog_menu.xml" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoPackage.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoAPIException.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoClient.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/CommentInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoCommentPost.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomDialog.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/simple_cell.xml" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoGroup.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListVideoGroup.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListGroup.java" />
+        <option value="$PROJECT_DIR$/nicoapilib/src/main/res/values/regex.xml" />
         <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TestActivity.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/SearchVideoInfo.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/SearchActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RankingActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RecommendActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TempMyListActivity.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoStorage.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/dialog_details.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomListActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/video_mylist_cell.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java" />
-        <option value="$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListEditor.java" />
       </list>
     </option>
-  </component>
-  <component name="NamedScopeManager">
-    <scope name="library" pattern="src[nicoapilib]:jp.ac.u_tokyo.kyoyo.seo.nicoapilib.*" />
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-11" />
@@ -2738,7 +2592,7 @@
     <option name="width" value="1942" />
     <option name="height" value="1042" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -2763,6 +2617,10 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -2780,68 +2638,12 @@
               <option name="myItemId" value="nicoapilib" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MyLibraryFactory" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nicoapilib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MyLibraryFactory" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nicoapilib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nicoapilib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MyLibraryFactory" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MyLibraryFactory" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="res" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
+              <option name="myItemId" value="values" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2851,7 +2653,21 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
+              <option name="myItemId" value="nicoapilib" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MyLibraryFactory" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nicoapilib" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -2865,7 +2681,7 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
+              <option name="myItemId" value="nicoapilib" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -2873,7 +2689,7 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mylibraryfactory" />
+              <option name="myItemId" value="nicoapilib" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2883,35 +2699,20 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
+              <option name="myItemId" value="nicoapilib" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Java" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="device.picker.selection" value="GBAZCY03V207HWB" />
-    <property name="UI_DESIGNER_EDITOR_MODE.CaptureAnalysis.SHOW" value="false" />
-    <property name="UI_DESIGNER_EDITOR_MODE.NlPaletteManager-NlPreviewForm.SHOW" value="false" />
   </component>
   <component name="RunManager" selected="Android App.app">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
@@ -2959,50 +2760,6 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
-      <module name="" />
-      <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="EXTRA_OPTIONS" value="" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="DEBUGGER_TYPE" value="Auto" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
-      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
-      <Auto>
-        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
-        <option name="WORKING_DIR" value="" />
-        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
-      </Auto>
-      <Hybrid>
-        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
-        <option name="WORKING_DIR" value="" />
-        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
-      </Hybrid>
-      <Java />
-      <Native>
-        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
-        <option name="WORKING_DIR" value="" />
-        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
-      </Native>
-      <Profilers>
-        <option name="ENABLE_ADVANCED_PROFILING" value="true" />
-        <option name="GAPID_ENABLED" value="false" />
-        <option name="GAPID_DISABLE_PCS" value="false" />
-        <option name="SUPPORT_LIB_ENABLED" value="true" />
-        <option name="INSTRUMENTATION_ENABLED" value="true" />
-      </Profilers>
-      <method />
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" />
@@ -3016,22 +2773,6 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="" />
       <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="GradleRunConfiguration" factoryName="Gradle">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list />
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
       <method />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -3058,27 +2799,6 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JarApplication" factoryName="JAR Application">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="Java Scratch" factoryName="Java Scratch">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="SCRATCH_FILE_ID" value="0" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="" />
-      <envs />
-      <method />
-    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -3101,34 +2821,6 @@
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="OUTPUT_DIRECTORY" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <option name="USE_DEFAULT_REPORTERS" value="false" />
-      <option name="PROPERTIES_FILE" />
-      <envs />
-      <properties />
-      <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="TestNGTestDiscovery" factoryName="TestNG Test Discovery" changeList="All">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="SUITE_NAME" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="GROUP_NAME" />
-      <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
       <option name="OUTPUT_DIRECTORY" />
       <option name="ANNOTATION_TYPE" />
       <option name="ENV_VARIABLES" />
@@ -3207,16 +2899,13 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
-  <component name="SvnConfiguration">
-    <configuration />
-  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="6b6aca32-905e-4ebd-bb8f-deef77987869" name="Default" comment="" />
-      <created>1488017334708</created>
+      <changelist id="b1af7594-b456-45f3-959c-3c5be83236b4" name="Default" comment="" />
+      <created>1499592683469</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1488017334708</updated>
+      <updated>1499592683469</updated>
     </task>
     <servers />
   </component>
@@ -3224,143 +2913,50 @@
     <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="1.0" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="-11" y="-28" width="1934" height="1042" />
-      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31025958" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32880098" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3275649" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16864865" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972974" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24972972" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39925835" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.9184178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="8" y="22" width="865" height="799" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
-    <layout-to-restore>
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="1.0" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" x="-11" y="-23" width="1934" height="1042" />
-      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2843016" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299363" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3275649" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16864865" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.9322459" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="-6" y="75" width="702" height="799" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-    </layout-to-restore>
-  </component>
-  <component name="Vcs.Log.UiProperties">
-    <option name="RECENTLY_FILTERED_USER_GROUPS">
-      <collection />
-    </option>
-    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-      <collection />
-    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="83" />
+      <option name="time" value="1" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListInfo.java" />
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/captures/jp.ac.u_tokyo.kyoyo.seo.mylibraryfactory_2017.03.05_22.14.alloc">
-      <provider selected="true" editor-type-id="capture-editor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/captures/jp.ac.u_tokyo.kyoyo.seo.mylibraryfactory_2017.03.05_22.18.hprof">
-      <provider selected="true" editor-type-id="capture-editor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/dialog_custom.xml" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_comment_post.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/spinner.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="16" column="11" selection-start-line="2" selection-start-column="4" selection-end-line="16" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/spinner_back.xml">
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -3368,712 +2964,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/back_dialog.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/back_dialog_title.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="61" selection-start-line="4" selection-start-column="61" selection-end-line="4" selection-end-column="61" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_account.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="65">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/res/values/regex.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
-          <caret line="13" column="47" selection-start-line="13" selection-start-column="47" selection-end-line="13" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_my_list.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/captures/jp.ac.u_tokyo.kyoyo.seo.mylibraryfactory_2017.03.06_21.07.hprof">
-      <provider selected="true" editor-type-id="capture-editor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/captures/jp.ac.u_tokyo.kyoyo.seo.mylibraryfactory_2017.03.06_21.21.hprof">
-      <provider selected="true" editor-type-id="capture-editor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListPickerDialog.java" />
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/RSSVideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="275" column="9" selection-start-line="275" selection-start-column="9" selection-end-line="275" selection-end-column="9" />
-          <folding>
-            <element signature="docComment;method#parse#0;class#RSSVideoInfo#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/HttpResponseGetter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="159" column="22" selection-start-line="159" selection-start-column="22" selection-end-line="159" selection-end-column="22" />
-          <folding>
-            <element signature="docComment;field#cookieStore#0;class#HttpResponseGetter#0" expanded="false" />
-            <element signature="docComment;field#response#0;class#HttpResponseGetter#0" expanded="false" />
-            <element signature="docComment;method#tryPost#0;class#HttpResponseGetter#0" expanded="false" />
-            <element signature="docComment;method#tryGet#0;class#HttpResponseGetter#0" expanded="false" />
-            <element signature="docComment;method#tryGet#1;class#HttpResponseGetter#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoLogin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3090">
-          <caret line="178" column="5" selection-start-line="178" selection-start-column="5" selection-end-line="178" selection-end-column="5" />
+          <caret line="64" column="42" selection-start-line="64" selection-start-column="42" selection-end-line="64" selection-end-column="42" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_menu.xml">
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoVideoInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        <state relative-caret-position="725">
+          <caret line="597" column="0" selection-start-line="597" selection-start-column="0" selection-end-line="597" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoPackage.java" />
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1936">
-          <caret line="178" column="4" selection-start-line="178" selection-start-column="4" selection-end-line="178" selection-end-column="4" />
-          <folding>
-            <element signature="docComment;field#appName#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;field#deviceName#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#NicoClient#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#login#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getNicoRanking#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getRecommend#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getTempMyList#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getNicoSearch#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getMyListGroup#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getMyList#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getComment#0;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getComment#1;class#NicoClient#0" expanded="false" />
-            <element signature="docComment;method#getNicoCommentPost#0;class#NicoClient#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/LoginInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4094">
-          <caret line="231" column="48" selection-start-line="231" selection-start-column="48" selection-end-line="231" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="docComment;method#isLogin#0;class#LoginInfo#0" expanded="false" />
-            <element signature="docComment;method#getUserName#0;class#LoginInfo#0" expanded="false" />
-            <element signature="docComment;method#getUserID#0;class#LoginInfo#0" expanded="false" />
-            <element signature="docComment;method#getUserIcon#0;class#LoginInfo#0" expanded="false" />
-            <element signature="method#setUserIconUrl#0;class#LoginInfo#0" expanded="false" />
-            <element signature="docComment;method#getCookieStore#0;class#LoginInfo#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/CommentInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6585">
-          <caret line="476" column="34" selection-start-line="476" selection-start-column="34" selection-end-line="476" selection-end-column="34" />
-          <folding>
-            <element signature="docComment;method#getStart#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;method#getContent#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;method#getDate#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;method#isAnonymous#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;method#getNgLevel#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;method#getCommentNo#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;method#getColor#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;method#getPosition#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;method#getSize#0;class#CommentInfo#0" expanded="false" />
-            <element signature="docComment;method#initialize#2;class#CommentInfo#0" expanded="false" />
-            <element signature="method#writeToParcel#0;class#CommentInfo#0" expanded="false" />
-            <element signature="method#CommentInfo#2;class#CommentInfo#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/simple_cell.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="23" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoCommentPost.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="65" column="35" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="35" />
-          <folding>
-            <element signature="docComment;method#NicoCommentPost#0;class#NicoCommentPost#0" expanded="false" />
-            <element signature="method#writeToParcel#0;class#NicoCommentPost#0" expanded="false" />
-            <element signature="method#NicoCommentPost#1;class#NicoCommentPost#0" expanded="false" />
-            <element signature="docComment;method#setComment#0;class#NicoCommentPost#0" expanded="false" />
-            <element signature="docComment;method#setTime#0;class#NicoCommentPost#0" expanded="false" />
-            <element signature="docComment;method#setAnonymous#0;class#NicoCommentPost#0" expanded="false" />
-            <element signature="docComment;method#setColor#0;class#NicoCommentPost#0" expanded="false" />
-            <element signature="docComment;method#getColorMap#0;class#NicoCommentPost#0" expanded="false" />
-            <element signature="docComment;method#setPosition#0;class#NicoCommentPost#0" expanded="false" />
-            <element signature="docComment;method#setSize#0;class#NicoCommentPost#0" expanded="false" />
-            <element signature="docComment;method#post#0;class#NicoCommentPost#0" expanded="false" />
-            <element signature="docComment;method#getCommentNo#0;class#NicoCommentPost#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-25/android/content/res/Resources.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="2151" column="0" selection-start-line="2151" selection-start-column="0" selection-end-line="2151" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TestActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1388">
-          <caret line="130" column="66" selection-start-line="130" selection-start-column="66" selection-end-line="130" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7106">
-          <caret line="74" column="31" selection-start-line="74" selection-start-column="31" selection-end-line="74" selection-end-column="31" />
-          <folding>
-            <element signature="docComment;class#RankingVideoGroup#0;class#NicoRanking#0" expanded="false" />
-            <element signature="docComment;method#getGenre#0;class#RankingVideoGroup#0;class#NicoRanking#0" expanded="false" />
-            <element signature="docComment;method#getPeriod#0;class#RankingVideoGroup#0;class#NicoRanking#0" expanded="false" />
-            <element signature="docComment;method#getKind#0;class#RankingVideoGroup#0;class#NicoRanking#0" expanded="false" />
-            <element signature="docComment;method#getPubDate#0;class#RankingVideoGroup#0;class#NicoRanking#0" expanded="false" />
-            <element signature="docComment;method#getVideoList#0;class#RankingVideoGroup#0;class#NicoRanking#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/SearchVideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="107" column="85" selection-start-line="107" selection-start-column="85" selection-end-line="107" selection-end-column="85" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="31" column="72" selection-start-line="31" selection-start-column="72" selection-end-line="31" selection-end-column="72" />
-          <folding>
-            <element signature="initializer##0;class#2575:2754" expanded="false" />
-            <element signature="initializer##0;class#3072:3378" expanded="false" />
-            <element signature="docComment;method#NicoSearch#2;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setQuery#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#addQuery#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#addQuery#1;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setTagsSearch#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setSortParam#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setSortDown#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setResultMax#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setFilterID#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setFilterTags#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setFilterGenre#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setFilterView#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setFilterComment#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setFilterLength#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setFilterMyList#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setFilterDate#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#setFilterDate#1;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;field#dateFormat#0;class#NicoSearch#0" expanded="false" />
-            <element signature="docComment;method#search#0;class#NicoSearch#0" expanded="false" />
-            <element signature="method#getFilterList#0;class#SearchGroup#0;class#NicoSearch#0" expanded="false" />
-            <element signature="e#19911#19919#0" expanded="false" />
-            <element signature="method#getVideoList#0;class#SearchGroup#0;class#NicoSearch#0" expanded="false" />
-            <element signature="e#20095#20106#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/SearchActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-328">
-          <caret line="66" column="29" selection-start-line="66" selection-start-column="29" selection-end-line="66" selection-end-column="29" />
-          <folding>
-            <element signature="e#1542#1543#0" expanded="true" />
-            <element signature="e#1591#1592#0" expanded="true" />
-            <element signature="e#2408#2409#0" expanded="true" />
-            <element signature="e#2489#2490#0" expanded="true" />
-            <element signature="e#2566#2840#0" expanded="true" />
-            <element signature="e#2839#2840#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RankingActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="160" column="49" selection-start-line="160" selection-start-column="49" selection-end-line="160" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfoStorage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-526">
-          <caret line="137" column="31" selection-start-line="137" selection-start-column="31" selection-end-line="137" selection-end-column="31" />
-          <folding>
-            <element signature="docComment;field#UNKNOWN#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#title#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#id#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#date#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#description#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#thumbnailUrl#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#thumbnail#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#length#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#viewCounter#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#commentCounter#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#myListCounter#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#tags#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#threadID#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#messageServerUrl#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#flvUrl#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#contributorID#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#contributorName#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#contributorIconUrl#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;field#contributorIcon#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#setID#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getDate#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getTitle#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getID#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getDescription#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getThreadID#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getMessageServerUrl#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getFlvUrl#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getContributorName#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getContributorIconUrl#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getString#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getLength#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getViewCounter#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getMyListCounter#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getCommentCounter#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getContributorID#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getComment#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getThumbnail#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getContributorIcon#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;method#setTags#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#setTags#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;method#setTags#1;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#setTags#1;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;method#getTagsList#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getTagsList#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;method#getTags#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getTags#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;method#setThumbnailUrl#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#setThumbnailUrl#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;method#setThumbnailUrl#1;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#setThumbnailUrl#1;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;method#setThumbnailUrl#2;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#setThumbnailUrl#2;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getThumbnailUrl#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="docComment;method#getThumbnailUrl#1;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getThumbnailUrl#1;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="method#getThumbnailUrlArray#0;class#VideoInfoStorage#0" expanded="false" />
-            <element signature="e#16103#16104#0" expanded="true" />
-            <element signature="e#16131#16132#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_list.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_details.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4427">
-          <caret line="37" column="27" selection-start-line="20" selection-start-column="12" selection-end-line="37" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomDialog.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="68" column="66" selection-start-line="68" selection-start-column="12" selection-end-line="68" selection-end-column="66" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6116">
-          <caret line="276" column="0" selection-start-line="276" selection-start-column="0" selection-end-line="276" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#writeToParcel#0;class#VideoInfo#0" expanded="false" />
-            <element signature="method#VideoInfo#1;class#VideoInfo#0" expanded="false" />
-            <element signature="docComment;field#dateFormatBase#0;class#VideoInfo#0" expanded="false" />
-            <element signature="docComment;method#complete#0;class#VideoInfo#0" expanded="false" />
-            <element signature="docComment;method#getFlv#0;class#VideoInfo#0" expanded="false" />
-            <element signature="docComment;method#formatLength#0;class#VideoInfo#0" expanded="false" />
-            <element signature="docComment;method#parseDate#0;class#VideoInfo#0" expanded="false" />
-            <element signature="docComment;method#loadComment#1;class#VideoInfo#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="71" column="5" selection-start-line="71" selection-start-column="5" selection-end-line="71" selection-end-column="5" />
-          <folding>
-            <element signature="method#setMyListItemDescription#0;class#MyListVideoInfo#0" expanded="false" />
-            <element signature="docComment;method#parse#0;class#MyListVideoInfo#0" expanded="false" />
-            <element signature="docComment;method#parse#1;class#MyListVideoInfo#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListVideoGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="728">
-          <caret line="72" column="35" selection-start-line="72" selection-start-column="35" selection-end-line="72" selection-end-column="35" />
-          <folding>
-            <element signature="docComment;method#TempMyListVideoGroup#0;class#TempMyListVideoGroup#0" expanded="false" />
-            <element signature="method#createFromParcel#0;class#1924:2219" expanded="false" />
-            <element signature="docComment;method#getUserID#0;class#TempMyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getVideos#0;class#TempMyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#add#0;class#TempMyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#update#0;class#TempMyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#delete#0;class#TempMyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#delete#1;class#TempMyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#move#0;class#TempMyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#copy#0;class#TempMyListVideoGroup#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/TempMyListActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="33" column="64" selection-start-line="33" selection-start-column="64" selection-end-line="33" selection-end-column="64" />
+        <state relative-caret-position="39">
+          <caret line="317" column="156" selection-start-line="317" selection-start-column="156" selection-end-line="317" selection-end-column="156" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="728">
-          <caret line="61" column="76" selection-start-line="61" selection-start-column="76" selection-end-line="61" selection-end-column="76" />
-          <folding>
-            <element signature="docComment;method#getMyListVideoGroup#0;class#MyListGroup#0" expanded="false" />
-            <element signature="docComment;method#add#0;class#MyListGroup#0" expanded="false" />
-            <element signature="docComment;method#update#0;class#MyListGroup#0" expanded="false" />
-            <element signature="docComment;method#delete#0;class#MyListGroup#0" expanded="false" />
-            <element signature="docComment;method#sort#0;class#MyListGroup#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListEditor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1958">
-          <caret line="169" column="40" selection-start-line="169" selection-start-column="40" selection-end-line="169" selection-end-column="40" />
-          <folding>
-            <element signature="docComment;field#defaultVideoID#0;class#MyListEditor#0" expanded="false" />
-            <element signature="docComment;method#getToken#0;class#MyListEditor#0" expanded="false" />
-            <element signature="docComment;method#getThreadID#0;class#MyListEditor#0" expanded="false" />
-            <element signature="docComment;method#checkStatusCode#0;class#MyListEditor#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3498">
-          <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
-          <folding>
-            <element signature="docComment;field#myListID#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;field#userID#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;field#name#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;field#description#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;field#isPublic#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;field#defaultSort#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;field#createDate#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;field#updateDate#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getMyListID#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getUserID#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getName#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getDescription#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#isPublic#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getDefaultSort#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getCreateDate#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getUpdateDate#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getDetails#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getVideos#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#loadVideos#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#getMyListGroup#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#add#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#update#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#delete#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#delete#1;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#move#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#copy#0;class#MyListVideoGroup#0" expanded="false" />
-            <element signature="docComment;method#sort#0;class#MyListVideoGroup#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoAPIException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="363" column="4" selection-start-line="363" selection-start-column="4" selection-end-line="363" selection-end-column="4" />
-          <folding>
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_DATE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_DESCRIPTION#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_THREAD_ID#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_MESSAGE_SERVER#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_FLV_URL#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_CONTRIBUTOR_NAME#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_CONTRIBUTOR_ICON_URL#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_LENGTH#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_VIEW_COUNTER#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_COMMENT_COUNTER#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_MY_LIST_COUNTER#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_INITIALIZED_CONTRIBUTOR_ID#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;class#NotInitializedException#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_DRAWABLE_USER_ICON#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_DRAWABLE_THUMBNAIL_URL#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_DRAWABLE_THUMBNAIL#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_DRAWABLE_CONTRIBUTOR_ICON_URL#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_DRAWABLE_CONTRIBUTOR_ICON#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;class#DrawableFailureException#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_NO_PATTERN#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_GET_THUMBNAIL_INFO_DATE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_RANKING_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_RECOMMEND_NO_TARGET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_RANKING_TITLE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_COUNTER#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_LENGTH#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_PUB_DATE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_RANKING_MYLIST_DATE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_TOKEN#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_DELETE_COUNT#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_JSON#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_GROUP_JSON#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_DETAILS_JSON#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_RSS#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_MYLIST_MOVE_STATE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_JSON_META#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_XML_META#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_RECOMMEND_STATUS#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_RECOMMEND#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARSE_LOGIN_USER_ICON#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;class#ParseException#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_DELETED#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_GET_THUMBNAIL_INFO_COMMUNITY#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_RANKING_NO_PARAM#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_NOT_RANKING#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_VIDEO_NOT_FOUND#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_VIDEO_ALREADY_EXIST#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_INVALID_TOKEN#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_OLD_TOKEN#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_EDIT_PARAM#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_ID#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_VIDEO#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_DESCRIPTION#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_TARGET_MYLIST#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_NAME#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_TARGET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TARGET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_TIME#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST_CONTENT#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_LOGIN#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_PARAM_MYLIST_GROUP_ID#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;class#InvalidParamsException#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_NAME#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_PREMIUM#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COOKIE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST_GROUP#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_TEMP_MYLIST#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_MYLIST_EDIT#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_NOT_LOGIN_USER_ICON#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;class#NoLoginException#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_UNEXPECTED_GET_THUMBNAIL_INFO_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_UNEXPECTED_MYLIST_EDIT_ERROR_CODE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_UNEXPECTED_COMMENT_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RECOMMEND_STATUS_CODE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_UNEXPECTED_RANKING#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;class#APIUnexpectedException#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_RANKING_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NON_REUSABLE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_LOGIN_NAME#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_LOGIN_USER_ID#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_MYLIST_VIDEO#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_LOGIN_USER_ICON#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_COMMENT#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_THUMBNAIL#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_ILLEGAL_STATE_CONTRIBUTOR_ICON#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;class#IllegalStateException#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_ADD#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_TOKEN#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_UPDATE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DELETE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_MOVE#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_TEMP_MYLIST_GET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_GROUP_GET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_DETAILS_GET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_COPY#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_MYLIST_SORT#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST_KEY#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT_POST#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_SEARCH#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_RANKING#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;field#EXCEPTION_HTTP_COMMENT#0;class#NicoAPIException#0" expanded="false" />
-            <element signature="docComment;class#HttpException#0;class#NicoAPIException#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/video_mylist_cell.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="50" column="41" selection-start-line="50" selection-start-column="41" selection-end-line="50" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/CustomListActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6402">
-          <caret line="354" column="0" selection-start-line="354" selection-start-column="0" selection-end-line="354" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/MyListActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="164" column="0" selection-start-line="164" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/jp/ac/u_tokyo/kyoyo/seo/mylibraryfactory/RecommendActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ScopeChooserConfigurable.UI">
-        <settings>
-          <last-edited>library</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-          <order>
-            <scope name="library" />
-          </order>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>

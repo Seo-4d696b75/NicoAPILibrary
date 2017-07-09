@@ -34,13 +34,13 @@ public class TempMyListVideoGroup extends MyListEditor implements Parcelable{
      * <strong>ＵＩスレッド禁止</strong> HTTP通信を行うのでバックグランドで処理して下さい。<br>
      * Pass {@link LoginInfo} with login session.
      * <strong>No UI thread</strong>: HTTP communication is done
-     * @param info the login session
+     * @param cookieGroup the login session
+     * @param userID
      * @throws NicoAPIException if not login or fail to get temp myList
      */
-    protected TempMyListVideoGroup(LoginInfo info) throws NicoAPIException{
-        super.info = info;
-        userID = info.getUserID();
-        this.info = info;
+    protected TempMyListVideoGroup(CookieGroup cookieGroup, int userID) throws NicoAPIException{
+        super(cookieGroup);
+        this.userID = userID;
         loadVideos();
     }
 
@@ -54,7 +54,7 @@ public class TempMyListVideoGroup extends MyListEditor implements Parcelable{
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeParcelable(super.info, flags);
+        out.writeParcelable(cookieGroup, flags);
         out.writeInt(userID);
         out.writeList(videoInfoList);
     }
@@ -69,9 +69,10 @@ public class TempMyListVideoGroup extends MyListEditor implements Parcelable{
     };
 
     private TempMyListVideoGroup(Parcel in) {
-        super.info = in.readParcelable(LoginInfo.class.getClassLoader());
+        super((CookieGroup)in.readParcelable(CookieGroup.class.getClassLoader()));
         this.userID = in.readInt();
-        this.videoInfoList = in.readArrayList(ArrayList.class.getClassLoader());
+        this.videoInfoList = new ArrayList<>();
+        in.readList(this.videoInfoList,List.class.getClassLoader());
     }
 
     /**
@@ -86,10 +87,10 @@ public class TempMyListVideoGroup extends MyListEditor implements Parcelable{
      * とりあえずマイリスに登録されている動画を取得します
      * Gets videos belonging to this temp myList.<br>
      * 返り値の動画を格納した{@code List}オブジェクトに変更を加えても問題はありません。
-     * ただし、とりあえずマイリスに変更を加えても先に取得したこの{@code List}オブジェクトには反映されません。
+     * ただし、とりあえずマイリスに変更を加えても先に取得したこのリストおよび動画オブジェクトには反映されません。
      * 再取得してください。<br>
      * Making changes to returned {@code List} object does not matter.
-     * But, when any change is made to this temp myList, the change is not applied to the {@code List} object.
+     * But, when any change is made to this temp myList, the change is not applied to the List and its video objects.
      *
      * @return the videos in temp myList
      */
@@ -102,23 +103,23 @@ public class TempMyListVideoGroup extends MyListEditor implements Parcelable{
     }
 
     private void loadVideos() throws NicoAPIException{
-        String tempMyListUrl = "http://www.nicovideo.jp/api/deflist/list";
-        if ( tryGet(tempMyListUrl, info.getCookieStore()) ){
-            JSONObject root = checkStatusCode(super.response);
-            List<MyListVideoInfo> list = MyListVideoInfo.parse(root);
+        ResourceStore res = ResourceStore.getInstance();
+        HttpClient client = res.getHttpClient();
+        String tempMyListUrl = res.getURL(R.string.url_tempList_load);
+        if ( client.get(tempMyListUrl, cookieGroup) ){
+            JSONObject root = checkStatusCode(client.getResponse());
+            List<MyListVideoInfo> list = NicoMyListVideoInfo.parse(cookieGroup,root);
             synchronized ( this ) {
-                this.videoInfoList = replaceList(videoInfoList,list);
+                this.videoInfoList = list;
             }
         }else{
             throw new NicoAPIException.HttpException(
                     "HTTP failure > tempMyList",
                     NicoAPIException.EXCEPTION_HTTP_TEMP_MYLIST_GET,
-                    super.statusCode, tempMyListUrl, "GET"
+                    client.getStatusCode(), tempMyListUrl, "GET"
             );
         }
     }
-
-    private String urlRoot = "http://www.nicovideo.jp/api/deflist/";
 
     /**
      * とりあえずマイリストに動画を追加登録します　Adds new video to this temp myList.<br>
@@ -135,7 +136,10 @@ public class TempMyListVideoGroup extends MyListEditor implements Parcelable{
      * @throws NicoAPIException if fail to add the video
      */
     public void add(VideoInfo target, String description) throws NicoAPIException{
-        addVideo(target,description,null,urlRoot);
+        addVideo(
+                target,description,null,
+                ResourceStore.getInstance().getURL(R.string.url_tempList_add)
+        );
         loadVideos();
     }
 
@@ -152,7 +156,10 @@ public class TempMyListVideoGroup extends MyListEditor implements Parcelable{
      * @throws NicoAPIException if fail to update
      */
     public void update(MyListVideoInfo target, String description) throws NicoAPIException{
-        updateVideo(target,description,null,urlRoot);
+        updateVideo(
+                target,description,null,
+                ResourceStore.getInstance().getURL(R.string.url_tempList_update)
+        );
         loadVideos();
     }
 
@@ -175,7 +182,10 @@ public class TempMyListVideoGroup extends MyListEditor implements Parcelable{
      * @throws NicoAPIException
      */
     public void delete(MyListVideoInfo[] videoList) throws NicoAPIException{
-        deleteVideo(videoList,null,urlRoot);
+        deleteVideo(
+                videoList,null,
+                ResourceStore.getInstance().getURL(R.string.url_tempList_delete)
+        );
         loadVideos();
     }
 
@@ -195,7 +205,10 @@ public class TempMyListVideoGroup extends MyListEditor implements Parcelable{
      * @throws NicoAPIException if fail to move the targets
      */
     public void move(MyListVideoInfo[] videoList, MyListVideoGroup target) throws NicoAPIException{
-        moveVideo(videoList,null,target,urlRoot);
+        moveVideo(
+                videoList,null,target,
+                ResourceStore.getInstance().getURL(R.string.url_tempList_move)
+        );
         loadVideos();
         target.loadVideos();
     }
@@ -216,7 +229,10 @@ public class TempMyListVideoGroup extends MyListEditor implements Parcelable{
      * @throws NicoAPIException if fail to copy the targets
      */
     public void copy(MyListVideoInfo[] videoList, MyListVideoGroup target) throws NicoAPIException{
-        copyVideo(videoList,null,target,urlRoot);
+        copyVideo(
+                videoList,null,target,
+                ResourceStore.getInstance().getURL(R.string.url_tempList_copy)
+        );
         target.loadVideos();
     }
 

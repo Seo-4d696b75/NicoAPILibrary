@@ -411,6 +411,8 @@ public class NicoAPIException extends Exception {
      * fail to get myList object specified by the ID from myListGroup object.
      */
     public static final int EXCEPTION_PARAM_MYLIST_GROUP_ID = 324;
+
+    public static final int EXCEPTION_PARSE_THREADKEY = 325;
     /**
      * 不正な引数を渡すと投げられます<br>
      * Thrown if invalid argument is passed.
@@ -508,6 +510,8 @@ public class NicoAPIException extends Exception {
      * the format of ranking RSS in XML is unexpected.
      */
     public static final int EXCEPTION_UNEXPECTED_RANKING = 506;
+
+
     /**
      * APIからのレスポンスの各値が想定外の場合に投げます<br>
      * Thrown if status of API response is not expected.<br>
@@ -537,7 +541,6 @@ public class NicoAPIException extends Exception {
     public static final int EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_POST = 602;
     /**
      * tried to get comment while {@link VideoInfo#messageServerUrl} and {@link VideoInfo#threadID} are unknown.
-     * at {@link VideoInfo#getComment()}, {@link VideoInfo#getComment(int)}
      */
     public static final int EXCEPTION_ILLEGAL_STATE_COMMENT_NOT_READY = 603;
     /**
@@ -648,6 +651,11 @@ public class NicoAPIException extends Exception {
      * HTTP failure while getting comments.
      */
     public static final int EXCEPTION_HTTP_COMMENT = 716;
+    /**
+     * Http failure while getting recommended videos.
+     */
+    public static final int EXCEPTION_HTTP_RECOMMEND = 717;
+    public static final int EXCEPTION_HTTP_THREADKEY = 718;
     /**
      * HTTP通信に失敗
      */

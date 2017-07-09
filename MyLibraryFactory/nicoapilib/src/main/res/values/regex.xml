@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="regex_comment_pos">vpos=&quot;([0-9]+?)&quot;</string>
+    <string name="regex_comment_anonymity">anonymity=&quot;([0-9])&quot;</string>
+    <string name="regex_comment_content">&gt;(.+?)&lt;/chat&gt;</string>
+    <string name="regex_comment_date">date=&quot;([0-9]+?)&quot;</string>
+    <string name="regex_comment_command">mail="(.+?)"</string>
+    <string name="regex_comment_score">score=&quot;(-[0-9]+?)&quot;</string>
+    <string name="regex_comment_id">no=&quot;([0-9]+?)&quot;</string>
+    <string name="regex_comment_group_meta">&lt;thread resultcode=&quot;([0-9]+?)&quot; thread=&quot;([0-9]+?)&quot; server_time=&quot;([0-9]+?)&quot; last_res=&quot;([0-9]+?)&quot; ticket=&quot;(.+?)&quot;.+?/&gt;</string>
+    <string name="regex_comment_group_item">&lt;chat ((?!deleted).)+?&gt;.+?&lt;/chat&gt;</string>
+    <string name="regex_comment_postKey">postkey=(.+)</string>
+    <string name="regex_comment_post_response">&lt;packet&gt;&lt;chat_result thread=&quot;[0-9]+?&quot; status=&quot;([0-9])&quot; no=&quot;([0-9]+?)&quot;.*?/&gt;&lt;/packet&gt;</string>
+
+    <string name="regex_myList_token">NicoAPI.token = \'(.+?)\'</string>
+
+    <string name="regex_myPage_userName">&lt;span id=\"siteHeaderUserNickNameContainer\"&gt;(.+?)&lt;/span&gt;</string>
+    <string name="regex_seiga_userName">&lt;nickname&gt;(.+?)&lt;/nickname&gt;</string>
+    <string name="regex_myPage_user_profile">var User = \\{ id: ([0-9]+), age: ([0-9]+), isPremium: (false|true), isOver18: (false|true), isMan: (false|true)</string>
+    <string name="regex_myPage_user_icon">&lt;img src=\"(.+?)\" alt=</string>
+
+    <string name="regex_rss_item">&lt;item&gt;.+?&lt;/item&gt;</string>
+    <string name="regex_rss_meta">&lt;channel&gt;.+&lt;title&gt;マイリスト\\s?(\\S*?)‐ニコニコ動画&lt;/title&gt;.+&lt;description&gt;(.*?)&lt;/description&gt;.+?&lt;lastBuildDate&gt;</string>
+
+    <string name="regex_recommend_videoID">&lt;url&gt;.+/(.+?)&lt;/url&gt;</string>
+    <string name="regex_recommend_thumbnail">&lt;thumbnail&gt;(.+?)&lt;/thumbnail&gt;</string>
+    <string name="regex_recommend_title">&lt;title&gt;(.+?)&lt;/title&gt;</string>
+    <string name="regex_recommend_view_counter">&lt;view&gt;([0-9]+?)&lt;/view&gt;</string>
+    <string name="regex_recommend_comment_counter">&lt;comment&gt;([0-9]+?)&lt;/comment&gt;</string>
+    <string name="regex_recommend_myList_counter">&lt;mylist&gt;([0-9]+?)&lt;/mylist&gt;</string>
+    <string name="regex_recommend_duration">&lt;length&gt;([0-9]+?)&lt;/length&gt;</string>
+    <string name="regex_recommend_date">&lt;time&gt;([0-9]+?)&lt;/time&gt;</string>
+    <string name="regex_recommend_status">&lt;related_video status=\"(.+?)\"&gt;</string>
+    <string name="regex_recommend_error">&lt;error&gt;.+&lt;code&gt;(.+?)&lt;/code&gt;.+&lt;description&gt;(.+?)&lt;/description&gt;.+&lt;/error&gt;</string>
+    <string name="regex_recommend_body">&lt;video&gt;.+?&lt;/video&gt;</string>
+
+    <string name="regex_rss_title">&lt;title&gt;(.+?)&lt;/title&gt;</string>
+    <string name="regex_rss_id">&lt;link&gt;.+/(.+?)&lt;/link&gt;</string>
+    <string name="regex_rss_thumbnail">src=\"(.+?)\"</string>
+    <string name="regex_rss_description">&lt;p class=\"nico-description\"&gt;(.+?)&lt;/p&gt;</string>
+    <string name="regex_rss_duration">&lt;strong class=\"nico-info-length\"&gt;(.+?)&lt;/strong&gt;</string>
+    <string name="regex_rss_date">&lt;strong class=\"nico-info-date\"&gt;(.+?)&lt;/strong&gt;</string>
+    <string name="regex_rss_view_counter">&lt;strong class=\"nico-info-total-view\"&gt;(.+?)&lt;/strong&gt;</string>
+    <string name="regex_rss_myList_counter">&lt;strong class=\"nico-info-total-mylist\"&gt;(.+?)&lt;/strong&gt;</string>
+    <string name="regex_rss_comment_counter">&lt;strong class=\"nico-info-total-res\"&gt;(.+?)&lt;/strong&gt;</string>
+    <string name="regex_rss_title_ranking_order">.+：(.+)</string>
+    <string name="regex_rss_duration_format">([0-9]+):([0-9]+)</string>
+    <string name="regex_rss_ranking_meta">&lt;channel&gt;.+&lt;title&gt;.+?ランキング.+?‐ニコニコ動画&lt;/title&gt;.+?&lt;pubDate&gt;(.+?)&lt;/pubDate&gt;</string>
+
+    <string name="regex_thumb_result_status">&lt;nicovideo_thumb_response status=\"(.+?)\"&gt;</string>
+    <string name="regex_thumb_description">&lt;description&gt;(.+?)&lt;/description&gt;</string>
+    <string name="regex_thumb_thumbnail">&lt;thumbnail_url&gt;(.+?)&lt;/thumbnail_url&gt;</string>
+    <string name="regex_thumb_date">&lt;first_retrieve&gt;(.+?)&lt;/first_retrieve&gt;</string>
+    <string name="regex_thumb_view_counter">&lt;view_counter&gt;(.+?)&lt;/view_counter&gt;</string>
+    <string name="regex_thumb_comment_counter">&lt;comment_num&gt;(.+?)&lt;/comment_num&gt;</string>
+    <string name="regex_thumb_myList_counter">&lt;mylist_counter&gt;(.+?)&lt;/mylist_counter&gt;</string>
+    <string name="regex_thumb_tags">&lt;tags domain=\"jp\"&gt;(.+?)&lt;/tags&gt;</string>
+    <string name="regex_thumb_tag">&lt;tag.*&gt;(.+?)&lt;/tag&gt;</string>
+    <string name="regex_thumb_userID">&lt;(user|ch)_id&gt;([0-9]+?)&lt;/(user|ch)_id&gt;</string>
+    <string name="regex_thumb_userName">&lt;(user_nickname|ch_name)&gt;(.+?)&lt;/(user_nickname|ch_name)&gt;</string>
+    <string name="regex_thumb_userIconUrl">&lt;(user|ch)_icon_url&gt;(.+?)&lt;/(user|ch)_icon_url&gt;</string>
+    <string name="regex_thumb_error">&lt;error&gt;.*&lt;code&gt;(.+?)&lt;/code&gt;.*&lt;/error&gt;</string>
+
+    <string name="regex_flv_threadID">thread_id=([0-9]+?)&amp;</string>
+    <string name="regex_flv_video">url=(.*?)&amp;</string>
+    <string name="regex_flv_message_server">ms=(.+?)&amp;</string>
+    <string name="regex_flv_message_server_json_extract">(.+/api)/?</string>
+    <string name="regex_threadKey">threadkey=(.+?)&amp;force_184=([0-9])</string>
+    <string name="regex_flv_watch_html_encode">&amp;quot;flashvars&amp;quot;:\\{.+?&amp;quot;flvInfo&amp;quot;:&amp;quot;(.+?)&amp;quot;</string>
+
+</resources>

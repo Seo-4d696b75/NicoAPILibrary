@@ -22,7 +22,7 @@
 
 
 それぞれ
-・Windows + Advanced REST client (Chromeの拡張機能)
+・Windows + Advanced REST client
 	要求ヘッダは
 	accept: */*
 	accept-language: ja
@@ -223,7 +223,7 @@ Response;
 	  	</thumb>
 	</nicovideo_thumb_response>
 
-＊日時の表示形式はISO 8601の拡張形"yyyy-MM-dd'T'HH:mm:ss'+90:00'"
+＊日時の表示形式はISO 8601の拡張形"yyyy-MM-dd'T'HH:mm:ss'+09:00'"
 　タイムゾーンは固定の模様？　
 ＊動画の長さは次のフォーマット"mm:ss" 秒は0埋めで二桁、一時間超えも分で表現される
 ＊動画タグ要素のXMLタグ<tag>...</tag>に関して以下の属性を含む場合がある
@@ -418,7 +418,7 @@ Response;
 "status":"ok"
 } 
 ＊JSON形式だが2byte文字はUTF-16にエンコードされているので適宜でコードする
-＊日時の表現形式はUNIX時間(long)
+＊日時の表現形式はUNIX時間(long,単位は秒)
 ＊"update_time"は動画を追加しても変わらない
 ＊アイコンについて、以下の画像のようなアイコンで左から0,1,2....と指定する
 　　http://efcl.info/wp-content/uploads/2009/11/ss-2009-11-12-20-25-10.png
@@ -596,7 +596,7 @@ Response;
 		"deleted":"{削除されたか否か 1;true 0:false}",
 		"last_res_body":"{最新？コメント}",
 		"watch_id":"{動画ＩＤ}"
-		},
+	},
 	"watch":{0しか確認できない},
 	"create_time":{とりあえずマイリス登録日時},
 	"update_time":{とりあえずマイリスのコメントを最後に編集した日時}
@@ -606,7 +606,7 @@ Response;
 "status":"ok"
 }
 ＊JSON形式だが2byte文字はUTF-16にエンコードされているので適宜デコードする
-＊日時の表現形式はUNIX時間(long)
+＊日時の表現形式はUNIX時間(long,単位は秒)
 ＊"update_time"は動画を追加しても変わらない
 
 ログインしていない状態でアクセスして失敗すると以下のようなレスポンスを取得する
@@ -952,7 +952,7 @@ Response;
 	</video>
 	.............
 </related_video>
-＊日時の表現形式はUNIX時間(long)
+＊日時の表現形式はUNIX時間(long,単位は秒)
 
 不正な動画ＩＤなど指定して失敗すると
 <related_video status="fail">
@@ -1050,12 +1050,12 @@ Response;
 thread_id={動画スレッドＩＤ}
 &l={動画長さ秒}
 &url={動画の在処}
-&link={??}
-&ms=メッセージサーバURL}
+&link={違反動画報告ページ}
+&ms={メッセージサーバURL}
 &user_id={ユーザID}
 &is_premium={プレミアム会員か否か 0:false 1:true}
 &nickname={ユーザ名}
-&time={動画投稿日時}
+&time={通信投稿日時UnixTime(ms)}
 &done={true/false??}
 &feedrev={??}
 &ng_up={??}
@@ -1084,18 +1084,85 @@ http://d.hatena.ne.jp/MineAP/20100819/1282201560
 確認　on 2017.02.27
 
 
+
+なお、公式動画の場合はこのＡＰＩからは取得できないので、
+ログイン状態で得た視聴ページのＨＴＭＬを解すと、同様のflvInfoを取得できる。
+
+RequestURL:http://www.nicovideo.jp/watch/{動画ＩＤ,so*****}
+Nethod:GET
+Response:動画視聴ページのHTMLテキスト
+
+このHTMLの<body>タグの近くにある以下のような部分を抽出する。
+ただし、XMLエスケープやURLエンコード、Unicodeなどを適宜デコードする必要があり、
+デコード前は改行もなくやたら長い謎のコード列で分かりにくい。
+
+<body class="ja-jp area-JP no_setting_panel size_medium ">
+	<noscript>
+		<iframe 
+			src="https://www.googletagmanager.com/ns.html?id=GTM-KXT7G5G" 
+			height="0" 
+			width="0" 
+			style="display:none;visibility:hidden">
+		</iframe>
+	</noscript>
+	<div 
+		id="watchAPIDataContainer" 
+		style="display:none">
+			{
+			"flashvars":{
+				"community_id":"{??}",
+				"community_global_id":"{??}",
+				"watchAuthKey":"{??}",
+				"flvInfo":"
+					thread_id={動画スレッドＩＤ}&
+					l={動画長さ秒}&
+					url={動画の在処}&
+					ms={メッセージサーバURL}&
+					ms_sub={メッセージサーバURL}&
+					user_id={ユーザID}&
+					is_premium={プレミアム会員か否か 0:false 1:true}&
+					nickname={ユーザ名}&
+					time={通信投稿日時UnixTime(ms)}&
+					done={???}&
+					ng_rv={?}&
+					isSMSB={?}&
+					needs_key=1&
+					optional_thread_id={?}&
+					hms={??}&
+					hmsp={??}&
+					hmst=440&
+					hmstk={??}&
+					userkey={?????}",
+				"isDmc":0,
+				"isBackComment":null,
+				............................
+
+
 ＜コメントの取得＞
 
-メッセージサーバと通信するのでそのURLをgetFlvAPIで取得すること
+まず、コメントを取得したい対象動画のスレッドＩＤを用意する。
+また、メッセージサーバと通信するのでそのURLをgetFlvAPIで取得すること。
 このメッセージサーバURL取得にはログイン必須だが、
 サーバとの通信にログインは要らない。
 
+ただし、公式動画の場合はthreadkeyとforce_184のパラメータを与える必要があり、
+この二つの値は別途次のＡＰＩから取得する。できるだけ新しい値を利用する。
+RequestURL:http://flapi.nicovideo.jp/api/getthreadkey?thread={スレッドＩＤ}
+Method:GET
+Response:次の一行の文字列だけ
+	threadkey={5}&force_184={6}
+（ログイン不要の模様。非公式動画だとレスポンスは空）
+
 ①GETで直近をXMLで取得する
 
-RequestURL; {0}/thread?version=20090904&thread={1}&res_from=-{2}
+RequestURL; {0}/thread?version={4}&thread={1}&res_from=-{2}&scores={3}&threadkey={5}&force_184={6}
 		{0} : メッセージサーバURL
 		{1} : 対象の動画スレッドＩＤ
 		{2} : 最大レスポンス数（最大直近1000コメ）
+		{3} : ＮＧスコアを表示するか 1:true（2以上の値も1で解釈されている模様、省略可能）
+		{4} : 詳細不明のパラメータ　有効値は3つ20090904/20061206/20130701 （うち一つを渡す、省略不可）
+		{5} : threadkeyパラメータ（公式動画のみ、非公式動画の場合は省略）
+		{6} : force_184パラメータ（公式動画のみ、非公式動画の場合は省略）
 		こんな感じになる；http://msg.nicovideo.jp/10/api/thread?version=20090904&thread=1173108780&res_from=-100
 Method;		GET
 Response;
@@ -1117,8 +1184,9 @@ Response;
 		no="{コメントＩＤ(int)}" 
 		vpos="{投稿タイミング 1/100秒単位}" 
 		leaf="{??}" 
-		date="{コメント投稿日時}" 
+		date="{投稿日時}" 
 		premium="{プレミアム会員か否か 0:false 1:true}" 
+		score="{NGスコア}"
 		anonymity="{匿名コメントか 1:true 0:false}" 
 		user_id="{投稿者のユーザＩＤ}" 
 		mail="{コマンド}">
@@ -1127,7 +1195,7 @@ Response;
 	......
 </packet>
 ＊匿名性は投稿デフォルト値がtrueなので基本trueでユーザ名は暗号化されている
-＊日時の表現形式はUNIX時間(long)
+＊日時の表現形式はUNIX時間(long,単位は秒)
 ＊コマンドに関して
 	以下のコマンド値が半角スペース区切りで得られる
 	(1)コメントの匿名化
@@ -1160,6 +1228,20 @@ Response;
 		＊省略時はmedium扱い
 	以上が全会員に開かれた基本コマンド
 	他にもプレミアム会員限定のコマンドが存在するが割愛
+
+
+＊ＮＧスコアに関して
+	値0が最も健全で他ユーザからNGされると値が減少する
+	この値が大きいほどＮＧされていないコメントであることを意味する
+	ただし、投稿時に投稿者のＮＧスコアで始まるらしい。
+	socres=1で要求してもこの属性が無いコメントタグも存在するが、詳細は不明。(score="0"と想像)
+	値とＮＧ共有レベルの関係はおおよそ、
+	
+	レベル			範囲				　ＮＧレベル無・弱・中・強
+	・微NG～NG無し	-1000<score<=0					〇	〇	〇	〇
+	・少NG			-4800<score<=-1000				〇	〇	〇	×
+	・中NG			-10000<scoee<=-4800				〇	〇	×	×
+	・多NG			score<=-10000					〇	×	×	×
 	
 ＊削除されたコメントも残っているから注意
 <chat 
@@ -1175,21 +1257,26 @@ Response;
 失敗時には以下のXMLが返る
 <?xml version="1.0" encoding="UTF-8"?>
 <packet>
-	<thread resultcode="{5}" thread="{動画スレッドＩＤ}" server_time="{メッセージサーバとの通信日時}"/>
+	<thread resultcode="{7}" thread="{動画スレッドＩＤ}" server_time="{メッセージサーバとの通信日時}"/>
 </packet>
-{5} : ステータスコード
+{7} : ステータスコード
 0 : 成功
 1 : 動画スレッドＩＤが不正値、または欠損している
 3 : version値が不正、または欠損している
+8,9 : 公式動画の場合で得られることもある、詳細不明
 
 ②GETで直近をJSONで取得する
 
 JSONフォーマットでもGETできる
 
-RequestURL; {0}/api.json/thread?version=20090904&thread={1}&res_from=-{2}
+RequestURL; {0}/api.json/thread?version={4}&thread={1}&res_from=-{2}&scores={3}&threadkey={5}&force_184={6}
 		{0} : メッセージサーバURL
 		{1} : 対象の動画スレッドＩＤ
-		{2} : 最大レスポンス数（最大直近1000コメ、不正な数値だと1000?）
+		{2} : 最大レスポンス数（最大直近1000コメ）
+		{3} : ＮＧスコアを表示するか 1:true（2以上の値も1で解釈されている模様、省略可能）
+		{4} : 詳細不明のパラメータ　有効値は3つ20090904/20061206/20130701 （うち一つを渡す、省略不可）
+		{5} : threadkeyパラメータ（公式動画のみ、非公式動画の場合は省略）
+		{6} : force_184パラメータ（公式動画のみ、非公式動画の場合は省略）
 Method;		GET
 Response;
 [
@@ -1216,6 +1303,7 @@ Response;
 			"leaf": {?}, 
 			"date": {コメント投稿日時}, 
 			"date_usec": {??}, 
+			"score": {NGスコア},
 			"anonymity": {匿名コメントか 1:true 0:false}, 
 			"user_id": "{投稿者のユーザＩＤ}", 
 			"mail": "{コマンド}", 
@@ -1231,32 +1319,18 @@ Response;
 RequestURL; {0}
 Method;		POST
 		Post対象；
-		<thread res_from="-{2}" version="20061206" scores="{3}" thread="{1}" />
+		<thread res_from="-{2}" version="{4}" scores="{3}" thread="{1}" threadkey="{5}" force_184="{6}" />
 		
 		{0} : メッセージサーバURL
 		{1} : 対象の動画スレッドＩＤ
 		{2} : 最大レスポンス数（最大直近1000コメ）
-		{3} : ＮＧスコアを表示するか 1:true（2以上の値も1で解釈されている模様）
-		{4} : 動画長さ（分単位で分未満切り上げ）
+		{3} : ＮＧスコアを表示するか 1:true（2以上の値も1で解釈されている模様、省略可能）
+		{4} : 詳細不明のパラメータ　有効値は3つ20090904/20061206/20130701 （うち一つを渡す、省略不可）
+		{5} : threadkeyパラメータ（公式動画のみ、非公式動画の場合は省略）
+		{6} : force_184パラメータ（公式動画のみ、非公式動画の場合は省略）
 		
 Response;
 基本的に①と同様のフォーマット
-ただし、{3}でＮＧスコア取得を設定すると
-		score="{NGスコア}" 
-の属性が各コメントの<chat>タグに加わる。
-
-＊ＮＧスコアに関して
-	値0が最も健全で他ユーザからNGされると値が減少する
-	この値が大きいほどＮＧされていないコメントであることを意味する
-	ただし、投稿時に投稿者のＮＧスコアで始まるらしい。
-	値とＮＧ共有レベルの関係はおおよそ、
-	
-	レベル			範囲				　ＮＧレベル無・弱・中・強
-	・微NG～NG無し	-1000<score<=0					〇	〇	〇	〇
-	・少NG			-4800<score<=-1000				〇	〇	〇	×
-	・中NG			-10000<scoee<=-4800				〇	〇	×	×
-	・多NG			score<=-10000					〇	×	×	×
-
 
 
 ④POSTでコメント取得
@@ -1271,28 +1345,47 @@ RequestURL; {0}
 Method;		POST
 		Post対象；
 		<packet>
-			<thread thread="{1}" version="20090904"  />
-			<thread_leaves scores="{3}" thread="{1}">0-{4}:100,1000</thread_leaves>
+			<thread thread="{1}" version="{4}"  />
+			<thread_leaves scores="{3}" thread="{1}" threadkey="{5}" force_184="{6}">0-{8}:100,1000</thread_leaves>
 		</packet>
 		
 		{0} : メッセージサーバURL
 		{1} : 対象の動画スレッドＩＤ
-		{3} : ＮＧスコアを表示するか 1:true
-		{4} : 動画長さ（分単位で分未満切り上げ）
+		{3} : ＮＧスコアを表示するか 1:true（2以上の値も1で解釈されている模様、省略可能）
+		{4} : 詳細不明のパラメータ　有効値は3つ20090904/20061206/20130701 （うち一つを渡す、省略不可）
+		{5} : threadkeyパラメータ（公式動画のみ、非公式動画の場合は省略）
+		{6} : force_184パラメータ（公式動画のみ、非公式動画の場合は省略）
+		{8} : 動画長さ（分単位で分未満切り上げ、誤った値でも<thread_leaves>タグの値自体を省略してもコメントはとりあえず取得できる）
 		
 Response;
 ③と同じ
 
-
-versionの値に関しては詳細は不明だがコメント取得の確認が取れたのは
-20090904、20061206
+＊注意
+このＡＰＩの場合のみresultcodeの属性をもつ<thread/>タグを複数含むレスポンスが得られるケースが発見された。
+さらに、公式動画の場合のみversionパラメータを省略または不正な値を渡しても、
+resultCode="3"と同時にresultCode="0"が得られて、コメントも正しく取得できると判明。
+もちろん、versionパラメータを20090904/20061206/20130701から選んで正しく渡してもコメントが得られるが、
+この場合も複数のresultCodeがレスポンスに紛れている場合があり、取得成功を表すresultCode="0"が必ずしも初めに現れるとは限らないので、パースする際には注意が必要。
+(例)
+<packet>
+	<thread thread="1484126967" version="20061206" />
+	<thread_leaves thread="1484126967"  threadkey="{適当なスレッドKey}" force_184="1" >0-24:100,1000</thread_leaves>
+</packet>をPOSTすると、
+<?xml version="1.0" encoding="UTF-8" ?>
+<packet>
+	<thread resultcode="8" thread="1484126967" server_time="1499422572" />
+	<thread resultcode="0" thread="1484126967" server_time="1499422572" last_res="1370763" ticket="0x6fce3b42" revision="575" click_revision="358" />
+	......
+</packet>
 
 参考；
 https://blog.hayu.io/web/nicovideo-comment-api
 http://blog.livedoor.jp/mgpn/archives/51886270.html
 http://dic.nicovideo.jp/a/ng%E5%85%B1%E6%9C%89%E6%A9%9F%E8%83%BD
 http://dic.nicovideo.jp/a/%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88
-確認　on 2017.02.27
+http://qiita.com/tor4kichi/items/2f19f533763fe6e3e479
+http://fireflower.hatenablog.com/entry/2016/11/16/130749
+確認　on 2017.02.27 2017.07.03
 
 
 
@@ -1302,7 +1395,7 @@ http://dic.nicovideo.jp/a/%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88
 
 RequestURL; 
 http://flapi.nicovideo.jp/api/getpostkey/?version=1&yugi=&device=1&block_no={0}&thread={1}&version_sub=2
-	{0} : 最新のコメント数/100　（取得時のメタ内のlast_res）
+	{0} : 最新のコメント数/100　（取得時のメタ内のlast_res、小数点以下切り捨て）
 	{1} : 対象動画ＩＤ
 Method;		GET
 Response;
@@ -1354,3 +1447,16 @@ status(int): 投稿ステータス
 参考：
 http://qiita.com/tor4kichi/items/be55e177f0e4a0753f5d
 http://blog.livedoor.jp/mgpn/archives/51968685.html
+
+
+
+＜動画のダウンロード＞
+
+まず、いわゆる普通の動画視聴ページにアクセスして以下のCookieを取得する
+
+RequestURL; http://www.nicovideo.jp/watch/{動画ＩＤ}
+Method;		GET
+Response;
+nicohistoryという名前のCookieが追加されている
+
+この値を付加してgetFlvで得た動画の在処にアクセスして完了

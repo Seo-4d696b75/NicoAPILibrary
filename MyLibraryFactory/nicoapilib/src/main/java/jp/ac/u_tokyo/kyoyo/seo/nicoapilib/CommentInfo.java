@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ import java.util.regex.Pattern;
  *
  *
  * note<br>
- * JSONArray passed to {@link #parse(JSONArray)} is supposed to gotten from message server like this;<br>
+ * JSONArray passed to {@link CommentGroup} is supposed to gotten from message server like this;<br>
  * http://msg.nicovideo.jp/10/api.json/thread?version=20090904&thread={0}&res_from=-{1}<br>
  * query should be like that (details is unknown)<br>
  *      params of query;<br>
@@ -46,37 +47,7 @@ import java.util.regex.Pattern;
  * </pre><br>
  *     {0} : thread ID,  {2} : video length in minutes ( rounded up)<br><br>
  *
- * expected response format;<br>
- * <pre>
- * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
- * &lt;packet&gt;
- *     &lt;thread
- *          resultcode="0"
- *          thread="1173108780"
- *          server_time="1487684957"
- *          last_res="4464366"
- *          ticket="0x087dabd6"
- *          revision="12"
- *          click_revision="34166"/&gt;
- *     &lt;leaf
- *          thread="1173108780"
- *          count="1520974"/&gt;
- *     ...............
- *     &lt;chat
- *          thread="1173108780"
- *          no="4118020"
- *          vpos="36114"
- *          leaf="6"
- *          date="1361103390"
- *          score="-2200"
- *          premium="1"
- *          anonymity="1"
- *          user_id="Yg_6QWiiS_T2mq3WJuzUcp41MvQ"
- *          mail="184"&gt;
- *              混ぜるな危険ｗｗｗ
- *          &lt;/chat&gt;
- *  .......
- * &lt;/packet&gt;
+ *
  * </pre><br><br>
  * references;<br>
  * how to get comment form Nico : <a href=https://blog.hayu.io/web/nicovideo-comment-api>[NANOWAY]ニコニコ動画のコメント解析</a><br>
@@ -93,17 +64,13 @@ public class CommentInfo implements Parcelable{
     private long start;
     private String[] mail;   //list of comment commands, not mail address
     private String content;  //comment
-    private String date;
+    private Date date;
     private boolean isAnonymous = true;   //1:normal
     private int ngLevel;
     private int commentNo;
 
     private boolean initialized = false;
 
-    public float x = 0f;
-    public float y = 0f;
-    public float length = 0f;
-    public float speed = 0f;
     private int color = 0;
     private float size = -1f;
     private int position = -1;
@@ -126,11 +93,9 @@ public class CommentInfo implements Parcelable{
     }
     /**
      * コメントの投稿日時を取得する Gets posted-date of the comment.<br>
-     * 日時の形式は{@link VideoInfo#dateFormatBase}に従います。<br>
-     * The Date format follows {@link VideoInfo#dateFormatBase}.
-     * @return
+     * @return the posted-date, not {@code null}
      */
-    public String getDate(){
+    public Date getDate(){
         return date;
     }
     /**
@@ -177,48 +142,30 @@ public class CommentInfo implements Parcelable{
     }
     /**
      * コメントの大きさを取得する　Gets the comment size.
-     * @return
+     * @return the comment size
      */
     public float getSize(){
         return size;
     }
-
+    
     public static final int POSITION_UP = 0;
     public static final int POSITION_MIDDLE = 1;
     public static final int POSITION_BOTTOM = 2;
 
-    private static final float SIZE_MEDIUM = 0.9f;
-    private static final float SIZE_SMALL = 0.8f;
-    private static final float SIZE_BIG = 1f;
+    public static final float SIZE_MEDIUM = 0.9f;
+    public static final float SIZE_SMALL = 0.8f;
+    public static final float SIZE_BIG = 1f;
 
-    private final static Map<String,Integer> colorMap = new HashMap<String,Integer>(){
-        {
-            put("white", 0xffffffff);
-            put("red",0xffff0000);
-            put("pink",0xffff8080);
-            put("orange",0xffffcc00);
-            put("yellow",0xffffff00);
-            put("green",0xff00ff00);
-            put("cyan",0xff00ffff);
-            put("blue",0xff0000ff);
-            put("purple",0xffc000ff);
-            put("black",0xff000000);
-        }
-    };
-    private final static Map<String,Integer> positionMap= new HashMap<String,Integer>(){
-        {
-            put("naka",POSITION_MIDDLE);
-            put("ue",POSITION_UP);
-            put("shita",POSITION_BOTTOM);
-        }
-    };
-    private final static Map<String,Float> sizeMap = new HashMap<String,Float>() {
-        {
-            put("medium", SIZE_MEDIUM);
-            put("small", SIZE_SMALL);
-            put("big", SIZE_BIG);
-        }
-    };
+    public static final String COLOR_WHITE     = "white";
+    public static final String COLOR_RED       = "red";
+    public static final String COLOR_PINK      = "pink";
+    public static final String COLOR_ORANGE    = "orange";
+    public static final String COLOR_YELLOW    = "yellow";
+    public static final String COLOR_GREEN     = "green";
+    public static final String COLOR_CYAN      = "cyan";
+    public static final String COLOR_BLUE      = "blue";
+    public static final String COLOR_PURPLE    = "purple";
+    public static final String COLOR_BLACK     = "black";
 
     private CommentInfo (JSONObject item) throws NicoAPIException{
         initialize(item);
@@ -230,32 +177,27 @@ public class CommentInfo implements Parcelable{
     //set command of comment from value of "mail"
     private void setCommands(){
         //set default value
-        color = colorMap.get("white");
+        ResourceStore resourceStore = ResourceStore.getInstance();
+        color = resourceStore.getColor(COLOR_WHITE);
         position = POSITION_MIDDLE;
         size = SIZE_MEDIUM;
         if ( mail != null ) {
             for (String key : mail) {
-                if ( colorMap.containsKey(key)) {
-                    color = colorMap.get(key);
-                } else if ( positionMap.containsKey(key)) {
-                    position = positionMap.get(key);
-                } else if ( sizeMap.containsKey(key)) {
-                    size = sizeMap.get(key);
+                if ( resourceStore.containColor(key)) {
+                    color = resourceStore.getColor(key);
+                } else if ( resourceStore.containPosition(key)) {
+                    position = resourceStore.getPosition(key);
+                } else if ( resourceStore.containSize(key)) {
+                    size = resourceStore.getSize(key);
                 }
             }
         }
     }
 
-    private final Map<Integer,Integer> ngThresholdMap = new LinkedHashMap<Integer, Integer>(){
-        {
-            put(0,-1000);
-            put(1,-4800);
-            put(2,-10000);
-        }
-    };
     private void setNGLevel(int ng){
-        for (int level : ngThresholdMap.keySet() ){
-            if ( ng > ngThresholdMap.get(level) ){
+        ResourceStore res = ResourceStore.getInstance();
+        for (int level = 0; res.containNGLevel(level) ; level++ ){
+            if ( ng > res.getNGThreshold(level) ){
                 ngLevel = level;
                 return;
             }else{
@@ -263,16 +205,16 @@ public class CommentInfo implements Parcelable{
             }
         }
     }
-
-    private Pattern startPattern = Pattern.compile("vpos=\"([0-9]+?)\"");
-    private Pattern anonymityPattern = Pattern.compile("anonymity=\"([0-9])\"");
-    private Pattern datePattern = Pattern.compile("date=\"([0-9]+?)\"");
-    private Pattern commandPattern = Pattern.compile("mail=\"(.+?)\"");
-    private Pattern contentPattern = Pattern.compile(">(.+?)</chat>");
-    private Pattern scorePattern = Pattern.compile("score=\"(-[0-9]+?)\"");
-    private Pattern noPattern = Pattern.compile("no=\"([0-9]+?)\"");
+    
 
     private void initialize (String xml) throws NicoAPIException{
+        Pattern startPattern = ResourceStore.getInstance().getPattern(R.string.regex_comment_pos);
+        Pattern anonymityPattern = ResourceStore.getInstance().getPattern(R.string.regex_comment_anonymity);
+        Pattern datePattern = ResourceStore.getInstance().getPattern(R.string.regex_comment_date);
+        Pattern commandPattern = ResourceStore.getInstance().getPattern(R.string.regex_comment_command);
+        Pattern contentPattern = ResourceStore.getInstance().getPattern(R.string.regex_comment_content);
+        Pattern scorePattern = ResourceStore.getInstance().getPattern(R.string.regex_comment_score);
+        Pattern noPattern = ResourceStore.getInstance().getPattern(R.string.regex_comment_id);
         Matcher startMatcher,dateMatcher,contentMatcher,noMatcher;
         startMatcher = startPattern.matcher(xml);
         dateMatcher = datePattern.matcher(xml);
@@ -280,7 +222,7 @@ public class CommentInfo implements Parcelable{
         noMatcher = noPattern.matcher(xml);
         if ( startMatcher.find() && dateMatcher.find() && contentMatcher.find() && noMatcher.find() ){
             start = Long.parseLong(startMatcher.group(1)) * 10;
-            date = convertDate(Long.parseLong(dateMatcher.group(1)));
+            date = new Date(1000*Long.parseLong(dateMatcher.group(1)));
             content = contentMatcher.group(1);
             commentNo = Integer.parseInt( noMatcher.group(1) );
             Matcher matcher = anonymityPattern.matcher(xml);
@@ -312,19 +254,20 @@ public class CommentInfo implements Parcelable{
         try {
             //value of "vpos" seems to be time when comment appear,
             // but unit is decimal sec, not milli sec
-            int vpos = item.getInt("vpos");
+            ResourceStore res = ResourceStore.getInstance();
+            int vpos = item.getInt(res.getString(R.string.key_comment_position));
             start = (long) vpos * 10;
-            if (item.has("anonymity")) {
-                if ( item.getInt("anonymity") == 1 ){
+            if (item.has(res.getString(R.string.key_comment_anonymity))) {
+                if ( item.getInt(res.getString(R.string.key_comment_anonymity)) == 1 ){
                     isAnonymous = false;
                 }
             }
-            date = convertDate(item.getLong("date"));
-            if (item.has("mail")) {
-                mail = item.getString("mail").split("\\s");
+            date = new Date(1000*item.getLong(res.getString(R.string.key_comment_date)));
+            if (item.has(res.getString(R.string.key_comment_command))) {
+                mail = item.getString(res.getString(R.string.key_comment_command)).split("\\s");
             }
-            content = item.getString("content");
-            commentNo = item.getInt("no");
+            content = item.getString(res.getString(R.string.key_comment_content));
+            commentNo = item.getInt(res.getString(R.string.key_comment_id));
             setCommands();
         }catch (JSONException e){
             throw new NicoAPIException.ParseException(
@@ -334,10 +277,8 @@ public class CommentInfo implements Parcelable{
         }
     }
 
-    protected static String convertDate (long time){
-        return VideoInfo.dateFormatBase.format(new Date(time * 1000));
-    }
 
+    /*
     /**
      * 実際にCanvasに描写する際、必要なフィールドを初期化する<br>
      * Initialize fields needed for being shown on Canvas.
@@ -345,7 +286,7 @@ public class CommentInfo implements Parcelable{
      * @param paint cannot be {@code null}
      * @param span  time in which the comment flows from one side to the other in seconds
      * @param offset offset in the direction of y in pixels
-     */
+
     public void initialize(float width, Paint paint, float span, float offset){
         if ( paint == null ){
             return;
@@ -364,7 +305,7 @@ public class CommentInfo implements Parcelable{
                     break;
             }
         }
-    }
+    }*/
 
     /*implementation of parcelable*/
 
@@ -374,15 +315,11 @@ public class CommentInfo implements Parcelable{
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(content);
-        out.writeString(date);
+        out.writeSerializable(date);
         out.writeBooleanArray(new boolean[]{isAnonymous});
         out.writeInt(ngLevel);
         out.writeInt(commentNo);
         out.writeBooleanArray(new boolean[]{initialized});
-        out.writeFloat(x);
-        out.writeFloat(y);
-        out.writeFloat(length);
-        out.writeFloat(speed);
         out.writeInt(color);
         out.writeFloat(size);
         out.writeInt(position);
@@ -399,7 +336,7 @@ public class CommentInfo implements Parcelable{
 
     private CommentInfo(Parcel in) {
         this.content = in.readString();
-        this.date = in.readString();
+        this.date = (Date)in.readSerializable();
         boolean[] val = new boolean[1];
         in.readBooleanArray(val);
         this.isAnonymous = val[0];
@@ -407,33 +344,33 @@ public class CommentInfo implements Parcelable{
         this.commentNo = in.readInt();
         in.readBooleanArray(val);
         this.initialized = val[0];
-        this.x = in.readFloat();
-        this.y = in.readFloat();
-        this.length = in.readFloat();
-        this.speed = in.readFloat();
         this.color = in.readInt();
         this.size = in.readFloat();
         this.position = in.readInt();
     }
 
+    /**
+     * 取得したコメントを保持・管理するクラスです
+     */
     public static class CommentGroup implements Parcelable {
-        protected List<CommentInfo> commentList;
-        protected int threadID;
-        protected String ticket;
-        protected int lastComment;
-        protected String date;
+        private List<CommentInfo> commentList;
+        private int threadID;
+        private String ticket;
+        private int lastComment;
+        private Date date;
         protected CommentGroup (String xml) throws NicoAPIException{
-            Pattern metaPattern = Pattern.compile("<thread resultcode=\"([0-9]+?)\" thread=\"([0-9]+?)\" server_time=\"([0-9]+?)\" last_res=\"([0-9]+?)\" ticket=\"(.+?)\".+?/>");
+            ResourceStore res = ResourceStore.getInstance();
+            Pattern metaPattern = res.getPattern(R.string.regex_comment_group_meta);
             Matcher matcher = metaPattern.matcher(xml);
             if ( matcher.find() ){
                 String resultCode = matcher.group(1);
-                this.date = CommentInfo.convertDate(Long.parseLong(matcher.group(2)));
-                this.threadID = Integer.parseInt(matcher.group(3));
+                this.date = new Date(1000*Long.parseLong(matcher.group(3)));
+                this.threadID = Integer.parseInt(matcher.group(2));
                 this.lastComment = Integer.parseInt( matcher.group(4) );
                 this.ticket = matcher.group(5);
-                if ( resultCode.equals("0") ){
+                if ( resultCode.equals(res.getString(R.string.value_comment_group_meta_result_success)) ){
                     this.commentList = new ArrayList<CommentInfo>();
-                    Pattern itemPattern = Pattern.compile("<chat ((?!deleted).)+?>.+?</chat>");
+                    Pattern itemPattern = res.getPattern(R.string.regex_comment_group_item);
                     matcher = itemPattern.matcher(xml);
                     while (matcher.find()) {
                         CommentInfo info = new CommentInfo(matcher.group());
@@ -454,21 +391,22 @@ public class CommentInfo implements Parcelable{
             }
         }
         protected CommentGroup (JSONArray root) throws NicoAPIException{
+            ResourceStore res = ResourceStore.getInstance();
             try{
                 JSONObject meta = root.getJSONObject(0);
-                meta = meta.getJSONObject("thread");
-                int resultCode = meta.getInt("resultcode");
-                this.threadID = meta.getInt("thread");
-                this.date = CommentInfo.convertDate(meta.getLong("server_time"));
-                this.lastComment = meta.getInt("last_res");
-                this.ticket = meta.getString("ticket");
-                if (resultCode == 0) {
+                meta = meta.getJSONObject(res.getString(R.string.key_comment_meta));
+                int resultCode = meta.getInt(res.getString(R.string.key_comment_status));
+                this.threadID = meta.getInt(res.getString(R.string.key_comment_threadID));
+                this.date = new Date(1000*meta.getLong(res.getString(R.string.key_comment_date)));
+                this.lastComment = meta.getInt(res.getString(R.string.key_comment_last_comment));
+                this.ticket = meta.getString(res.getString(R.string.key_comment_ticket));
+                if (resultCode == Integer.parseInt(res.getString(R.string.value_comment_group_meta_result_success))) {
                     this.commentList = new ArrayList<CommentInfo>();
                     for (int i = 1; i < root.length(); i++) {
                         JSONObject item = root.getJSONObject(i);
-                        if (item.has("chat")) {
-                            item = item.getJSONObject("chat");
-                            if (!item.has("vpos") || !item.has("content")) {
+                        if (item.has(res.getString(R.string.key_comment_group_item))) {
+                            item = item.getJSONObject(res.getString(R.string.key_comment_group_item));
+                            if (!item.has(res.getString(R.string.key_comment_position)) || !item.has(res.getString(R.string.key_comment_content))) {
                                 continue;
                             }
                             commentList.add(new CommentInfo(item));
@@ -488,21 +426,45 @@ public class CommentInfo implements Parcelable{
                 );
             }
         }
+
+        /**
+         * コメントを取得します Gets comments.<br>
+         * コメントを格納した{@code List}オブジェクトを変更しても問題ありません。
+         * Making change to {@code List} object does not matter.
+         * @return {@code List} of comments
+         */
         public List<CommentInfo> getComments(){
             List<CommentInfo> list = new ArrayList<CommentInfo>();
             list.addAll(commentList);
             return list;
         }
+        /**
+         * コメント動画のスレッドＩＤを取得します
+         * Gets threadID, from which the comments come.
+         * @return the threadID, which stands for the target video
+         */
         public int getThreadID(){
             return threadID;
         }
+        /**
+         * チケット値を取得します Gets ticket value.
+         * @return the ticket value, not {@code null}
+         */
         public String getTicket(){
             return ticket;
         }
+        /**
+         * コメント総数を取得します Gets total number of comments.
+         * @return the total number
+         */
         public int getLastComment(){
             return lastComment;
         }
-        public String getDate(){
+        /**
+         * メッセージサーバとの通信時間を取得する Gets time when this communicates with the message server.
+         * @return the communicate-time, not {@code null}
+         */
+        public Date getDate(){
             return date;
         }
 
@@ -561,7 +523,7 @@ public class CommentInfo implements Parcelable{
             out.writeInt(threadID);
             out.writeString(ticket);
             out.writeInt(lastComment);
-            out.writeString(date);
+            out.writeSerializable(date);
         }
         public static final Parcelable.Creator<CommentGroup> CREATOR = new Parcelable.Creator<CommentGroup>() {
             public CommentGroup createFromParcel(Parcel in) {
@@ -572,11 +534,12 @@ public class CommentInfo implements Parcelable{
             }
         };
         private CommentGroup(Parcel in) {
-            this.commentList = in.readArrayList(ArrayList.class.getClassLoader());
+            this.commentList = new ArrayList<>();
+            in.readList(this.commentList,List.class.getClassLoader());
             this.threadID = in.readInt();
             this.ticket = in.readString();
             this.lastComment = in.readInt();
-            this.date = in.readString();
+            this.date = (Date)in.readSerializable();
         }
     }
 

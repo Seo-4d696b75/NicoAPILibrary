@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +19,7 @@ import java.util.regex.Pattern;
  * コメントの投稿にはログインが必須です。
  * まず対象の動画とログインした状態の{@link NicoClient}をコンストラクタに渡してインスタンスを得ます。
  * そしたら各種メソッドを呼んでコメントの情報を加えます。設定できる情報は<br>
- * コメント内容・コメントの(1/100秒単位)・コメント位置・コメント大きさ・コメントの色(プレミア会員限定色非対応)<br>
+ * コメント内容・コメントのタイミング(1/100秒単位)・コメント位置・コメント大きさ・コメントの色(プレミア会員限定色非対応)<br>
  * です。他のプレミア会員限定コマンドは対応していません。
  * これらのうちコメント内容と時間を最低限設定してから{@link #post()}を呼ぶと実際に投稿します。
  * また動画の設定によってはコメントの投稿を受け付けない場合があります。<br>
@@ -36,20 +37,21 @@ import java.util.regex.Pattern;
 
 public class NicoCommentPost implements Parcelable{
 
-    private NicoClient client;
-    private VideoInfo targetVideo;
+    private final LoginInfo loginInfo;
+    private final String deviceName;
+    private final VideoInfo targetVideo;
     private int startTime = -1;
     private String comment = "";
     private boolean isAnonymous = true;
-    private int color = COLOR_WHITE;
-    private int position = POSITION_MIDDLE;
-    private int size = SIZE_MEDIUM;
+    private String color = CommentInfo.COLOR_WHITE;
+    private int position = CommentInfo.POSITION_MIDDLE;
+    private float size = CommentInfo.SIZE_MEDIUM;
     private int commentNo = 0;
 
     private boolean isPost = false;
 
-    private Object paramSettingLock = new Object();
-    private Object postLock = new Object();
+    private final Object paramSettingLock = new Object();
+    private final Object postLock = new Object();
 
     /**
      * コメント投稿に必要なインスタンスを得ます<br>
@@ -59,10 +61,10 @@ public class NicoCommentPost implements Parcelable{
      * Pass the target video and {@link NicoClient} with login session to this constructor.
      * If not login, an exception is thrown.
      * @param targetVideo the video to which a new comment is posted, cannot be {@code null}
-     * @param client the information of the user, cannot be {@code null}
+     * @param loginInfo the information of the user, cannot be {@code null}
      * @throws NicoAPIException if any param is {@code null} or not login
      */
-    protected NicoCommentPost(VideoInfo targetVideo, NicoClient client)throws NicoAPIException{
+    protected NicoCommentPost(VideoInfo targetVideo, LoginInfo loginInfo, String deviceName)throws NicoAPIException{
         if ( targetVideo == null ){
             throw new NicoAPIException.InvalidParamsException(
                     "target video not found > comment",
@@ -70,7 +72,8 @@ public class NicoCommentPost implements Parcelable{
             );
         }
         this.targetVideo = targetVideo;
-        this.client = client;
+        this.loginInfo = loginInfo;
+        this.deviceName = deviceName;
     }
 
     /* <implementation of parcelable> */
@@ -80,13 +83,14 @@ public class NicoCommentPost implements Parcelable{
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeParcelable(client,flags);
+        out.writeParcelable(loginInfo,flags);
+        out.writeString(deviceName);
         out.writeParcelable(targetVideo,flags);
         out.writeInt(startTime);
         out.writeString(comment);
-        out.writeInt(color);
+        out.writeString(color);
         out.writeInt(position);
-        out.writeInt(size);
+        out.writeFloat(size);
         out.writeInt(commentNo);
         out.writeBooleanArray(new boolean[]{isAnonymous, isPost});
     }
@@ -101,13 +105,14 @@ public class NicoCommentPost implements Parcelable{
     };
 
     private NicoCommentPost(Parcel in) {
-        this.client = in.readParcelable(NicoClient.class.getClassLoader());
+        this.loginInfo = in.readParcelable(LoginInfo.class.getClassLoader());
+        this.deviceName = in.readString();
         this.targetVideo = in.readParcelable(VideoInfo.class.getClassLoader());
         this.startTime = in.readInt();
         this.comment = in.readString();
-        this.color = in.readInt();
+        this.color = in.readString();
         this.position = in.readInt();
-        this.size = in.readInt();
+        this.size = in.readFloat();
         this.commentNo = in.readInt();
         boolean[] val = new boolean[2];
         in.readBooleanArray(val);
@@ -129,6 +134,11 @@ public class NicoCommentPost implements Parcelable{
             this.comment = comment;
         }
     }
+    /**
+     * 現在指定されているコメント本文を取得します  Gets the comment text, which is set now.<br>
+     * コメントを未指定の場合は初期値の空文字を返します。
+     * @return the comment text, may be {@code null} if {@code null} was passed to {@link #setComment(String)}
+     */
     public String getComment (){
         synchronized (paramSettingLock) {
             return comment;
@@ -151,7 +161,11 @@ public class NicoCommentPost implements Parcelable{
             this.startTime = startTime;
         }
     }
-    public int getStartTime (){
+    /**
+     * 現在指定されている投稿時間を取得します　Gets the time at which this comment is posted.
+     * @return the time in decimal seconds
+     */
+    public int getTime (){
         synchronized (paramSettingLock) {
             return startTime;
         }
@@ -167,125 +181,84 @@ public class NicoCommentPost implements Parcelable{
         }
     }
 
-    public static final int COLOR_WHITE     = 0xffffffff;
-    public static final int COLOR_RED       = 0xffff0000;
-    public static final int COLOR_PINK      = 0xffff8080;
-    public static final int COLOR_ORANGE    = 0xffffcc00;
-    public static final int COLOR_YELLOW    = 0xffffff00;
-    public static final int COLOR_GREEN     = 0xff00ff00;
-    public static final int COLOR_CYAN      = 0xff00ffff;
-    public static final int COLOR_BLUE      = 0xff0000ff;
-    public static final int COLOR_PURPLE    = 0xffc000ff;
-    public static final int COLOR_BLACK     = 0xff000000;
-    private final Map<Integer,String> colorMap = new LinkedHashMap<Integer, String>(){
-        {
-            put(COLOR_WHITE,"white");
-            put(COLOR_RED,"red");
-            put(COLOR_PINK,"pink");
-            put(COLOR_ORANGE,"orange");
-            put(COLOR_YELLOW,"yellow");
-            put(COLOR_GREEN,"green");
-            put(COLOR_CYAN,"cyan");
-            put(COLOR_BLUE,"blue");
-            put(COLOR_PURPLE,"purple");
-            put(COLOR_BLACK,"black");
-        }
-    };
-
     /**
      * コメントの色を設定します　Sets color of the comment.<br>
-     * コメント色をCOLOR_****定数で指定します。デフォルト値は{@link #COLOR_WHITE}です。
+     * コメント色をCOLOR_****定数で指定します。デフォルト値は{@link CommentInfo#COLOR_WHITE}です。
      * 用意された定数以外の無効な値を渡すと変更は無視されます。<br>
      * The color of comment is sets by passing constant COLOR_*****.
-     * {@link #COLOR_WHITE} is set as default.
+     * {@link CommentInfo#COLOR_WHITE} is set as default.
      * If invalid value except for provided ones is passed, setting is canceled.
      * @param color　the constant standing for comment color, chosen from COLOR_****
      */
-    public void setColor(int color){
-        if ( colorMap.containsKey(color) ){
+    public void setColor(String color){
+        if ( ResourceStore.getInstance().containColor(color) ){
             synchronized (paramSettingLock) {
                 this.color = color;
             }
         }
     }
+    /**
+     * 現在指定されているコメント色の32bit値を取得します
+     * Gets the comment color in 32bit.
+     * @return the comment color in αRGB
+     */
     public int getColor (){
         synchronized (paramSettingLock) {
-            return color;
+            return ResourceStore.getInstance().getColor(this.color);
         }
     }
+    /**
+     * 現在指定されているコメント色の名称を取得します　
+     * Gets name of the comment color.
+     * @return name of the color
+     */
     public String getColorName(){
         synchronized (paramSettingLock) {
-            return colorMap.get(color);
+            return color;
         }
     }
 
     /**
      * コメント色に関して有効な色の名前とその色を表す定数のMapを返します
      * Gets Map of name of valid comment color and its constant.<br>
-     * この定数値を{@link #setColor(int)}に渡すことで色を指定できます。
+     * この定数値を{@link #setColor(String)}に渡すことで色を指定できます。
      * またこの値(int)は実際の色をαRGBで表しています。(8bit×4)
-     * By passing this constant to {@link #setColor(int)}, comment color can be set.
+     * By passing this constant to {@link #setColor(String)}, comment color can be set.
      * Also this value stands for the actual color in αRGB.
      * @return {@code Map} of color name and its constant
      */
     public Map<String,Integer> getColorMap(){
-        Map<String,Integer> map = new LinkedHashMap<String ,Integer>();
-        for ( Integer color : colorMap.keySet() ){
-            map.put( colorMap.get(color), color);
-        }
-        return map;
+        return ResourceStore.getInstance().getColorMap();
     }
-
-    public static final int POSITION_TOP = 0;
-    public static final int POSITION_MIDDLE = 1;
-    public static final int POSITION_BOTTOM = 2;
-    private final Map<Integer,String> positionMap = new HashMap<Integer, String>(){
-        {
-            put(POSITION_TOP,"ue");
-            put(POSITION_MIDDLE,"naka");
-            put(POSITION_BOTTOM,"shita");
-        }
-    };
 
     /**
      * コメントの表示位置を設定します　Sets displayed-position of the comment.<br>
-     * コメント位置をPOSITION_****定数で指定します。デフォルト値は{@link #POSITION_MIDDLE}です。
+     * コメント位置をPOSITION_****定数で指定します。デフォルト値は{@link CommentInfo#POSITION_MIDDLE}です。
      * 用意された定数以外の無効な値を渡すと変更は無視されます。<br>
      * The position of comment is sets by passing constant POSITION_*****.
-     * {@link #POSITION_MIDDLE} is set as default.
+     * {@link CommentInfo#POSITION_MIDDLE} is set as default.
      * If invalid value except for provided ones is passed, setting is canceled.
      * @param position the constant standing for comment position, chosen from POSITION_****
      */
     public void setPosition(int position){
-        if ( positionMap.containsKey(position) ){
+        if ( ResourceStore.getInstance().containPosition(position) ){
             synchronized (paramSettingLock) {
                 this.position = position;
             }
         }
     }
 
-    public static final int SIZE_MEDIUM = 800;
-    public static final int SIZE_BIG = 801;
-    public static final int SIZE_SMALL = 802;
-    private final Map<Integer,String> sizeMap = new HashMap<Integer, String>(){
-        {
-            put(SIZE_BIG,"big");
-            put(SIZE_MEDIUM,"medium");
-            put(SIZE_SMALL,"small");
-        }
-    };
-
     /**
      * コメントの表示サイズを設定します　Sets displayed-size of the comment.<br>
-     * コメントサイズをSIZE_****定数で指定します。デフォルト値は{@link #SIZE_MEDIUM}です。
+     * コメントサイズをSIZE_****定数で指定します。デフォルト値は{@link CommentInfo#SIZE_MEDIUM}です。
      * 用意された定数以外の無効な値を渡すと変更は無視されます。<br>
      * The size of comment is sets by passing constant SIZE_*****.
-     * {@link #SIZE_MEDIUM} is set as default.
+     * {@link CommentInfo#SIZE_MEDIUM} is set as default.
      * If invalid value except for provided ones is passed, setting is canceled.
      * @param size the constant standing for comment size, chosen from SIZE_****
      */
     public void setSize(int size){
-        if ( sizeMap.containsKey(size) ){
+        if ( ResourceStore.getInstance().containSize(size) ){
             synchronized (paramSettingLock) {
                 this.size = size;
             }
@@ -319,7 +292,9 @@ public class NicoCommentPost implements Parcelable{
      * また、これは再利用禁止で投稿に成功したうえで二度以上呼ぶと例外を投げます。<br>
      * The text and time of comment must be set in advance by calling {@link #setComment(String)},{@link #setTime(int)}.
      * If these values are not set or invalid values are set, an exception is thrown.
-     * Also you cannot reuse this and, if you call this again after succeeding in posting, an exception is thrown.
+     * Also you cannot reuse this and, if you call this again after succeeding in posting, an exception is thrown.<br>
+     * <strong>ＵＩスレッド禁止</strong>HTTP通信を行うのでバックグランド処理してください。<br>
+     *<strong>No UI thread</strong> HTTP communication is done.
      * @throws NicoAPIException if fail to post comment
      */
     public void post() throws NicoAPIException{
@@ -341,41 +316,37 @@ public class NicoCommentPost implements Parcelable{
                     NicoAPIException.EXCEPTION_PARAM_COMMENT_POST_CONTENT
             );
         }
-        int userID = 0;
-        int premium = 0;
+        ArrayList<String> commandList = new ArrayList<String>();
+        ResourceStore res = ResourceStore.getInstance();
+        int userID = loginInfo.getUserID();
+        String premium = loginInfo.isPremium() ? res.getString(R.string.value_comment_premium) : res.getString(R.string.value_comment_non_premium);
         String comment = "";
         int startTime = 0;
-        ArrayList<String> commandList = new ArrayList<String>();
         synchronized (paramSettingLock) {
-            userID = client.getUserID();
             comment = this.comment;
             startTime = this.startTime;
-            if ( client.isPremium() ){
-                premium = 1;
-            }
             if ( isAnonymous ){
-                commandList.add("184");
+                commandList.add(res.getString(R.string.value_comment_anonymous));
             }
-            if ( color != COLOR_WHITE ){
-                commandList.add(colorMap.get(color));
+            if ( !color.equals(CommentInfo.COLOR_WHITE) ){
+                commandList.add(color);
             }
-            if ( position != POSITION_MIDDLE ){
-                commandList.add(positionMap.get(position));
+            if ( position != CommentInfo.POSITION_MIDDLE ){
+                commandList.add(res.getPosition(position));
             }
-            if ( size != SIZE_MEDIUM ){
-                commandList.add(sizeMap.get(size));
+            if ( size != CommentInfo.SIZE_MEDIUM ){
+                commandList.add(res.getSize(size));
             }
-            commandList.add("device:"+client.deviceName);
+            commandList.add(String.format(Locale.US,res.getString(R.string.value_comment_device),deviceName));
         }
         synchronized (postLock) {
             try {
                 targetVideo.getThreadID();
-                targetVideo.getMessageServerUrl();
+                targetVideo.getMessageServerURL();
             } catch (NicoAPIException e) {
-                targetVideo.getFlv(client.getCookieStore());
+                targetVideo.getFlv(loginInfo.getCookies());
             }
-            targetVideo.loadComment(1);
-            CommentInfo.CommentGroup group = targetVideo.commentGroup;
+            CommentInfo.CommentGroup group = targetVideo.getComment(1);
             String command = "";
             if (!commandList.isEmpty()) {
                 StringBuilder builder = new StringBuilder();
@@ -386,16 +357,21 @@ public class NicoCommentPost implements Parcelable{
                 }
                 command = builder.toString();
             }
-            HttpResponseGetter getter = new HttpResponseGetter();
-            String path = "http://flapi.nicovideo.jp/api/getpostkey/?version=1&yugi=&device=1&block_no=%d&thread=%s&version_sub=2";
-            path = String.format(path, group.lastComment / 100, group.threadID);
-            if (getter.tryGet(path, client.getCookieStore())) {
-                String postKey = getter.response.split("=")[1];
-                String bodyFormat = "<chat thread=\"%d\" ticket=\"%s\" user_id=\"%d\" vpos=\"%d\" mail=\"%s\" postkey=\"%s\" premium=\"%d\">%s</chat>";
-                String body = String.format(bodyFormat, group.threadID, group.ticket, userID, startTime, command, postKey, premium, comment);
-                path = targetVideo.getMessageServerUrl();
-                if (getter.tryPost(path, body)) {
-                    Matcher matcher = Pattern.compile("<packet><chat_result thread=\"[0-9]+?\" status=\"([0-9])\" no=\"([0-9]+?)\".*?/></packet>").matcher(getter.response);
+            HttpClient client = res.getHttpClient();
+            String path = String.format(
+                    Locale.US,res.getURL(R.string.url_comment_post),
+                    group.getLastComment() / 100, group.getThreadID()
+            );
+            if (client.get(path, loginInfo.getCookies() )) {
+                Matcher matcher = res.getPattern(R.string.regex_comment_postKey).matcher(client.getResponse());
+                String postKey = matcher.find() ? matcher.group(1) : client.getResponse().split("=")[1];
+                String body = String.format(
+                        Locale.US, res.getString(R.string.format_comment_post),
+                        group.getThreadID(), group.getTicket(), userID, startTime, command, postKey, premium, comment
+                );
+                path = targetVideo.getMessageServerURL();
+                if (client.post(path, body, null )) {
+                    matcher = res.getPattern(R.string.regex_comment_post_response).matcher(client.getResponse());
                     if (matcher.find()) {
                         int statusCode = Integer.parseInt(matcher.group(1));
                         commentNo = Integer.parseInt(matcher.group(2));
@@ -409,7 +385,7 @@ public class NicoCommentPost implements Parcelable{
                         }
                     } else {
                         throw new NicoAPIException.ParseException(
-                                "fail to parse post response",getter.response,
+                                "fail to parse post response",client.getResponse(),
                                 NicoAPIException.EXCEPTION_PARSE_COMMENT_POST
                         );
                     }
@@ -417,14 +393,14 @@ public class NicoCommentPost implements Parcelable{
                     throw new NicoAPIException.HttpException(
                             "fail to post comment",
                             NicoAPIException.EXCEPTION_HTTP_COMMENT_POST,
-                            getter.statusCode, path, "GET"
+                            client.getStatusCode(), path, "GET"
                     );
                 }
             } else {
                 throw new NicoAPIException.HttpException(
                         "fail to get postKey",
                         NicoAPIException.EXCEPTION_HTTP_COMMENT_POST_KEY,
-                        getter.statusCode, path, "GET"
+                        client.getStatusCode(), path, "GET"
                 );
             }
         }
@@ -452,6 +428,11 @@ public class NicoCommentPost implements Parcelable{
         }
     }
 
+    /**
+     * コメントの投稿先動画を取得します
+     * Gets the video to which this comment is posted
+     * @return the video, not {@code null}
+     */
     public VideoInfo getTargetVideo(){
         return targetVideo;
     }

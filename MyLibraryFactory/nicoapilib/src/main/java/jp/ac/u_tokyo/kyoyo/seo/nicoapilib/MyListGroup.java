@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -29,12 +30,11 @@ import java.util.Map;
 
 public class MyListGroup extends MyListEditor implements Parcelable {
 
-    protected MyListGroup(LoginInfo info) throws NicoAPIException{
-        super.info = info;
+    protected MyListGroup(CookieGroup cookieGroup) throws NicoAPIException{
+        super(cookieGroup);
         loadGroups();
     }
 
-    private final String rootURL = "http://www.nicovideo.jp/api/mylistgroup/";
     private List<MyListVideoGroup> groupList;
 
     /* <implementation of parcelable> */
@@ -44,7 +44,7 @@ public class MyListGroup extends MyListEditor implements Parcelable {
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeParcelable(super.info, flags);
+        out.writeParcelable(cookieGroup, flags);
         out.writeList(groupList);
     }
 
@@ -58,14 +58,15 @@ public class MyListGroup extends MyListEditor implements Parcelable {
     };
 
     private MyListGroup(Parcel in) {
-        super.info = in.readParcelable(LoginInfo.class.getClassLoader());
-        this.groupList = in.readArrayList(ArrayList.class.getClassLoader());
+        super((CookieGroup)in.readParcelable(CookieGroup.class.getClassLoader()));
+        this.groupList = new ArrayList<>();
+        in.readList(this.groupList,List.class.getClassLoader());
     }
 
     /**
      * 登録されているマイリスを取得します　Gets myLists registered in the user's myListGroup.<br>
      * {@link MyListVideoGroup マイリス}を格納した{@code List}のオブジェクトを変更しても問題はありません。
-     * ただし、マイリスグループに変更を加えても先に取得したこの{@code List}オブジェクトに変更は反映されません。
+     * ただし、マイリスグループに変更を加えても先に取得したこのリストおよびマイリスオブジェクトに変更は反映されません。
      * {@link #add(String, boolean, int, String) マイリスの追加}、
      * {@link #update(MyListVideoGroup, String, boolean, int, String)}  マイリス設定の編集}、
      * {@link #delete(MyListVideoGroup) マイリスの削除}　を行った後に再取得してください。<br>
@@ -83,6 +84,14 @@ public class MyListGroup extends MyListEditor implements Parcelable {
         }
         return list;
     }
+
+    /**
+     * マイリスＩＤで指定された登録マイリスを取得します
+     * Gets the myList specified with myListID.
+     * @param id the myList ID
+     * @return the target myList
+     * @throws NicoAPIException if the target myList specified with requested ID not found
+     */
     public synchronized MyListVideoGroup getMyListVideoGroup(int id) throws NicoAPIException{
         for ( MyListVideoGroup group : groupList){
             if ( group.getMyListID() == id ){
@@ -97,13 +106,16 @@ public class MyListGroup extends MyListEditor implements Parcelable {
 
 
     private void loadGroups () throws NicoAPIException{
-        String myListGroupUrl = rootURL + "list";
-        if ( tryGet(myListGroupUrl,info.getCookieStore()) ){
-            JSONObject root = checkStatusCode(super.response);
-            List<MyListVideoGroup> list = MyListVideoGroup.parse(root, info);
+        ResourceStore res = ResourceStore.getInstance();
+        HttpClient client = res.getHttpClient();
+        String myListGroupUrl = res.getURL(R.string.url_myListGroup_load);
+        if ( client.get(myListGroupUrl,cookieGroup) ){
+            JSONObject root = checkStatusCode(client.getResponse());
+            List<MyListVideoGroup> list = MyListVideoGroup.parse(cookieGroup,root);
             synchronized (this) {
-                if (groupList != null) {
+                /*if (groupList != null) {
                     //マイリスグループのリストがセット済みならなるべく元のオブジェクトを維持して差分のみ変更する
+                    //groupList = replaceList(groupList,list);
                     for (Iterator<MyListVideoGroup> iterator = groupList.iterator(); iterator.hasNext(); ) {
                         MyListVideoGroup before = iterator.next();
                         boolean isFind = false;
@@ -111,15 +123,15 @@ public class MyListGroup extends MyListEditor implements Parcelable {
                             MyListVideoGroup after = iteratorAfter.next();
                             if (after.getMyListID() == before.getMyListID()) {
                                 isFind = true;
-                                synchronized (before) {
-                                    before.name = after.name;
-                                    before.description = after.description;
-                                    before.isPublic = after.isPublic;
-                                    before.defaultSort = after.defaultSort;
-                                    before.createDate = after.createDate;
-                                    before.updateDate = after.updateDate;
-                                    before.iconID = after.iconID;
-                                }
+                                before.setMyListDetails(
+                                        after.getName(),
+                                        after.getDescription(),
+                                        after.isPublic(),
+                                        after.getDefaultSort(),
+                                        after.getCreateDate(),
+                                        after.getUpdateDate(),
+                                        after.getIconID()
+                                );
                                 iteratorAfter.remove();
                                 break;
                             }
@@ -131,16 +143,15 @@ public class MyListGroup extends MyListEditor implements Parcelable {
                     if (!list.isEmpty()) {
                         groupList.addAll(list);
                     }
-                } else {
-                    groupList = list;
-                }
+                } else {*/
+                groupList = list;
             }
 
         } else {
             throw new NicoAPIException.HttpException(
                     "HTTP failure > myList group",
                     NicoAPIException.EXCEPTION_HTTP_MYLIST_GROUP_GET,
-                    super.statusCode, myListGroupUrl, "GET"
+                    client.getStatusCode(), myListGroupUrl, "GET"
             );
         }
     }
@@ -164,9 +175,10 @@ public class MyListGroup extends MyListEditor implements Parcelable {
      * @param isPublic whether or not the myList is public
      * @param sort the sort param
      * @param description the myList description, can be empty {@code String}, but cannot be {@code null}
+     * @return the myListID
      * @throws NicoAPIException if invalid param is passed or fail to add the new myList
      */
-    public void add (String name, boolean isPublic, int sort, String description) throws NicoAPIException{
+    public int add (String name, boolean isPublic, int sort, String description) throws NicoAPIException{
         if ( name == null ){
             throw new NicoAPIException.InvalidParamsException(
                     "name is null > add - myList",
@@ -182,26 +194,30 @@ public class MyListGroup extends MyListEditor implements Parcelable {
         if ( sort < 0 || sort > 17 ){
             sort = MYLIST_SORT_REGISTER_LATE;
         }
-        String path = rootURL + "add";
-        String publicValue = "0";
-        if ( isPublic ){
-            publicValue = "1";
-        }
+        ResourceStore res = ResourceStore.getInstance();
+        HttpClient client = res.getHttpClient();
+        String path = res.getURL(R.string.url_myListGroup_add);
+        String publicValue = isPublic ? res.getString(R.string.value_myList_public) : res.getString(R.string.value_myList_private);
         Map<String,String> params = new HashMap<String, String>();
-        params.put("token", getToken(getVideoID()));
-        params.put("name", name);
-        params.put("public", publicValue);
-        params.put("default_sort", String.valueOf(sort));
-        params.put("icon_id","0");
-        params.put("description", description);
-        if ( tryPost(path,params,info.getCookieStore()) ){
-            checkStatusCode(super.response);
+        params.put(res.getString(R.string.key_myList_token), getToken(getVideoID()));
+        params.put(res.getString(R.string.key_myList_name), name);
+        params.put(res.getString(R.string.key_myList_public), publicValue);
+        params.put(res.getString(R.string.key_myList_sort), String.valueOf(sort));
+        params.put(res.getString(R.string.key_myList_icon),"0");
+        params.put(res.getString(R.string.key_myList_description), description);
+        if ( client.post(path,params,cookieGroup) ){
+            JSONObject root = checkStatusCode(client.getResponse());
             loadGroups();
+            try{
+                return root.getInt(res.getString(R.string.key_myList_add_response_myListID));
+            }catch (JSONException e){
+                return 0;
+            }
         }else{
             throw new NicoAPIException.HttpException(
                     "http failure",
                     NicoAPIException.EXCEPTION_HTTP_MYLIST_ADD,
-                    statusCode,path,"POST");
+                    client.getStatusCode(),path,"POST");
         }
     }
 
@@ -231,33 +247,32 @@ public class MyListGroup extends MyListEditor implements Parcelable {
                     NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_MYLIST
             );
         }
-        String path = rootURL + "update";
-        String publicValue = "0";
-        if ( isPublic ){
-            publicValue = "1";
-        }
+        ResourceStore res = ResourceStore.getInstance();
+        HttpClient client = res.getHttpClient();
+        String path = res.getURL(R.string.url_myListGroup_update);
+        String publicValue = isPublic ? res.getString(R.string.value_myList_public) : res.getString(R.string.value_myList_private);
         Map<String,String> params = new HashMap<String, String>();
-        params.put("group_id",String.valueOf(group.getMyListID()) );
-        params.put("token", getToken(getVideoID()));
+        params.put(res.getString(R.string.key_myList_param_myListID),String.valueOf(group.getMyListID()) );
+        params.put(res.getString(R.string.key_myList_token), getToken(getVideoID()) );
         if ( name != null ) {
-            params.put("name", name);
+            params.put(res.getString(R.string.key_myList_name), name);
         }
-        params.put("public", publicValue);
+        params.put(res.getString(R.string.key_myList_public), publicValue);
         if ( sort >=0 && sort <= 17 ) {
-            params.put("default_sort", String.valueOf(sort));
+            params.put(res.getString(R.string.key_myList_sort), String.valueOf(sort));
         }
         //params.put("icon_id","0");
         if ( description != null ) {
-            params.put("description", description);
+            params.put(res.getString(R.string.key_myList_description), description);
         }
-        if ( tryPost(path,params,info.getCookieStore()) ){
-            checkStatusCode(super.response);
+        if ( client.post(path,params,cookieGroup) ){
+            checkStatusCode(client.getResponse());
             loadGroups();
         }else{
             throw new NicoAPIException.HttpException(
                     "http failure",
                     NicoAPIException.EXCEPTION_HTTP_MYLIST_UPDATE,
-                    statusCode,path,"POST");
+                    client.getStatusCode(),path,"POST");
         }
     }
 
@@ -275,18 +290,20 @@ public class MyListGroup extends MyListEditor implements Parcelable {
                     NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_MYLIST
             );
         }
-        String path = rootURL + "delete";
+        ResourceStore res = ResourceStore.getInstance();
+        HttpClient client = res.getHttpClient();
+        String path = res.getURL(R.string.url_myListGroup_delete);
         Map<String,String> params = new HashMap<String, String>();
-        params.put("group_id",String.valueOf(group.getMyListID()) );
-        params.put("token", getToken(getVideoID()));
-        if ( tryPost(path,params,info.getCookieStore()) ){
-            checkStatusCode(super.response);
+        params.put(res.getString(R.string.key_myList_param_myListID),String.valueOf(group.getMyListID()) );
+        params.put(res.getString(R.string.key_myList_token), getToken(getVideoID()) );
+        if ( client.post(path,params,cookieGroup) ){
+            checkStatusCode(client.getResponse());
             loadGroups();
         }else{
             throw new NicoAPIException.HttpException(
                     "http failure",
                     NicoAPIException.EXCEPTION_HTTP_MYLIST_DELETE,
-                    statusCode,path,"POST");
+                    client.getStatusCode(),path,"POST");
         }
     }
 
@@ -312,7 +329,7 @@ public class MyListGroup extends MyListEditor implements Parcelable {
     /**
      * マイリス内の動画をソートします　Sorts videos in myList.<br>
      * このとき動画を整列する方法は各マイリスのソートパラメータで規定されます。
-     * パラメータは{@link #update(MyListVideoGroup, String, boolean, int, String)　変更できます}。
+     * パラメータは{@link #update(MyListVideoGroup, String, boolean, int, String)}で変更できます。
      * 同時に複数のマイリス内をソートするのも可能ですので、対象マイリスを配列で渡してください。
      * Hot to sort videos is defined by sort parameter of the target myList,
      * which can be changed at {@link #update(MyListVideoGroup, String, boolean, int, String)}.
@@ -329,9 +346,11 @@ public class MyListGroup extends MyListEditor implements Parcelable {
                     NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_MYLIST
             );
         }
-        String path = rootURL + "sort";
+        ResourceStore res = ResourceStore.getInstance();
+        HttpClient client = res.getHttpClient();
+        String path = res.getURL(R.string.url_myListGroup_sort);
         Map<String,String> params = new HashMap<String, String>();
-        params.put("token", getToken(getVideoID()));
+        params.put(res.getString(R.string.key_myList_token), getToken(getVideoID()) );
         for ( int i=0 ; i<groups.length ; i++){
             if ( groups[i] == null ){
                 throw new NicoAPIException.InvalidParamsException(
@@ -339,24 +358,22 @@ public class MyListGroup extends MyListEditor implements Parcelable {
                         NicoAPIException.EXCEPTION_PARAM_MYLIST_TARGET_MYLIST
                 );
             }else {
-                params.put(String.format("group_id_list[%d]", i), String.valueOf(groups[i].getMyListID()));
+                params.put(String.format(Locale.US,res.getString(R.string.key_myList_myListID_list), i), String.valueOf(groups[i].getMyListID()));
             }
         }
-        if ( tryPost(path,params,info.getCookieStore()) ){
-            checkStatusCode(super.response);
+        if ( client.post(path,params,cookieGroup) ){
+            checkStatusCode(client.getResponse());
             //対象のマイリスにビデオリストがセット済みなら再読み込みさせる
             for ( MyListVideoGroup group : groups) {
-                synchronized (group){
-                    if ( group.videoInfoList != null ){
-                        group.loadVideos();
-                    }
+                if (group.videoInfoList != null) {
+                    group.loadVideos();
                 }
             }
         }else{
             throw new NicoAPIException.HttpException(
                     "http failure",
                     NicoAPIException.EXCEPTION_HTTP_MYLIST_SORT,
-                    statusCode,path,"POST");
+                    client.getStatusCode(),path,"POST");
         }
 
     }

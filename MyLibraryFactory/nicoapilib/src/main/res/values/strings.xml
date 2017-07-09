@@ -1,3 +1,262 @@
 <resources>
     <string name="app_name">NicoAPILib</string>
+
+    <string name="value_comment_position_top">ue</string>
+    <string name="value_comment_position_middle">naka</string>
+    <string name="value_comment_position_bottom">shita</string>
+    <string name="value_comment_size_small">small</string>
+    <string name="value_comment_size_medium">medium</string>
+    <string name="value_comment_size_large">big</string>
+    <string name="value_comment_premium">1</string>
+    <string name="value_comment_non_premium">0</string>
+    <string name="value_comment_anonymous">184</string>
+    <string name="value_comment_device" formatted="false">device:%s</string>
+    <string name="format_comment_post" formatted="false">&lt;chat thread=&quot;%d&quot; ticket=&quot;%s&quot; user_id=&quot;%d&quot; vpos=&quot;%d&quot; mail=&quot;%s&quot; postkey=&quot;%s&quot; premium=&quot;%s&quot;&gt;%s&lt;/chat&gt;</string>
+    <integer name="value_comment_NG_threshold_0">-1000</integer>
+    <integer name="value_comment_NG_threshold_1">-4800</integer>
+    <integer name="value_comment_NG_threshold_2">-10000</integer>
+
+    <string name="key_comment_position">vpos</string>
+    <string name="key_comment_anonymity">anonymity</string>
+    <string name="key_comment_date">date</string>
+    <string name="key_comment_command">mail</string>
+    <string name="key_comment_content">content</string>
+    <string name="key_comment_id">no</string>
+    <string name="key_comment_meta">thread</string>
+    <string name="key_comment_status">resultcode</string>
+    <string name="key_comment_threadID">thread</string>
+    <string name="key_comment_server_time">server_time</string>
+    <string name="key_comment_last_comment">last_res</string>
+    <string name="key_comment_ticket">ticket</string>
+    <string name="key_comment_group_item">chat</string>
+
+    <string name="key_myList_video_threadID">item_id</string>
+    <string name="key_myList_description">description</string>
+    <string name="key_myList_param_myListID">group_id</string>
+    <string name="key_myList_token">token</string>
+    <string name="key_myList_item_type">item_type</string>
+    <string name="key_myList_video_threadID_list" formatted="false">id_list[%s][%d]</string>
+    <string name="key_myList_delete_count">delete_count</string>
+    <string name="key_myList_target_myListID">target_group_id</string>
+    <string name="key_myList_status">status</string>
+    <string name="key_myList_error_meta">error</string>
+    <string name="key_myList_error_code">code</string>
+    <string name="key_myList_move_response_item">item</string>
+    <string name="key_myList_move_response_threadID">id</string>
+    <string name="key_myList_move_response_detected">matches</string>
+    <string name="key_myList_move_response_duplicate">duplicates</string>
+    <string name="key_myList_move_response_executed">targets</string>
+    <string name="key_myList_public">public</string>
+    <string name="key_myList_name">name</string>
+    <string name="key_myList_sort">default_sort</string>
+    <string name="key_myList_icon">icon_id</string>
+    <string name="key_myList_add_response_myListID">id</string>
+    <string name="key_myList_myListID_list" formatted="false">group_id_list[%d]</string>
+    <string name="key_myList_myListID">id</string>
+    <string name="key_myList_userID">user_id</string>
+    <string name="key_myList_create_time">create_time</string>
+    <string name="key_myList_update_time">update_time</string>
+    <string name="key_myList_video_data">item_data</string>
+    <string name="key_myList_video_id">video_id</string>
+    <string name="key_myList_video_description">description</string>
+    <string name="key_myList_video_registration_time">create_time</string>
+    <string name="key_myList_video_update_time">update_time</string>
+    <string name="key_myList_video_title">title</string>
+    <string name="key_myList_video_thumbnail">thumbnail_url</string>
+    <string name="key_myList_video_contribution">first_retrieve</string>
+    <string name="key_myList_video_view">view_counter</string>
+    <string name="key_myList_video_comment">num_res</string>
+    <string name="key_myList_video_myList">mylist_counter</string>
+    <string name="key_myList_video_duration">length_seconds</string>
+    <string name="key_myList_group">mylistitem</string>
+    <string name="key_myListGroup_group">mylistgroup</string>
+    <string name="key_login_id">mail_tel</string>
+    <string name="key_login_pass">password</string>
+    <string name="key_search_title">title</string>
+    <string name="key_search_videoID">contentId</string>
+    <string name="key_search_date">startTime</string>
+    <string name="key_search_description">description</string>
+    <string name="key_search_duration">lengthSeconds</string>
+    <string name="key_search_view_counter">"viewCounter"</string>
+    <string name="key_search_comment_counter">commentCounter</string>
+    <string name="key_search_myList_counter">mylistCounter</string>
+    <string name="key_search_tags">tags</string>
+    <string name="key_search_genre">categoryTags</string>
+    <string name="key_search_result_body">data</string>
+    <string name="key_search_result_meta">meta</string>
+    <string name="key_search_result_status">status</string>
+    <string name="key_search_result_error_code">errorCode</string>
+    <string name="key_search_result_error_message">errorMessage</string>
+    <string name="key_search_result_total_hit">totalCount</string>
+    <string name="key_search_result_id">id</string>
+    <string name="key_search_sort_order">&amp;_sort=</string>
+    <string name="key_search_result_max">&amp;_limit=</string>
+    <string name="key_search_appName">&amp;_context=</string>
+    <string name="key_login_session">user_session</string>
+
+    <string name="value_myList_item_type_video">0</string>
+    <string name="value_myList_status_success">ok</string>
+    <string name="value_myList_status_fail">fail</string>
+    <string name="value_myList_public">1</string>
+    <string name="value_myList_private">0</string>
+    <string name="value_myList_rss_private">このマイリストは非公開に設定されています。</string>
+    <string name="value_comment_group_meta_result_success">0</string>
+    <string name="value_myList_token_default_videoID">sm9</string>
+    <string-array name="value_ranking_genre_name">
+        <item>カテゴリ合算</item>
+        <item>VOCALOID</item>
+        <item>音楽</item>
+        <item>アニメ</item>
+        <item>ゲーム</item>
+        <item>踊ってみた</item>
+        <item>歌ってみた</item>
+        <item>演奏してみた</item>
+        <item>東方</item>
+        <item>アイドルマスター</item>
+        <item>エンターテイメント</item>
+        <item>動物</item>
+        <item>ラジオ</item>
+        <item>スポーツ</item>
+        <item>政治</item>
+        <item>科学</item>
+        <item>歴史</item>
+        <item>料理</item>
+        <item>自然</item>
+        <item>日記</item>
+        <item>ニコニコ動画講座</item>
+        <item>ニコニコインディーズ</item>
+        <item>車載動画</item>
+        <item>ニコニコ技術部</item>
+        <item>ニコニコ手芸部</item>
+        <item>作ってみた</item>
+        <item>描いてみた</item>
+        <item>旅行</item>
+        <item>例のアレ</item>
+        <item>その他</item>
+    </string-array>
+    <string-array name="value_ranking_genre_param">
+        <item>all</item>
+        <item>vocaloid</item>
+        <item>music</item>
+        <item>anime</item>
+        <item>game</item>
+        <item>dance</item>
+        <item>sing</item>
+        <item>play</item>
+        <item>toho</item>
+        <item>imas</item>
+        <item>ent</item>
+        <item>animal</item>
+        <item>radio</item>
+        <item>sport</item>
+        <item>politics</item>
+        <item>science</item>
+        <item>history</item>
+        <item>cooking</item>
+        <item>nature</item>
+        <item>diary</item>
+        <item>lecture</item>
+        <item>nicoindies</item>
+        <item>drive</item>
+        <item>tech</item>
+        <item>handcraft</item>
+        <item>make</item>
+        <item>draw</item>
+        <item>travel</item>
+        <item>are</item>
+        <item>other</item>
+    </string-array>
+    <string-array name="value_ranking_period_name">
+        <item>合計</item>
+        <item>月間</item>
+        <item>週間</item>
+        <item>24時間</item>
+        <item>毎時</item>
+    </string-array>
+    <string-array name="value_ranking_period_param">
+        <item>total</item>
+        <item>monthly</item>
+        <item>weekly</item>
+        <item>daily</item>
+        <item>hourly</item>
+    </string-array>
+    <string-array name="value_ranking_kind_name">
+        <item>総合</item>
+        <item>再生</item>
+        <item>コメント</item>
+        <item>マイリスト</item>
+    </string-array>
+    <string-array name="value_ranking_kind_param">
+        <item>fav</item>
+        <item>view</item>
+        <item>res</item>
+        <item>mylist</item>
+    </string-array>
+    <string-array name="value_search_query_operator">
+        <item> </item>
+        <item> OR </item>
+        <item> -</item>
+    </string-array>
+    <string name="value_recommend_status_success">ok</string>
+    <string name="value_search_result_status_success">200</string>
+    <string name="value_search_range_lower">gte</string>
+    <string name="value_search_range_upper">lte</string>
+    <string name="value_search_range_exact">0</string>
+    <string name="value_search_tagSearch">&amp;targets=tagsExact</string>
+    <string name="value_search_nonTagSearch">&amp;targets=title,description,tags</string>
+    <string name="value_search_target_fields">&amp;fields=contentId,title,description,tags,viewCounter,mylistCounter,commentCounter,startTime,lengthSeconds</string>
+    <string name="value_search_sort_order_down">-</string>
+    <string name="value_search_sort_order_up">+</string>
+    <string name="value_getThumbnailAPI_status_success">ok</string>
+    <string name="value_getThumbnailAPI_status_failure">fail</string>
+    <string name="value_comment_version">20090904</string>
+
+    <string name="url_login">https://account.nicovideo.jp/api/v1/login?show_button_twitter=1&amp;site=niconico&amp;show_button_facebook=1&amp;next_url=</string>
+    <string name="url_myPage">http://www.nicovideo.jp/my</string>
+    <string name="url_user_icon" formatted="false">http://usericon.nimg.jp/usericon/%d/%d.jpg</string>
+    <string name="url_user_seiga" formatted="false">http://seiga.nicovideo.jp/api/user/info?id=%d</string>
+    <string name="url_nico_api_token">http://www.nicovideo.jp/mylist_add/video/</string>
+    <string name="url_myList_sort">http://www.nicovideo.jp/api/mylistgroup/sort</string>
+    <string name="url_myList_add">http://www.nicovideo.jp/api/mylist/add</string>
+    <string name="url_myList_update_item">http://www.nicovideo.jp/api/mylist/update</string>
+    <string name="url_myList_delete_item">http://www.nicovideo.jp/api/mylist/delete</string>
+    <string name="url_myList_move_item">http://www.nicovideo.jp/api/mylist/move</string>
+    <string name="url_myList_copy_item">http://www.nicovideo.jp/api/mylist/copy</string>
+    <string name="url_myList_load">http://www.nicovideo.jp/api/mylist/list</string>
+    <string name="url_myList_detail">http://www.nicovideo.jp/api/mylistgroup/get</string>
+    <string name="url_myList_rss" formatted="false">http://www.nicovideo.jp/mylist/%d?rss=2.0</string>
+    <string name="url_myListGroup_load">http://www.nicovideo.jp/api/mylistgroup/list</string>
+    <string name="url_myListGroup_add">http://www.nicovideo.jp/api/mylistgroup/add</string>
+    <string name="url_myListGroup_update">http://www.nicovideo.jp/api/mylistgroup/update</string>
+    <string name="url_myListGroup_delete">http://www.nicovideo.jp/api/mylistgroup/delete</string>
+    <string name="url_myListGroup_sort">http://www.nicovideo.jp/api/mylistgroup/sort</string>
+    <string name="url_tempList_load">http://www.nicovideo.jp/api/deflist/list</string>
+    <string name="url_tempList_add">http://www.nicovideo.jp/api/deflist/add</string>
+    <string name="url_tempList_update">http://www.nicovideo.jp/api/deflist/update</string>
+    <string name="url_tempList_delete">http://www.nicovideo.jp/api/deflist/delete</string>
+    <string name="url_tempList_move">http://www.nicovideo.jp/api/deflist/move</string>
+    <string name="url_tempList_copy">http://www.nicovideo.jp/api/deflist/copy</string>
+    <string name="url_recommend" formatted="false">http://flapi.nicovideo.jp/api/getrelation?page=10&amp;sort=p&amp;order=d&amp;video=%s</string>
+    <string name="url_watch" formatted="false">http://www.nicovideo.jp/watch/%s</string>
+    <string name="url_comment_post" formatted="false">http://flapi.nicovideo.jp/api/getpostkey/?version=1&amp;yugi=&amp;device=1&amp;block_no=%d&amp;thread=%s&amp;version_sub=2</string>
+    <string name="url_ranking" formatted="false">http://www.nicovideo.jp/ranking/%s/%s/%s?rss=2.0</string>
+    <string name="url_search">http://api.search.nicovideo.jp/api/v2/snapshot/video/contents/search?q=</string>
+    <string name="url_getThumbnailAPI">http://ext.nicovideo.jp/api/getthumbinfo/</string>
+    <string name="url_getFlvAPI">http://flapi.nicovideo.jp/api/getflv/</string>
+    <string name="url_getThreadKeyAPI">http://flapi.nicovideo.jp/api/getthreadkey?thread=%s</string>
+
+    <string name="format_date">yyyy-MM-dd\'T\'HH:mm:ssZ</string>
+    <string name="format_rss_date">yyyy\'年\'MM\'月\'dd\'日\' HH：mm：ss</string>
+    <string name="format_search_date">yyyy-MM-dd\'T\'HH:mm:ss\'+09:00\'</string>
+    <string name="format_rss_publish_date">EEE, dd MMM yyyy HH:mm:ss Z</string>
+    <string name="format_thumbnail_date">yyyy-MM-dd\'T\'HH:mm:ss\'+09:00\'</string>
+    <string name="format_search_range" formatted="false">&amp;filters[%s][%s]=%s</string>
+    <string name="format_comment_get">&lt;packet&gt;&lt;thread thread=\"%1$d\" version=\"%3$s\"  /&gt;&lt;thread_leaves scores=\"1\" thread=\"%1$d\"&gt;0-%2$d:100,1000&lt;/thread_leaves&gt;&lt;/packet&gt;</string>
+    <string name="format_comment_get_official">&lt;packet&gt;&lt;thread thread="%1$d" version="%5$s" /&gt;&lt;thread_leaves scores="1" thread="%1$d" threadkey="%3$s" force_184="%4$d"&gt;0-%2$d:100,1000&lt;/thread_leaves&gt;&lt;/packet&gt;</string>
+    <string name="format_comment_get_latest" formatted="false">&lt;thread res_from=\"-%d\" version=\"%s\" scores=\"1\" thread=\"%d\" /&gt;</string>
+    <string name="format_comment_get_latest_official" formatted="false">&lt;thread res_from="-%d" version="%s" scores="1" thread="%d" threadkey="%s" force_184="%d" /&gt;</string>
+    <string name="format_comment_get_json" formatted="false">.json/thread?version=20090904&amp;thread=%d&amp;res_from=-%d</string>
+
+    <string name="reflection_http_client">jp.ac.u_tokyo.kyoyo.seo.nicoapilib.ApacheHttpClient</string>
+
 </resources>

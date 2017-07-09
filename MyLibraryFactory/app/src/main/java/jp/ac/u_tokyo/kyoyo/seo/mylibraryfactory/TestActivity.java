@@ -50,6 +50,14 @@ public class TestActivity extends AppCompatActivity implements CustomDialog.onCl
 
         setTitle("DemoApp");
 
+        Intent intent = getIntent();
+        if ( intent != null ){
+            Bundle bundle = intent.getExtras();
+            if ( bundle != null ) {
+                nicoClient = (NicoClient)bundle.getParcelable(NicoClient.INTENT);
+            }
+        }
+
         textViewLoginStatus = (TextView)findViewById(R.id.textViewLoginStatus);
         textViewUserName = (TextView)findViewById(R.id.textViewUserName);
         imageViewUserIcon = (ImageView)findViewById(R.id.imageViewUser);

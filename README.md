@@ -13,3 +13,7 @@ githubで制作過程を管理したい
 明日はわかりません。ご承知のほど。
 
 詳細な仕様はWikiのほうにまとめてあります
+
+MyLibraryFactoryディレクトリ：AndroidStudioプロジェクトのルート
+　　　　nicoapilibモジュールが肝心のライブラリです
+JavaDocディレクトリ：Docやクラス図などライブラリの説明です

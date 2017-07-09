@@ -2,30 +2,10 @@ package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
 
 
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.CookieStore;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * ニコ動へのログインおよびユーザＩＤ・ニックネームを取得する<br>
@@ -42,15 +22,12 @@ import java.util.regex.Pattern;
  * @version 0.0 2016/12/10.
  */
 
-public class NicoLogin extends HttpResponseGetter {
+class NicoLogin  {
 
     private LoginInfo loginInfo;
-    private String loginUrl = "https://account.nicovideo.jp/api/v1/login?show_button_twitter=1&site=niconico&show_button_facebook=1&next_url=";
-    private String myPageUrl = "http://www.nicovideo.jp/my";
-    private String userIconUrl = "http://usericon.nimg.jp/usericon/%d/%d.jpg";
-    private String nicoSeigaUrl = "http://seiga.nicovideo.jp/api/user/info?id=";
     private int userID;
     private String userName;
+    private HttpClient client;
 
     /**
      * ログインを行うにはこのコンストラクタでインスタンスを取得する<br>
@@ -72,27 +49,31 @@ public class NicoLogin extends HttpResponseGetter {
      * ログインセッションの情報を含むCookiesとユーザＩＤ、ユーザ名を登録します。
      * いずれかの取得に失敗すると例外を投げます。<br>
      * When succeed in login, this tries to get userID and its name,
-     * then resisters them in {@link LoginInfo} passed at {@link NicoLogin constructor}.
+     * then resisters them in {@link LoginInfo} passed at {@link NicoLogin constructor}.<br>
+     * <strong>ＵＩスレッド禁止</strong>HTTP通信を行うのでバックグランド処理してください。<br>
+     * <strong>No UI thread</strong> HTTP communication is done.
      * @param mail the mail address, cannot be {@code null}
      * @param pass the password, cannot be {@code null}
      * @throws NicoAPIException if fail to login
      */
-    protected void login( final String mail, final String pass) throws NicoAPIException{
+    protected synchronized void login( final String mail, final String pass) throws NicoAPIException{
         if ( mail == null || pass == null ){
             throw new NicoAPIException.InvalidParamsException(
                     "mail and pass cannot be null > login",
                     NicoAPIException.EXCEPTION_PARAM_LOGIN
             );
         }
-        String path = loginUrl + myPageUrl;
+        final ResourceStore res = ResourceStore.getInstance();
+        client = res.getHttpClient();
+        String path = res.getURL(R.string.url_login) + res.getURL(R.string.url_myPage);
         Map<String,String> params = new HashMap<String,String>(){
             {
-                put("mail_tel", mail);
-                put("password", pass);
+                put(res.getString(R.string.key_login_id), mail);
+                put(res.getString(R.string.key_login_pass), pass);
             }
         };
-        if ( tryPost(path,params) ){
-            loginInfo.setCookieStore(super.cookieStore);
+        if ( client.post(path,params,null) ){
+            loginInfo.setCookies(client.getCookies());
             if ( loginInfo.isLogin() ){
                 getUserID();
                 getUserName();
@@ -107,28 +88,30 @@ public class NicoLogin extends HttpResponseGetter {
     }
 
     private void getUserName() throws NicoAPIException{
-        if ( super.response == null || userID <= 0 ){
+        String response = client.getResponse();
+        if ( response == null || userID <= 0 ){
             throw new NicoAPIException.IllegalStateException(
                     "userID in unknown > userName",
                     NicoAPIException.EXCEPTION_ILLEGAL_STATE_LOGIN_NAME
             );
         }
-        Matcher matcher = Pattern.compile("<span id=\"siteHeaderUserNickNameContainer\">(.+?)</span>").matcher(super.response);
+        ResourceStore res = ResourceStore.getInstance();
+        Matcher matcher = res.getPattern(R.string.regex_myPage_userName).matcher(response);
         if ( matcher.find() ){
             userName =  matcher.group(1);
             loginInfo.setUserName(userName);
             return;
         }
-        String path = nicoSeigaUrl + userID;
-        if ( tryGet(path) ){
-            matcher = Pattern.compile("<nickname>(.+?)</nickname>").matcher(super.response);
+        String path = String.format(Locale.US,res.getString(R.string.url_user_seiga),userID);
+        if ( client.get(path,null) ){
+            matcher = res.getPattern(R.string.regex_seiga_userName).matcher(client.getResponse());
             if ( matcher.find() ){
                 userName = matcher.group(1);
                 loginInfo.setUserName(userName);
                 return;
             }else{
                 throw new NicoAPIException.ParseException(
-                        "cannot find user name ",super.response,
+                        "cannot find user name ",client.getResponse(),
                         NicoAPIException.EXCEPTION_PARSE_LOGIN_USER_NAME
                 );
             }
@@ -136,13 +119,13 @@ public class NicoLogin extends HttpResponseGetter {
     }
 
     private void getUserID() throws NicoAPIException{
-        if ( super.response == null ){
+        if ( client.getResponse() == null ){
             throw new NicoAPIException.IllegalStateException(
                     "not login yet",
                     NicoAPIException.EXCEPTION_ILLEGAL_STATE_LOGIN_USER_ID
             );
         }
-        Matcher matcher = Pattern.compile("var User = \\{ id: ([0-9]+), age: ([0-9]+), isPremium: (false|true), isOver18: (false|true), isMan: (false|true) \\};").matcher(super.response);
+        Matcher matcher = ResourceStore.getInstance().getPattern(R.string.regex_myPage_user_profile).matcher(client.getResponse());
         if ( matcher.find() ){
             userID = Integer.parseInt(matcher.group(1));
             String age = matcher.group(2);
@@ -154,25 +137,25 @@ public class NicoLogin extends HttpResponseGetter {
             loginInfo.setPremium(isPremium);
         }else{
             throw new NicoAPIException.ParseException(
-                    "cannot find userID ",super.response,
+                    "cannot find userID ",client.getResponse(),
                     NicoAPIException.EXCEPTION_PARSE_LOGIN_USER_ID
             );
         }
     }
 
     private void getUserIconUrl() throws NicoAPIException{
-        if ( super.response == null ){
+        if ( client.getResponse() == null ){
             throw new NicoAPIException.IllegalStateException(
                     "not login yet",
                     NicoAPIException.EXCEPTION_ILLEGAL_STATE_LOGIN_USER_ICON
             );
         }
-        Matcher matcher = Pattern.compile("<img src=\"(.+?)\" alt=").matcher(super.response);
+        Matcher matcher = ResourceStore.getInstance().getPattern(R.string.regex_myPage_user_icon).matcher(client.getResponse());
         if ( matcher.find() ){
             loginInfo.setUserIconUrl(matcher.group(1));
         }else{
             throw new NicoAPIException.ParseException(
-                    "cannot find userIconUrl ",super.response,
+                    "cannot find userIconUrl ",client.getResponse(),
                     NicoAPIException.EXCEPTION_PARSE_LOGIN_USER_ICON
             );
         }

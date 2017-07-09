@@ -68,7 +68,7 @@ public class SearchActivity extends CustomListActivity implements CustomDialog.o
                     public void onTextChanged(CharSequence s, int start, int before, int count) {}
                     @Override
                     public void afterTextChanged(Editable s) {
-                        nicoSearch.setQuery(s.toString());
+                        nicoSearch.setKeyword(s.toString());
                     }
                 });
                 checkBoxTag.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -89,7 +89,7 @@ public class SearchActivity extends CustomListActivity implements CustomDialog.o
                 final NicoSearch nicoSearch = (NicoSearch)param;
                 new AsyncTask<Void, Void, NicoAPIException>(){
                     private ProgressDialog progress = null;
-                    private NicoSearch.SearchGroup group;
+                    private NicoSearch.SearchVideoGroup group;
                     @Override
                     protected void onPreExecute() {
                         progress = new ProgressDialog(SearchActivity.this);
@@ -111,7 +111,7 @@ public class SearchActivity extends CustomListActivity implements CustomDialog.o
                         progress.cancel();
                         progress = null;
                         if ( e == null ) {
-                            setVideos(group.getVideoList());
+                            setVideos(group.getVideos());
                             textViewMes.setText("query : " + group.getQuery());
                         }else{
                             showMessage(e);

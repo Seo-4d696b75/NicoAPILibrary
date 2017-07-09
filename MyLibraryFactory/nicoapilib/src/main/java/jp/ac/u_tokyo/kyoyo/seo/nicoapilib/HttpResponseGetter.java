@@ -3,6 +3,7 @@ package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.CookieStore;
@@ -14,10 +15,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,7 +110,7 @@ public class HttpResponseGetter {
             HttpResponse httpResponse = client.execute(httpPost);
             statusCode = httpResponse.getStatusLine().getStatusCode();
             if (statusCode == 200) {
-                //cookieStore = client.getCookieStore();
+                cookieStore = client.getCookieStore();
                 response = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
                 return true;
             }
@@ -149,6 +155,7 @@ public class HttpResponseGetter {
             String res = EntityUtils.toString(httpResponse.getEntity(),"UTF-8");
             statusCode = httpResponse.getStatusLine().getStatusCode();
             if ( statusCode == 200 ) {
+                this.cookieStore = client.getCookieStore();
                 response = res;
                 return true;
             }
@@ -175,6 +182,50 @@ public class HttpResponseGetter {
             }
         }
         return null;
+    }
+
+    public boolean download (String path, String downloadPath, CookieStore cookieStore){
+        DefaultHttpClient client = new DefaultHttpClient();
+        InputStream inputStream;
+        OutputStream outputStream;
+        response = null;
+        try{
+            path = replaceMetaSymbol(path);
+            HttpGet httpGet = new HttpGet(path);
+            if ( cookieStore != null){
+                client.setCookieStore(cookieStore);
+            }
+            HttpResponse httpResponse = client.execute(httpGet);
+            HttpEntity entity = httpResponse.getEntity();
+            statusCode = httpResponse.getStatusLine().getStatusCode();
+            if ( statusCode == 200 ) {
+                File out = new File(downloadPath);
+                if ( !out.exists() ){
+                    if ( !out.createNewFile() ){
+                        return false;
+                    }
+                }
+                if ( !out.canWrite() ){
+                    return false;
+                }
+                inputStream = new BufferedInputStream(entity.getContent());
+                outputStream = new BufferedOutputStream(new FileOutputStream(out,false));
+                int b;
+                while ( (b = inputStream.read()) >= 0 ){
+                    outputStream.write(b);
+                }
+                outputStream.close();
+                inputStream.close();
+                EntityUtils.consume(entity);
+                entity.consumeContent();
+                return true;
+            }
+        }catch ( Exception e){
+            e.printStackTrace();
+        }finally {
+            client.getConnectionManager().shutdown();
+        }
+        return  false;
     }
 
     private final Map<String,String> symbolMap = new HashMap<String, String>(){

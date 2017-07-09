@@ -9,7 +9,10 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -23,33 +26,35 @@ import java.util.TimeZone;
  * @version 0.0  on 2017/01/16.
  */
 
-public class SearchVideoInfo extends VideoInfo {
+class SearchVideoInfo extends NicoVideoInfo {
 
-    private SearchVideoInfo (JSONObject item) throws NicoAPIException.ParseException {
+    private SearchVideoInfo (CookieGroup cookies, JSONObject item) throws NicoAPIException.ParseException {
+        super(cookies);
         initialize(item);
     }
 
     private synchronized void initialize(JSONObject item) throws NicoAPIException.ParseException {
         try{
-            title = item.getString("title");
-            setID( item.getString("contentId") );
-            date = convertDate(item.getString("startTime"));
-            description = item.getString("description");
-            length = item.getInt("lengthSeconds");
-            viewCounter = item.getInt("viewCounter");
-            commentCounter = item.getInt("commentCounter");
-            myListCounter = item.getInt("mylistCounter");
-            setTags( item.getString("tags").split("\\s") );
+            ResourceStore res = ResourceStore.getInstance();
+            title = item.getString(res.getString(R.string.key_search_title));
+            setID( item.getString(res.getString(R.string.key_search_videoID)) );
+            date = convertDate(item.getString(res.getString(R.string.key_search_date)));
+            description = item.getString(res.getString(R.string.key_search_description));
+            length = item.getInt(res.getString(R.string.key_search_duration));
+            viewCounter = item.getInt(res.getString(R.string.key_search_view_counter));
+            commentCounter = item.getInt(res.getString(R.string.key_search_comment_counter));
+            myListCounter = item.getInt(res.getString(R.string.key_search_myList_counter));
+            tags = Arrays.asList(item.getString(res.getString(R.string.key_search_tags)).split("\\s"));
         }catch(JSONException e){
             throw new NicoAPIException.ParseException(e.getMessage(),item.toString());
         }
     }
 
-    private String convertDate (String date) throws NicoAPIException.ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'+09:00'");
+    private Date convertDate (String date) throws NicoAPIException.ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(ResourceStore.getInstance().getString(R.string.format_search_date), Locale.JAPAN);
         dateFormat.setTimeZone(TimeZone.getTimeZone("Japan"));
         try {
-            return dateFormatBase.format(dateFormat.parse(date));
+            return dateFormat.parse(date);
         }catch (ParseException e){
             throw new NicoAPIException.ParseException(e.getMessage(),date);
         }
@@ -58,19 +63,17 @@ public class SearchVideoInfo extends VideoInfo {
     /**
      * ニコ動ＡＰＩからの検索結果をパースします<br>
      * Parses search results form Nico.<br>
-     * {@link #parse(JSONObject)}と基本的に同じですが、JSONに対応した内容のStringで渡せます。<br>
-     * Basically, this is as same as {@link #parse(JSONObject)}, but String can be passed.
      * @param response the string corresponding to root of result, cannot be {@code null}
      * @return Returns empty List if no hit, not {@code null}
      * @throws NicoAPIException if invalid argument not following required format
      */
-    protected static List<VideoInfo> parse (String response) throws NicoAPIException{
+    protected static List<VideoInfo> parse (CookieGroup cookies, String response) throws NicoAPIException{
         if ( response == null ){
             throw new NicoAPIException.ParseException("parse target is null",null);
         }
         try {
             JSONObject root = new JSONObject(response);
-            return parse(root);
+            return parse(cookies,root);
         }catch ( JSONException e){
             throw new NicoAPIException.ParseException(e.getMessage(),response);
         }
@@ -81,37 +84,37 @@ public class SearchVideoInfo extends VideoInfo {
      * Parses search results form Nico.<br>
      * ＡＰＩの詳細やレスポンスの形式は{@link SearchVideoInfo ここから参照}してください。<br>
      * 取得できる動画のフィールドは以下の通りです。<br>
-     *     {@link VideoInfo#title 動画タイトル}<br>
-     *     {@link VideoInfo#id 動画ID}<br>
-     *     {@link VideoInfo#description 動画説明}<br>
-     *     {@link VideoInfo#length 動画長さ}<br>
-     *     {@link VideoInfo#date 動画投稿日時}<br>
-     *     {@link VideoInfo#viewCounter 再生数}<br>
-     *     {@link VideoInfo#commentCounter コメント数}<br>
-     *     {@link VideoInfo#myListCounter マイリス数}<br>
-     *     {@link VideoInfo#tags 動画タグ}<br>
+     *     動画タイトル<br>
+     *     動画ID<br>
+     *     動画説明<br>
+     *     動画長さ<br>
+     *     動画投稿日時<br>
+     *     再生数<br>
+     *     コメント数<br>
+     *     マイリス数<br>
+     *     動画タグ<br>
      * More details about API and response format is {@link SearchVideoInfo available here}.<br>
      * You can get these video fields;<br>
-     *     {@link VideoInfo#title title of video}<br>
-     *     {@link VideoInfo#id video ID}<br>
-     *     {@link VideoInfo#description video description}<br>
-     *     {@link VideoInfo#length length}<br>
-     *     {@link VideoInfo#date contributed date}<br>
-     *     {@link VideoInfo#viewCounter number of view}<br>
-     *     {@link VideoInfo#commentCounter number of comment}<br>
-     *     {@link VideoInfo#myListCounter number of myList registered}<br>
-     *     {@link VideoInfo#tags tags of video}<br>
+     *     title of video<br>
+     *     video ID<br>
+     *     video description<br>
+     *     length<br>
+     *     contributed date<br>
+     *     number of view<br>
+     *     number of comment<br>
+     *     number of myList registered<br>
+     *     tags of video<br>
      * @param root the JSONObject corresponding to root of result, cannot be {@code null}
      * @return Returns empty List if no hit, not {@code null}
      * @throws NicoAPIException if invalid argument not following required format
      */
-    protected static List<VideoInfo> parse (JSONObject root) throws NicoAPIException{
+    protected static List<VideoInfo> parse (CookieGroup cookies, JSONObject root) throws NicoAPIException{
         try {
             List<VideoInfo> list = new ArrayList<VideoInfo>();
-            JSONArray array = root.getJSONArray("data");
+            JSONArray array = root.getJSONArray(ResourceStore.getInstance().getString(R.string.key_search_result_body));
             for ( int i=0 ; i<array.length() ; i++){
                 JSONObject item = array.getJSONObject(i);
-                list.add( new SearchVideoInfo(item));
+                list.add( new SearchVideoInfo(cookies, item));
             }
             return list;
         }catch(JSONException e){

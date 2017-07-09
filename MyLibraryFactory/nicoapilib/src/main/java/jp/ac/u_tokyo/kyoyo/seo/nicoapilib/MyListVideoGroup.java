@@ -9,8 +9,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,38 +37,34 @@ import java.util.regex.Pattern;
 public class MyListVideoGroup extends MyListEditor implements Parcelable{
 
     //from myList group
-    protected MyListVideoGroup (LoginInfo info, JSONObject item) throws JSONException {
-        setDetails(item);
-        super.info = info;
+    private MyListVideoGroup (CookieGroup cookieGroup, JSONObject item) throws JSONException {
+        super(cookieGroup);
+        setMyListDetails(item);
     }
     //from myListID directly
-    private MyListVideoGroup (LoginInfo info, String xml, String name, String description) throws NicoAPIException{
-        super.info = info;
-        this.info = info;
+    private MyListVideoGroup (CookieGroup cookieGroup, String xml, String name, String description) throws NicoAPIException{
+        super(cookieGroup);
         this.videoInfoList = new ArrayList<MyListVideoInfo>();
-        Matcher matcher = Pattern.compile("<item>.+?</item>",Pattern.DOTALL).matcher(xml);
+        Matcher matcher = ResourceStore.getInstance().getPattern(R.string.regex_rss_item).matcher(xml);
         while (matcher.find() ){
-            videoInfoList.add(new MyListVideoInfo( matcher.group()));
+            videoInfoList.add(new NicoMyListVideoInfo(cookieGroup, matcher.group()));
         }
         this.name = name;
         this.description = description;
-        getDetails();
+        getMyListDetails();
     }
 
-    private synchronized void setDetails(JSONObject item) throws JSONException{
-        myListID = item.getInt("id");
-        userID = item.getInt("user_id");
-        name = item.getString("name");
-        description = item.getString("description");
-        if (item.getInt("public") == 1) {
-            isPublic = true;
-        } else {
-            isPublic = false;
-        }
-        defaultSort = item.getInt("default_sort");
-        createDate = MyListVideoInfo.convertDate(item.getLong("create_time"));
-        updateDate = MyListVideoInfo.convertDate(item.getLong("update_time"));
-        iconID = item.getInt("icon_id");
+    private synchronized void setMyListDetails(JSONObject item) throws JSONException{
+        ResourceStore res = ResourceStore.getInstance();
+        myListID = item.getInt(res.getString(R.string.key_myList_myListID));
+        userID = item.getInt(res.getString(R.string.key_myList_userID));
+        name = item.getString(res.getString(R.string.key_myList_name));
+        description = item.getString(res.getString(R.string.key_myList_description));
+        isPublic = item.getInt(res.getString(R.string.key_myList_public)) == Integer.valueOf(res.getString(R.string.value_myList_public));
+        defaultSort = item.getInt(res.getString(R.string.key_myList_sort));
+        createDate = new Date(1000*item.getLong(res.getString(R.string.key_myList_create_time)));
+        updateDate = new Date(1000*item.getLong(res.getString(R.string.key_myList_update_time)));
+        iconID = item.getInt(res.getString(R.string.key_myList_icon));
     }
 
     /**
@@ -101,38 +99,35 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
     /**
      * マイリスを制作した日時です
      * date when this myList is created.
-     * 表示形式はライブラリ内の{@link VideoInfo#dateFormatBase 共通形式}に従います。
      */
-    protected String createDate;
+    protected Date createDate;
     /**
      * マイリスを最後に編集した日時です
      * date when this myList was edited at last time.
      * 動画をマイリスに追加したり削除しても変化しません。
      * 初期値はマイリス制作日時と同一で、
      * {@link MyListGroup#update(MyListVideoGroup, String, boolean, int, String) マイリスグループからマイリス設定を編集}
-     * するとその日時で上書きされます。
-     * 表示形式はライブラリ内の{@link VideoInfo#dateFormatBase 共通形式}に従います。
+     * するとその日時で上書きされます。。
      */
-    protected String updateDate;
+    protected Date updateDate;
     protected int iconID;
     protected List<MyListVideoInfo> videoInfoList;
 
     /* <implementation of parcelable> */
-
     public int describeContents() {
         return 0;
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeParcelable(super.info, flags);
+        out.writeParcelable(super.cookieGroup, flags);
         out.writeInt(myListID);
         out.writeInt(userID);
         out.writeString(name);
         out.writeString(description);
         out.writeBooleanArray(new boolean[]{isPublic});
         out.writeInt(defaultSort);
-        out.writeString(createDate);
-        out.writeString(updateDate);
+        out.writeSerializable(createDate);
+        out.writeSerializable(updateDate);
         out.writeInt(iconID);
         out.writeList(videoInfoList);
     }
@@ -147,7 +142,7 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
     };
 
     private MyListVideoGroup(Parcel in) {
-        super.info = in.readParcelable(LoginInfo.class.getClassLoader());
+        super((CookieGroup) in.readParcelable(CookieGroup.class.getClassLoader()));
         this.myListID = in.readInt();
         this.userID = in.readInt();
         this.name = in.readString();
@@ -156,10 +151,11 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
         in.readBooleanArray(val);
         this.isPublic = val[0];
         this.defaultSort = in.readInt();
-        this.createDate = in.readString();
-        this.updateDate = in.readString();
+        this.createDate = (Date)in.readSerializable();
+        this.updateDate = (Date)in.readSerializable();
         this.iconID = in.readInt();
-        this.videoInfoList = in.readArrayList(ArrayList.class.getClassLoader());
+        this.videoInfoList = new ArrayList<>();
+        in.readList(this.videoInfoList,List.class.getClassLoader());
     }
 
     /* </implementation of parcelable> */
@@ -216,23 +212,19 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
     /**
      * マイリス制作日時を取得します　Gets date when this myList was created.
      * @return the date
-     * @see #createDate
      */
-    public synchronized String getCreateDate(){
+    public synchronized Date getCreateDate(){
         return createDate;
     }
     /**
      * マイリスの最終編集日時を取得します　Gets date when this myLis was edited at last time.
      * @return the date
-     * @see #updateDate
      */
-    public synchronized String getUpdateDate(){
+    public synchronized Date getUpdateDate(){
         return updateDate;
     }
 
-    private String detailsGetURL = "http://www.nicovideo.jp/api/mylistgroup/get";
-    private String sortURL = "http://www.nicovideo.jp/api/mylistgroup/sort";
-    private String rootURL = "http://www.nicovideo.jp/api/mylist/";
+
 
     /**
      * このマイリスの設定値を取得してセットします
@@ -243,13 +235,16 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
      * <strong>No UI thread</strong>: HTTP communication is done
      * @throws NicoAPIException　if fail
      */
-    protected void getDetails() throws NicoAPIException{
+    protected void getMyListDetails() throws NicoAPIException{
+        ResourceStore res = ResourceStore.getInstance();
+        HttpClient client = res.getHttpClient();
+        String detailsGetURL = res.getURL(R.string.url_myList_detail);
         Map<String,String> param = new HashMap<String ,String>();
-        param.put("group_id", String.valueOf(myListID));
-        if ( tryPost( detailsGetURL,param,info.getCookieStore() ) ){
-            JSONObject root = checkStatusCode(super.response);
+        param.put(res.getString(R.string.key_myList_param_myListID), String.valueOf(myListID));
+        if ( client.post( detailsGetURL,param,cookieGroup ) ){
+            JSONObject root = checkStatusCode(client.getResponse());
             try{
-                setDetails( root.getJSONObject("mylistgroup"));
+                setMyListDetails( root.getJSONObject(res.getString(R.string.key_myListGroup_group)));
             }catch (JSONException e){
                 throw new NicoAPIException.ParseException(
                         e.getMessage(),root.toString(),
@@ -260,31 +255,34 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
             throw new NicoAPIException.HttpException(
                     "HTTP failure > myList details",
                     NicoAPIException.EXCEPTION_HTTP_MYLIST_DETAILS_GET,
-                    super.statusCode, detailsGetURL,"POST"
+                    client.getStatusCode(), detailsGetURL,"POST"
             );
         }
     }
 
     /**
      * このマイリスに登録されている動画を取得します　Gets videos belonging to this myList.<br>
-     * {@link MyListGroup#getMyListVideoGroup() マイリスグループから取得した}段階では、
-     * まだ登録動画は未取得なので{@link #loadVideos()}で予め取得しておく必要があります。
-     * この登録動画のフィールドが初期化されていない状態で呼ばれると例外を投げます。
+     * マイリスに登録されている動画を登録順に格納したリストオブジェクトを返します。<br>
+     * <strong>UIスレッド禁止</strong> HTTP通信でニコ動APIから取得するのでバックグランド処理が必要です。
+     * ただし、一度動画を取得するとフィールドに保持されて次回以降はこのオブジェクトを返します。
      * また、動画を格納する返り値の{@code List}オブジェクトに変更を加えても問題はありません。
-     * ただし、マイリスの登録動画を編集してもその{@code List}オブジェクトには反映されないので再取得してください。<br>
-     * When this myList is gotten from {@link MyListGroup#getMyListVideoGroup()},
-     * the registered videos are not set yet. Be sure to call {@link #loadVideos()} and set videos in advance.
+     * <strong>注意</strong>マイリスの登録動画を編集しても返り値のリストおよび動画オブジェクトには反映されないので再取得してください。<br>
+     * This returns the list object holing videos in the same order of the myList.<br>
+     * <strong>No UI Thread </strong> This gets videos from Nico API via HTTP communication.
+     * Once videos are gotten, they are held in this field and they will be returns in the next calling.
      * Making any change to returned {@code List} object does not matter.
-     * When you make any change to this myList, no change is applied to the {@code List} object.
+     * When you make any change to this myList, no change is applied to the {@code List} and its video objects.
      * @return {@code List} of videos belonging to this myList
      * @throws NicoAPIException if videos are not set yet
      */
     public synchronized List<MyListVideoInfo> getVideos() throws NicoAPIException{
         if ( videoInfoList == null ){
+            loadVideos();
+            /*
             throw new NicoAPIException.IllegalStateException(
                     "videos not initialized > myList",
                     NicoAPIException.EXCEPTION_ILLEGAL_STATE_MYLIST_VIDEO
-            );
+            );*/
         }
         List<MyListVideoInfo> list = new ArrayList<MyListVideoInfo>();
         for (MyListVideoInfo info : videoInfoList) {
@@ -296,36 +294,54 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
     /**
      * マイリスに登録されている動画を取得してフィールドに保持します
      * Gets videos belonging to this myList and set them.<br>
-     * <strong>ＵＩスレッド禁止</strong> HTTP通信を行うのでバックグランドで処理して下さい。<br>
-     * <strong>No UI thread</strong>: HTTP communication is done
+     * <strong>注意</strong>フィールドに既に動画オブジェクトが保持されている場合は新たに取得したオブジェクトで置換するため、
+     * {@link #getVideos()}で取得済みの動画オブジェクトには変更は反映されません。
+     * <strong>UIスレッド禁止</strong><br>
+     * <strong>Attention</strong> In case where video objects exist in this field yet,
+     * they are replaced with those which are gotten newly.
+     * No change is applied to videos which have been gotten from {@link #getVideos()}.
+     * <strong>No UI Thread</strong>
      * @throws NicoAPIException if fail to get videos
      */
-    public void loadVideos() throws NicoAPIException{
-        String path = rootURL + "list";
+    protected void loadVideos() throws NicoAPIException{
+        ResourceStore res = ResourceStore.getInstance();
+        HttpClient client = res.getHttpClient();
+        String path = res.getURL(R.string.url_myList_load);
         Map<String, String> param = new HashMap<String, String>();
-        param.put("group_id", String.valueOf(myListID));
-        if (tryPost(path, param, info.getCookieStore())) {
-            JSONObject root = checkStatusCode(super.response);
-            List<MyListVideoInfo> list  = MyListVideoInfo.parse(root);
+        param.put(res.getString(R.string.key_myList_param_myListID), String.valueOf(myListID));
+        if (client.post(path, param, cookieGroup)) {
+            JSONObject root = checkStatusCode(client.getResponse());
+            List<MyListVideoInfo> list  = NicoMyListVideoInfo.parse(cookieGroup,root);
             synchronized (this) {
-                this.videoInfoList = replaceList(this.videoInfoList,list);
+                this.videoInfoList = list;
             }
         } else {
             throw new NicoAPIException.HttpException(
                     "HTTP failure > myList details",
                     NicoAPIException.EXCEPTION_HTTP_MYLIST_VIDEOS_GET,
-                    super.statusCode, path, "POST"
+                    client.getStatusCode(), path, "POST"
             );
         }
     }
 
-    protected static List<MyListVideoGroup> parse (JSONObject root, LoginInfo info)throws NicoAPIException{
+    /**
+     * 登録マイリスをまとめて{@code List}で取得します　
+     * Gets registered myLists in {@code List}.<br>
+     * マイリスグループを取得した際のJSONのレスポンスをパースします。
+     * ただし、この段階では各マイリスに登録された動画情報は初期化されていません。
+     * {@link #getVideos()}で取得する前に{@link #loadVideos()}を呼んでください。
+     * @param root　the JSON response
+     * @param cookieGroup the login session
+     * @return {@code List} of myList, not {@code null}
+     * @throws NicoAPIException if fail to parse the response
+     */
+    protected static List<MyListVideoGroup> parse (CookieGroup cookieGroup, JSONObject root)throws NicoAPIException{
         List<MyListVideoGroup> list = new ArrayList<MyListVideoGroup>();
         try {
-            JSONArray group = root.getJSONArray("mylistgroup");
+            JSONArray group = root.getJSONArray(ResourceStore.getInstance().getString(R.string.key_myListGroup_group));
             for (int i = 0; i < group.length(); i++) {
                 JSONObject myListItem = group.getJSONObject(i);
-                list.add(new MyListVideoGroup(info, myListItem));
+                list.add(new MyListVideoGroup(cookieGroup, myListItem));
             }
         } catch (JSONException e) {
             throw new NicoAPIException.ParseException(
@@ -350,36 +366,31 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
      *  {@link MyListVideoGroup} object gotten from this already contains videos registered in the myList.
      *  Getting these videos in {@link #getVideos()} does not requires calling {@link #loadVideos()} beforehand.
      * @param myListID the ID
-     * @param info the login status
+     * @param cookieGroup the login status
      * @return the target myList
      * @throws NicoAPIException if fail to get the target because of public-setting or other
      */
-    protected static MyListVideoGroup getMyListGroup(int myListID, LoginInfo info) throws NicoAPIException{
-        CookieStore loginCookie = null;
-        try{
-            loginCookie = info.getCookieStore();
-        }catch (NicoAPIException.NoLoginException e){}
-        String myListUrl = String.format("http://www.nicovideo.jp/mylist/%d?rss=2.0",myListID);
-        HttpResponseGetter getter = new HttpResponseGetter();
-        if ( getter.tryGet(myListUrl,loginCookie) ){
-            Matcher matcher = Pattern.compile(
-                    "<channel>.+<title>マイリスト\\s?(\\S*?)‐ニコニコ動画</title>.+<description>(.*?)</description>.+?<lastBuildDate>",
-                    Pattern.DOTALL).matcher(getter.response);
+    protected static MyListVideoGroup getMyListGroup(CookieGroup cookieGroup, int myListID) throws NicoAPIException{
+        ResourceStore res = ResourceStore.getInstance();
+        String myListUrl = String.format(Locale.US,res.getString(R.string.url_myList_rss),myListID);
+        HttpClient client = res.getHttpClient();
+        if ( client.get(myListUrl,cookieGroup) ){
+            Matcher matcher = ResourceStore.getInstance().getPattern(R.string.regex_rss_meta).matcher(client.getResponse());
             if ( matcher.find() ){
                 String name = matcher.group(1);
                 String description = matcher.group(2);
-                if ( name.isEmpty() && description.equals("このマイリストは非公開に設定されています。")){
+                if ( name.isEmpty() && description.equals(res.getString(R.string.value_myList_rss_private))){
                     throw new NicoAPIException.InvalidParamsException(
                             "fail to get myList from its ID",
                             NicoAPIException.EXCEPTION_PARAM_MYLIST_ID
                     );
                 }else{
-                    return new MyListVideoGroup(info,getter.response, name, description);
+                    return new MyListVideoGroup(cookieGroup,client.getResponse(), name, description);
                 }
             }else{
                 throw new NicoAPIException.ParseException(
                         "fail to parse RSS meta > myList",
-                        getter.response,
+                        client.getResponse(),
                         NicoAPIException.EXCEPTION_PARSE_MYLIST_RSS
                 );
             }
@@ -387,7 +398,7 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
             throw new NicoAPIException.HttpException(
                     "HTTP failure > myList RSS",
                     NicoAPIException.EXCEPTION_HTTP_MYLIST_VIDEOS_GET_DIRECT,
-                    getter.statusCode,myListUrl,"GET"
+                    client.getStatusCode(),myListUrl,"GET"
             );
         }
     }
@@ -407,7 +418,10 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
      * @throws NicoAPIException if fail to add the video
      */
     public void add (VideoInfo target, String description) throws NicoAPIException{
-        addVideo(target,description,String.valueOf(getMyListID()),rootURL);
+        addVideo(
+                target,description,String.valueOf(getMyListID()),
+                ResourceStore.getInstance().getURL(R.string.url_myList_add)
+        );
         loadVideos();
     }
 
@@ -424,7 +438,10 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
      * @throws NicoAPIException if fail to edit
      */
     public void update (MyListVideoInfo target, String description) throws NicoAPIException{
-        updateVideo(target,description,String.valueOf(getMyListID()),rootURL);
+        updateVideo(
+                target,description,String.valueOf(getMyListID()),
+                ResourceStore.getInstance().getURL(R.string.url_myList_update_item)
+        );
         loadVideos();
     }
 
@@ -443,11 +460,14 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
     }
     /**
      * @deprecated API response is ambiguous if try to delete plural videos at once.
-     * @param videoList
-     * @throws NicoAPIException
+     * @param videoList the target videos in array
+     * @throws NicoAPIException if fail
      */
     public void delete(MyListVideoInfo[] videoList) throws NicoAPIException{
-        deleteVideo(videoList,String.valueOf(getMyListID()),rootURL);
+        deleteVideo(
+                videoList,String.valueOf(getMyListID()),
+                ResourceStore.getInstance().getURL(R.string.url_myList_delete_item)
+        );
         loadVideos();
     }
 
@@ -467,7 +487,10 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
      * @throws NicoAPIException if fail to move the targets
      */
     public void move(MyListVideoInfo[] videoList, MyListVideoGroup target) throws NicoAPIException{
-        moveVideo(videoList,String.valueOf(getMyListID()),target,rootURL);
+        moveVideo(
+                videoList,String.valueOf(getMyListID()),target,
+                ResourceStore.getInstance().getURL(R.string.url_myList_move_item)
+        );
         loadVideos();
         target.loadVideos();
     }
@@ -488,7 +511,10 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
      * @throws NicoAPIException if fail to copy the targets
      */
     public void copy(MyListVideoInfo[] videoList, MyListVideoGroup target) throws NicoAPIException{
-        copyVideo(videoList,String.valueOf(getMyListID()),target,rootURL);
+        copyVideo(
+                videoList,String.valueOf(getMyListID()),target,
+                ResourceStore.getInstance().getURL(R.string.url_myList_copy_item)
+        );
         target.loadVideos();
     }
 
@@ -508,17 +534,20 @@ public class MyListVideoGroup extends MyListEditor implements Parcelable{
         if ( videoInfoList.size() < 2 ){
             return;
         }
+        ResourceStore res = ResourceStore.getInstance();
+        String sortURL = res.getURL(R.string.url_myList_sort);
+        HttpClient client = res.getHttpClient();
         Map<String,String> params = new HashMap<String, String>();
-        params.put("token", getToken(videoInfoList.get(0).getID()) );
-        params.put("group_id_list[0]", String.valueOf(getMyListID()) );
-        if ( tryPost(sortURL,params,info.getCookieStore()) ){
-            checkStatusCode(super.response);
+        params.put(res.getString(R.string.key_myList_token), getToken(videoInfoList.get(0).getID()) );
+        params.put(String.format(Locale.US,res.getString(R.string.key_myList_myListID_list),0), String.valueOf(getMyListID()) );
+        if ( client.post(sortURL,params,cookieGroup) ){
+            checkStatusCode(client.getResponse());
             loadVideos();
         }else{
             throw new NicoAPIException.HttpException(
                     "http failure",
                     NicoAPIException.EXCEPTION_HTTP_MYLIST_SORT,
-                    statusCode,sortURL,"POST");
+                    client.getStatusCode(),sortURL,"POST");
         }
     }
 }

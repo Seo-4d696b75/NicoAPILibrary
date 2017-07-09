@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="white">0xffffffff</integer>
+    <integer name="red">0xffff0000</integer>
+    <integer name="pink">0xffff8080</integer>
+    <integer name="orange">0xffffcc00</integer>
+    <integer name="yellow">0xffffff00</integer>
+    <integer name="green">0xff00ff00</integer>
+    <integer name="cyan">0xff00ffff</integer>
+    <integer name="blue">0xff0000ff</integer>
+    <integer name="purple">0xffc000ff</integer>
+    <integer name="black">0xff000000</integer>
+</resources>

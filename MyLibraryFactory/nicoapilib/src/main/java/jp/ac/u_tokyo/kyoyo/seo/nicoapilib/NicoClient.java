@@ -1,5 +1,6 @@
 package jp.ac.u_tokyo.kyoyo.seo.nicoapilib;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
@@ -16,10 +17,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,14 +31,14 @@ import java.util.regex.Pattern;
  * NicoAPIの中心となるクラスです<br>
  * this class the center of NicoAPI, all the functions are called from here.<br><br>
  *
- * このライブラリの全機能はここから呼ぶことができます。このクラスは直列化可能ですのでアプリ起動時に
+ * このライブラリの全機能はここから呼ぶことができます。このクラスは{@code Parcelable}ですのでアプリ起動時に
  * 一度インスタンス化したらIntentでActivity間を渡して使いまわせます。
  *
  * @author Seo-4d696b75
  * @version 0.0 on 2017/01/21.
  */
 
-public class NicoClient extends LoginInfo{
+public class NicoClient extends LoginInfo implements Parcelable{
 
     public static final String INTENT = "intent";
 
@@ -44,83 +47,118 @@ public class NicoClient extends LoginInfo{
      * Your application name, needed for some API.<br>
      *  動画検索に用いる『スナップショット検索API v2』 に必要です。
      */
-    protected String appName;
+    protected final String appName;
     /**
      * 使用するデバイスの名前 <br>
      * コメントを投稿するときに必要です。<br>
      * This value is needed when a comment is posted.
      */
-    protected String deviceName;
+    protected final String deviceName;
 
     /**
-     * コンストラクタからインスタンスを取得します、全てはここから始まる<br>
-     * Gets instance of this constructor.
+     * コンストラクタからインスタンスを取得します<br>
+     * Gets instance of this constructor.<br>
+     * 使用するアプリ名とデバイス名を渡してください。{@code null}と空文字以外の文字列が必要です。
      * @param appName your application name, cannot be {@code null}
      * @param deviceName your device name, cannot be {@code null}
      */
-    public NicoClient (String appName,String deviceName){
+    public NicoClient (String appName, String deviceName){
         this.appName = appName;
         this.deviceName = deviceName;
     }
 
     /**
      * ニコ動にログインします<br>
-     * Tries to login in NicoNico. <br>
+     * Tries to login to NicoNico. <br>
      * ニコ動にアカウント登録された有効なメールアドレスとパスワードを渡してください。
      * {@code null}または無効な値を渡すとログインに失敗します。
-     * ライブラリでは機能によってはログインが必須なので、必ずログインしてください。
+     * ライブラリでは機能によってはログインが必須なので、必ず事前にログインしてください。
      * 各種ログイン情報は{@link LoginInfo 親クラス}の適当なメソッドを呼び参照できます。<br>
      *  Pass valid mail address and pass word registered in NicoNico.
      *  If invalid value or {@code null} is passed, you fail to login.
      *  In this library, some function require login session, so be sure to login.
      *  You can access various relevant information by calling methods of {@link LoginInfo super class}.
+     * <strong>ＵＩスレッド禁止</strong>  HTTP通信を行うのでバックグランドで処理して下さい。<br>
+     * <strong>No UI thread</strong>:  HTTP communication is done<br>
      * @param mail cannot be {@code null}
      * @param pass cannot be {@code null}
      * @throws NicoAPIException if fail to login because of invalid params
      */
     public synchronized void login (String mail, String pass) throws NicoAPIException {
-        NicoLogin nicoLogin = new NicoLogin(NicoClient.this);
+        NicoLogin nicoLogin = new NicoLogin(this);
         nicoLogin.login(mail, pass);
     }
 
     /**
-     * ランキング検索に必要な{@link NicoRanking}のインスタンスを取得する<br>
-     * Gets instance of {@link NicoRanking}, in order to get ranking from Nico.
-     * @return not {@code null}
+     * ランキング検索に必要な{@link NicoRanking}のインスタンスを取得します<br>
+     * Gets instance of {@link NicoRanking}, in order to get ranking from Nico.<br>
+     * ニコ動のランキング検索を行うには、このメソッドから{@link NicoRanking}オブジェクトを取得して
+     * このオブジェクトに対して各種検索パラメータをセットしてから{@link NicoRanking#getRanking()} ()}を呼びます。
+     * <strong>注意　</strong>動画のランキング検索にはログインが要りませんが、非ログインで状態で取得した動画への操作には制約が生じるので
+     * ログイン状態でランキング検索するよう推奨されます。<br>
+     * <strong>Warning </strong>Getting video ranking does not require login, but there is some limitation
+     * on operations to videos which are gotten without login. It is recommended to get videos ranking with login.
+     * @return Returns the object to get ranking, not {@code null}
      */
-    public NicoRanking getNicoRanking (){
-        return new NicoRanking();
+    public synchronized NicoRanking getNicoRanking (){
+        if ( isLogin() ){
+            try {
+                return new NicoRanking(getCookies());
+            }catch (NicoAPIException e){}
+        }
+        return new NicoRanking(null);
     }
 
     /**
-     * 対象の動画を引数に渡し、その動画に関するおすすめ動画を取得する<br>
-     * Gets videos recommended about the target video passed in argument.
+     * 動画のおすすめ動画を取得します<br>
+     * Gets videos recommended about the target video.<br>
+     * <strong>ＵＩスレッド禁止</strong> HTTP通信を行うのでバックグランドで処理して下さい。<br>
+     * <strong>注意　</strong>おすすめ動画の取得にはログインが要りませんが、非ログインで状態で取得した動画への操作には制約が生じるので
+     * ログイン状態で取得するよう推奨されます。<br>
+     * <strong>No UI thread</strong>: HTTP communication is done<br>
+     * <strong>Warning </strong>Getting recommended videos does not require login, but there is some limitation
+     * on operations to videos which are gotten without login. It is better to get recommended videos woth login.
      * @param videoInfo target video, cannot be {@code null}
      * @return Returns empty List if no hit, not {@code null}
-     * @throws NicoAPIException if fail to get recommend video
+     * @throws NicoAPIException if fail to get recommended video
      */
     public List<VideoInfo> getRecommend(VideoInfo videoInfo) throws NicoAPIException {
         if ( videoInfo == null ){
             throw new NicoAPIException.InvalidParamsException("target video is null > recommend");
         }
-        String recommendUrl = "http://flapi.nicovideo.jp/api/getrelation?page=10&sort=p&order=d&video=";
-        String path = recommendUrl + videoInfo.getID();
-        HttpResponseGetter getter = new HttpResponseGetter();
-        getter.tryGet(path);
-        return RecommendVideoInfo.parse(getter.response);
+        ResourceStore res = ResourceStore.getInstance();
+        String path = String.format(
+                Locale.US,
+                res.getURL(R.string.url_recommend),
+                videoInfo.getID()
+        );
+        HttpClient client = res.getHttpClient();
+        if ( client.get(path,null) ) {
+            try{
+                return RecommendVideoInfo.parse(getCookies(),client.getResponse());
+            }catch (NicoAPIException.NoLoginException e){
+                return RecommendVideoInfo.parse(null,client.getResponse());
+            }
+        }else{
+            throw new NicoAPIException.HttpException(
+                    "Http failure > recommend", NicoAPIException.EXCEPTION_HTTP_RECOMMEND,
+                    client.getStatusCode(),path,"GET"
+            );
+        }
     }
 
     /**
-     * とりあえずマイリストの取得【ログイン必須】<br>
-     * Gets temp myList, be sure to login beforehand.<br>
-     * ログインしていない、もしくはユーザの公開設定によっては取得に失敗して例外を投げます。<br>
-     * If not login or setting of user does not allow the access, this fails to get myList and throws exception.
-     * @return Returns {@link TempMyListVideoGroup instance with empty List, not {@code null}
+     * とりあえずマイリストを取得します  Gets temp myList.<br>
+     * <strong>ログイン必須 </strong>ログインしていない、もしくはユーザの公開設定によっては取得に失敗して例外を投げます。<br>
+     * <strong>ＵＩスレッド禁止</strong> HTTP通信を行うのでバックグランドで処理して下さい。<br>
+     * <strong>Login Needed </strong>If not login or setting of user does not allow the access, this fails to get myList and throws exception.
+     * <strong>No UI thread</strong>: HTTP communication is done<br>
+     * @return Returns {@link TempMyListVideoGroup} object with empty List, not {@code null}
      * @throws NicoAPIException if fail to get myList
      */
     public synchronized TempMyListVideoGroup getTempMyList()throws NicoAPIException{
-        if ( isLogin() ) {
-            return new TempMyListVideoGroup(this);
+        if ( isLogin() ){
+            return new TempMyListVideoGroup(getCookies(),getUserID());
         }else{
             throw new NicoAPIException.NoLoginException(
                     "no login > temp myList",
@@ -130,17 +168,32 @@ public class NicoClient extends LoginInfo{
     }
 
     /**
-     * 動画を検索するのに必要な{@link NicoSearch}のインスタンスを取得する、検索にはログインが要らない<br>
-     * Gets {@link NicoSearch} instance in order to search videos in NicoNico, you don't have to login.
-     * @return use this to search videos, not {@code null}
+     * 動画を検索するのに必要な{@link NicoSearch}のインスタンスを取得します<br>
+     * Gets {@link NicoSearch} instance in order to search videos in NicoNico.<br>
+     * 動画を検索するにはこのメソッドから{@link NicoSearch}オブジェクトを取得してこのオブジェクトに対して
+     * 各種検索パラメータをセットして{@link NicoSearch#search()}を呼びます。
+     * <strong>注意　</strong>動画検索にはログインが要りませんが、非ログインで状態で取得した動画への操作には制約が生じるので
+     * ログイン状態で検索するよう推奨されます。<br>
+     * In order to search videos, first, you get {@link NicoSearch} object and set various params to it.
+     * Then you can get results by calling {@link NicoSearch#search()}.
+     * <strong>Warning </strong>Searching for videos does not require login, but there is some limitation
+     * on operations to videos which are gotten without login. It is recommended to search and get videos with login.
+     * @return Returns the object to search videos, not {@code null}
      */
-    public NicoSearch getNicoSearch (){
-        return new NicoSearch(appName);
+    public synchronized NicoSearch getNicoSearch (){
+        if ( isLogin() ){
+            try{
+                return new NicoSearch(appName,null,getCookies());
+            }catch (NicoAPIException e){}
+        }
+        return new NicoSearch(appName,null,null);
     }
 
     /**
      * マイリスグループを取得します【ログイン必須】<br>
-     *     get myList group , be sure to login beforehand.<br>
+     * Gets myList group , be sure to login beforehand.<br>
+     * <strong>ＵＩスレッド禁止</strong> HTTP通信を行うのでバックグランドで処理して下さい。<br>
+     * <strong>No UI thread</strong>: HTTP communication is done<br>
      * @return Returns {@link MyListGroup} instance with {@code List} of {@link MyListVideoGroup}
      * @throws NicoAPIException if fail to get myList group
      */
@@ -151,29 +204,33 @@ public class NicoClient extends LoginInfo{
                     NicoAPIException.EXCEPTION_NOT_LOGIN_MYLIST_GROUP
             );
         }
-        return new MyListGroup(this);
+        return new MyListGroup(getCookies());
     }
 
     /**
-     * 指定したIDのマイリスを取得します【ログイン必須】<br>
+     * 指定したIDのマイリスを取得します<br>
      * Gets myList identified with ID.<br>
-     * このメソッドでは自身のマイリスのみ取得できます。
-     * ただし、マイリスの公開設定によっては取得できません。
+     * 公開マイリスはログインしていなくても他ユーザのマイリスでもマイリスＩＤを正しく指定することで取得できます。
+     * 非公開マイリスはログイン状態で自身のマイリスのみ取得できます。
+     * ただし、取得可能な値の関係で自身のマイリスは{@link MyListGroup#getMyListVideoGroup()}からの取得が推奨されます。
      * マイリスIDは{@link #getMyListGroup()}で取得できます。<br>
-     *     This can get your own myList only, but may fails due to its accessibility by user.
-     *     You can get myList ID from {@link #getMyListGroup()}.
+     * Getting public myList does not require login. One user's public myList is available to another user.
+     * However, non-public myList is available only for that user who created it.
+     * You can get myList ID from {@link #getMyListGroup()}.
+     * <strong>ＵＩスレッド禁止</strong> HTTP通信を行うのでバックグランドで処理して下さい。<br>
+     * <strong>No UI thread</strong>: HTTP communication is done<br>
      * @param ID the target myList ID, cannot be {@code null}
      * @return Returns empty List if no hit, not {@code null}
      * @throws NicoAPIException if fail to get myList, which my be because of no target myList or invalid myList ID
      */
     public synchronized MyListVideoGroup getMyList (int ID) throws NicoAPIException{
-        if ( !isLogin() ){
+        /*if ( !loginInfo.isLogin() ){
             throw new NicoAPIException.NoLoginException(
                     "no login > myList",
                     NicoAPIException.EXCEPTION_NOT_LOGIN_MYLIST
             );
-        }
-        return MyListVideoGroup.getMyListGroup(ID,this);
+        }*/
+        return MyListVideoGroup.getMyListGroup(isLogin() ? getCookies() : null ,ID);
     }
 
     /**
@@ -197,12 +254,12 @@ public class NicoClient extends LoginInfo{
             );
         }
         try{
-            videoInfo.getMessageServerUrl();
+            videoInfo.getMessageServerURL();
             videoInfo.getThreadID();
         }catch (NicoAPIException e){
-            videoInfo.getFlv(getCookieStore());
+            videoInfo.getFlv(getCookies());
         }
-        return videoInfo.loadComment();
+        return videoInfo.getComment();
     }
 
     /**
@@ -231,31 +288,60 @@ public class NicoClient extends LoginInfo{
             );
         }
         try{
-            videoInfo.getMessageServerUrl();
+            videoInfo.getMessageServerURL();
             videoInfo.getThreadID();
         }catch (NicoAPIException e){
-            videoInfo.getFlv(getCookieStore());
+            videoInfo.getFlv(getCookies());
         }
-        return videoInfo.loadComment(max);
+        return videoInfo.getComment(max);
         //return videoInfo.loadCommentByJson(max);
     }
 
     /**
-     * コメントの投稿に必要な{@link NicoCommentPost}のインスタンスを取得する<br>
+     * コメントの投稿に必要な{@link NicoCommentPost}のインスタンスを取得します<br>
      * Gets instance of {@link NicoCommentPost} in order to post a comment to Nico.
+     * <strong>ログイン必須　</strong>コメントの投稿にはログインが必要です。
+     * 非ログイン状態で呼ばれると例外を投げますので注意してください。
      * @param info the target video to which new comment is posted, cannot be {@code null}
      * @return not {@code null}
      * @throws NicoAPIException if not login or target video is {@code null}
      */
     public NicoCommentPost getNicoCommentPost(VideoInfo info) throws NicoAPIException{
         if ( isLogin() ){
-            return new NicoCommentPost(info,this);
+            return new NicoCommentPost(info,this,deviceName);
         }else{
             throw new NicoAPIException.NoLoginException(
                     "no login > posting comment",
                     NicoAPIException.EXCEPTION_NOT_LOGIN_COMMENT_POST
             );
         }
+    }
+
+    public boolean downloadFlv (VideoInfo info, File dir) throws Exception{
+        if ( isLogin() ){
+            if ( info == null ){
+
+            }else{
+                try{
+                    info.getFlvURL();
+                }catch (NicoAPIException e){
+                    if ( ! info.getFlv(getCookies())){
+                        return false;
+                    }
+                }
+                File output = new File(dir,info.getTitle());
+                ResourceStore res = ResourceStore.getInstance();
+                HttpClient client = res.getHttpClient();
+                String path = String.format(
+                        Locale.US,
+                        res.getURL(R.string.url_watch),
+                        info.getID()
+                );
+                client.get(path, getCookies());
+                return client.download(info.getFlvURL(),output,client.getCookies());
+            }
+        }
+        return false;
     }
 
     /*implementation of parcelable*/
@@ -266,18 +352,7 @@ public class NicoClient extends LoginInfo{
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeBooleanArray(new boolean[]{login});
-        out.writeString(userName);
-        out.writeInt(userID);
-        out.writeBooleanArray(new boolean[]{isPremium});
-        out.writeString(userIconUrl);
-        out.writeParcelable(userIcon,flags);
-        out.writeInt(cookieNum);
-        out.writeIntArray(cookieVersion);
-        out.writeStringArray(cookieName);
-        out.writeStringArray(cookieValue);
-        out.writeStringArray(cookiePath);
-        out.writeStringArray(cookieDomain);
+        super.writeToParcel(out,flags);
         out.writeString(appName);
         out.writeString(deviceName);
     }
@@ -292,31 +367,10 @@ public class NicoClient extends LoginInfo{
     };
 
     private NicoClient(Parcel in) {
-        boolean[] booleanValue = new boolean[1];
-        in.readBooleanArray(booleanValue);
-        super.login = booleanValue[0];
-        super.userName = in.readString();
-        super.userID = in.readInt();
-        in.readBooleanArray(booleanValue);
-        super.isPremium = booleanValue[0];
-        super.userIconUrl = in.readString();
-        super.userIcon = in.readParcelable(Bitmap.class.getClassLoader());
-        super.cookieNum = in.readInt();
-        super.cookieVersion = new int[cookieNum];
-        in.readIntArray(super.cookieVersion);
-        super.cookieName = new String[cookieNum];
-        in.readStringArray(super.cookieName);
-        super.cookieValue = new String[cookieNum];
-        in.readStringArray(super.cookieValue);
-        super.cookiePath = new String[cookieNum];
-        in.readStringArray(super.cookiePath);
-        super.cookieDomain = new String[cookieNum];
-        in.readStringArray(super.cookieDomain);
+        super(in);
         this.appName = in.readString();
         this.deviceName = in.readString();
     }
-
-
 
 
 }
