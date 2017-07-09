@@ -1,7 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_TEST_SOURCES" value="false" />
+    <option name="SCOPE_TYPE" value="8" />
+    <option name="CUSTOM_SCOPE_NAME" value="Module 'nicoapilib'" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="b1af7594-b456-45f3-959c-3c5be83236b4" name="Default" comment="" />
+    <list default="true" id="b1af7594-b456-45f3-959c-3c5be83236b4" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/cache.properties.lock" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileHashes.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshots.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/fileSnapshotsToTreeSnapshotsIndex.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/allclasses-frame.html" afterPath="$PROJECT_DIR$/../JavaDoc/allclasses-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/allclasses-noframe.html" afterPath="$PROJECT_DIR$/../JavaDoc/allclasses-noframe.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/constant-values.html" afterPath="$PROJECT_DIR$/../JavaDoc/constant-values.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/deprecated-list.html" afterPath="$PROJECT_DIR$/../JavaDoc/deprecated-list.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/help-doc.html" afterPath="$PROJECT_DIR$/../JavaDoc/help-doc.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-1.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-1.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-10.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-10.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-11.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-11.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-12.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-12.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-13.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-13.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-14.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-14.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-15.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-15.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-16.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-16.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-17.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-17.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-18.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-18.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-19.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-19.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-2.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-2.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-20.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-20.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-21.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-21.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-22.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-22.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-23.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-23.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-3.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-3.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-4.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-4.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-5.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-5.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-6.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-6.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-7.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-7.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-8.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-8.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index-files/index-9.html" afterPath="$PROJECT_DIR$/../JavaDoc/index-files/index-9.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/index.html" afterPath="$PROJECT_DIR$/../JavaDoc/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/CommentInfo.CommentGroup.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/CommentInfo.CommentGroup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/CommentInfo.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/CommentInfo.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/HttpResponseGetter.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/HttpResponseGetter.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/LoginInfo.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/LoginInfo.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListGroup.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListGroup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoGroup.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoGroup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoInfo.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/MyListVideoInfo.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoAPIException.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoAPIException.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoClient.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoClient.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoCommentPost.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoCommentPost.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.RankingVideoGroup.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.RankingVideoGroup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoRanking.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.SearchVideoGroup.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.SearchVideoGroup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/NicoSearch.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListVideoGroup.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/TempMyListVideoGroup.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/package-frame.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/package-frame.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/package-summary.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/package-summary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/package-tree.html" afterPath="$PROJECT_DIR$/../JavaDoc/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/package-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/overview-tree.html" afterPath="$PROJECT_DIR$/../JavaDoc/overview-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/package-list" afterPath="$PROJECT_DIR$/../JavaDoc/package-list" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JavaDoc/serialized-form.html" afterPath="$PROJECT_DIR$/../JavaDoc/serialized-form.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nicoapilib/nicoapilib.iml" afterPath="$PROJECT_DIR$/nicoapilib/nicoapilib.iml" />
+    </list>
     <ignored path="MyLibraryFactory.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,11 +91,11 @@
     <favorites_list name="MyLibraryFactory" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
       <file leaf-file-name="regex.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/res/values/regex.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
+            <state relative-caret-position="1408">
               <caret line="64" column="42" selection-start-line="64" selection-start-column="42" selection-end-line="64" selection-end-column="42" />
               <folding />
             </state>
@@ -39,7 +105,7 @@
       <file leaf-file-name="VideoInfo.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="39">
+            <state relative-caret-position="310">
               <caret line="317" column="156" selection-start-line="317" selection-start-column="156" selection-end-line="317" selection-end-column="156" />
               <folding />
             </state>
@@ -47,6 +113,9 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="GradleLocalSettings">
     <option name="availableProjects">
@@ -2592,7 +2661,7 @@
     <option name="width" value="1942" />
     <option name="height" value="1042" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -2617,8 +2686,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
       <pane id="Scratches" />
+      <pane id="ProjectPane" />
       <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="AndroidView">
@@ -2629,87 +2698,13 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MyLibraryFactory" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nicoapilib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MyLibraryFactory" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nicoapilib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MyLibraryFactory" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nicoapilib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MyLibraryFactory" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nicoapilib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nicoapilib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MyLibraryFactory" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nicoapilib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Java" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="device.picker.selection" value="GBAZCY03V207HWB" />
@@ -2899,6 +2894,9 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="b1af7594-b456-45f3-959c-3c5be83236b4" name="Default" comment="" />
@@ -2910,41 +2908,49 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
-    <editor active="true" />
+    <frame x="-11" y="-11" width="1942" height="1042" extended-state="7" />
+    <editor active="false" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24972972" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39925835" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32880098" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24972972" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -2956,7 +2962,15 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/res/values/strings.xml">
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/res/values/regex.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1408">
+          <caret line="64" column="42" selection-start-line="64" selection-start-column="42" selection-end-line="64" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -2964,9 +2978,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/res/values/regex.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
+        <state relative-caret-position="1408">
           <caret line="64" column="42" selection-start-line="64" selection-start-column="42" selection-end-line="64" selection-end-column="42" />
           <folding />
         </state>
@@ -2982,7 +3003,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/nicoapilib/src/main/java/jp/ac/u_tokyo/kyoyo/seo/nicoapilib/VideoInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="39">
+        <state relative-caret-position="310">
           <caret line="317" column="156" selection-start-line="317" selection-start-column="156" selection-end-line="317" selection-end-column="156" />
           <folding />
         </state>
